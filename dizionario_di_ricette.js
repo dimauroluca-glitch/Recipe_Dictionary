@@ -1,34 +1,96 @@
 const databaseRicette = [
-    { nome: "Frittata veloce", ingredienti: ["uova", "sale", "formaggio"], video: "https://www.youtube.com/watch?v=xxLq4pHvj3A" },
-    { nome: "Biscotti fatti in casa", ingredienti: ["farina", "burro", "uova"], video: "https://www.youtube.com/shorts/kUBxg-b6PUw" },
-    { nome: "Arancini di riso", ingredienti: ["cereali", "cipolla", "farina"], video: "https://www.youtube.com/watch?v=byhhYm3aFm8" },
-    { nome: "Porridge", ingredienti: ["cereali", "latte"], video: "https://www.youtube.com/shorts/lrs10J530o0" },
-    { nome: "Zuppa di cipolle", ingredienti: ["cipolla", "brodo", "pane"], video: "https://www.youtube.com/shorts/8ScJIpFvIBI" },
-    { nome: "Riso al curry", ingredienti: ["cereali", "curry", "verdure"], video: "https://www.youtube.com/shorts/jTGANsXQSl4" },
-    { nome: "Patate al forno", ingredienti: ["patate", "olio", "sale"], video: "https://www.youtube.com/shorts/ITzC5ECY9gg" },
-    { nome: "Miele e noci", ingredienti: ["miele", "noci"], video: "https://www.youtube.com/watch?v=RVLQ37YTW3s" },
-    { nome: "Insalata mista", ingredienti: ["lattuga", "pomodori", "olio"], video: "https://www.youtube.com/shorts/96X9HBmyHow" },
-    { nome: "Smoothie alla frutta", ingredienti: ["frutta", "yogurt", "miele"], video: "https://www.youtube.com/shorts/dP8Vf9m4ly0" },
-    { nome: "Pizza margherita", ingredienti: ["farina", "pomodoro", "mozzarella"], video: "https://www.youtube.com/shorts/YUNjyDbkZUE" },
-    { nome: "Lasagna", ingredienti: ["pasta", "ragù", "besciamella"], video: "https://www.youtube.com/shorts/eekXLQTqd10" },
-    { nome: "Torta al cioccolato", ingredienti: ["farina", "uova", "cioccolato"], video: "https://www.youtube.com/shorts/5eWNEsBXWTg" },
-    { nome: "Crepes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/YWEQh-l3hg8" },
-    { nome: "Polenta", ingredienti: ["farina", "acqua", "sale"], video: "https://www.youtube.com/shorts/dUtftEfnVlY" },
-    { nome: "Tiramisù", ingredienti: ["savoiardi", "caffè", "mascarpone"], video: "https://www.youtube.com/shorts/8Yz7wREvhAc" },
-    { nome: "Pancakes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/LtSdqM9l5i4" },
-    { nome: "Insalata di riso", ingredienti: ["cereali", "verdure", "olio"], video: "https://www.youtube.com/shorts/KWd_xJtbxYQ" },
-    { nome: "Besciamella", ingredienti: ["latte", "patate", "uova"], video: "https://www.youtube.com/shorts/YdY5Mu-rJOM" },
-    { nome: "Salsa olandese", ingredienti: ["burro", "succo di limone", "uovo"], video: "https://www.youtube.com/shorts/IuQIOp13YSY" },
-    { nome: "Risotto alla milanese", ingredienti: ["burro", "zafferano", "cipolla"], video: "https://www.youtube.com/shorts/vLY7OThgQEs" },
-    { nome: "Melanzane alla parmigiana", ingredienti: ["ragù", "melanzane", "formaggio"], video: "https://www.youtube.com/shorts/InSse_GGwzY" },
-    { nome: "Cacio e pepe", ingredienti: ["formaggio", "pepe nero", "spaghetti"], video: "https://www.youtube.com/shorts/4-uiBhdmDuI" },
-    { nome: "Purè di patate", ingredienti: ["patate", "latte", "burro"], video: "https://www.youtube.com/shorts/6E3e4i9LDWw" },
-    { nome: "Panna cotta al caffè", ingredienti: ["caffè", "panna"], video: "https://www.youtube.com/shorts/cXOhcR2g3NQ" },
-    { nome: "Affogato al caffè", ingredienti: ["caffè", "gelato"], video: "https://www.youtube.com/shorts/FXXWM903I9U" },
+    { nome: "Frittata veloce", ingredienti: ["uova", "sale", "formaggio"], video: "https://youtube.com" },
+    { nome: "Biscotti fatti in casa", ingredienti: ["farina", "burro", "uova"], video: "https://youtube.com" },
+    { nome: "Arancini di riso", ingredienti: ["cereali", "cipolla", "farina"], video: "https://youtube.com" },
+    { nome: "Porridge", ingredienti: ["cereali", "latte"], video: "https://youtube.com" },
+    { nome: "Zuppa di cipolle", ingredienti: ["cipolla", "brodo", "pane"], video: "https://youtube.com" },
+    { nome: "Riso al curry", ingredienti: ["cereali", "curry", "verdure"], video: "https://youtube.com" },
+    { nome: "Patate al forno", ingredienti: ["patate", "olio", "sale"], video: "https://youtube.com" },
+    { nome: "Miele e noci", ingredienti: ["miele", "noci"], video: "https://youtube.com" },
+    { nome: "Insalata mista", ingredienti: ["lattuga", "pomodori", "olio"], video: "https://youtube.com" },
+    { nome: "Smoothie alla frutta", ingredienti: ["frutta", "yogurt", "miele"], video: "https://youtube.com" },
+    { nome: "Pizza margherita", ingredienti: ["farina", "pomodoro", "mozzarella"], video: "https://youtube.com" },
+    { nome: "Lasagna", ingredienti: ["pasta", "ragù", "besciamella"], video: "https://youtube.com" },
+    { nome: "Torta al cioccolato", ingredienti: ["farina", "uova", "cioccolato"], video: "https://youtube.com" },
+    { nome: "Crepes", ingredienti: ["farina", "uova", "latte"], video: "https://youtube.com" },
+    { nome: "Polenta", ingredienti: ["farina", "acqua", "sale"], video: "https://youtube.com" },
+    { nome: "Tiramisù", ingredienti: ["savoiardi", "caffè", "mascarpone"], video: "https://youtube.com" },
+    { nome: "Pancakes", ingredienti: ["farina", "uova", "latte"], video: "https://youtube.com" },
+    { nome: "Insalata di riso", ingredienti: ["cereali", "verdure", "olio"], video: "https://youtube.com" },
+    { nome: "Besciamella", ingredienti: ["latte", "patate", "uova"], video: "https://youtube.com" },
+    { nome: "Salsa olandese", ingredienti: ["burro", "succo di limone", "uovo"], video: "https://youtube.com" },
+    { nome: "Risotto alla milanese", ingredienti: ["burro", "zafferano", "cipolla"], video: "https://youtube.com" },
+    { nome: "Melanzane alla parmigiana", ingredienti: ["ragù", "melanzane", "formaggio"], video: "https://youtube.com" },
+    { nome: "Cacio e pepe", ingredienti: ["formaggio", "pepe nero", "spaghetti"], video: "https://youtube.com" },
+    { nome: "Purè di patate", ingredienti: ["patate", "latte", "burro"], video: "https://youtube.com" },
+    { nome: "Panna cotta al caffè", ingredienti: ["caffè", "panna"], video: "https://youtube.com" },
+    { nome: "Affogato al caffè", ingredienti: ["caffè", "gelato"], video: "https://youtube.com" },
 ];
 const menuTendina = document.getElementById("Ingredienti");
 const bottoneCerca = document.getElementById("bottone-cerca");
 const contenitoreRisultati = document.getElementById("risultati");
+const contenitorePreferiti = document.getElementById("preferiti");
+const titoloPreferiti = document.getElementById("titolo-preferiti");
+let preferiti = JSON.parse(localStorage.getItem("ricettePreferite")) || [];
+function creaSchedaRicetta(ricetta, èNeiPreferiti) {
+    const bloccoRicetta = document.createElement("div");
+    bloccoRicetta.className = "scheda-ricetta";
+    bloccoRicetta.style.position = "relative";
+    bloccoRicetta.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("tasto-cuore")) {
+            window.open(ricetta.video, "_blank");
+        }
+    });
+    const iconaCuore = èNeiPreferiti ? "❤️" : "🤍";
+    bloccoRicetta.innerHTML = `
+        <button class="tasto-cuore" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.4rem; cursor: pointer; padding: 0; width: auto; box-shadow: none;">${iconaCuore}</button>
+        <h3>${ricetta.nome}</h3>
+        <p><strong>Ingredienti:</strong> ${ricetta.ingredienti.join(", ")}</p>
+        <span class="badge-video">▶ Guarda il video</span>
+    `;
+    const bottoneCuore = bloccoRicetta.querySelector(".tasto-cuore");
+    bottoneCuore.addEventListener("click", () => invertiPreferito(ricetta.nome));
+    return bloccoRicetta;
+}
+function invertiPreferito(nomeRicetta) {
+    if (preferiti.includes(nomeRicetta)) {
+        preferiti = preferiti.filter(nome => nome !== nomeRicetta);
+    } else {
+        preferiti.push(nomeRicetta);
+    }
+    localStorage.setItem("ricettePreferite", JSON.stringify(preferiti));
+    mostraPreferiti();
+    aggiornaRicercaAttuale();
+}
+function mostraPreferiti() {
+    contenitorePreferiti.innerHTML = "";
+    if (preferiti.length === 0) {
+        titoloPreferiti.style.display = "none";
+        return;
+    }
+    titoloPreferiti.style.display = "block";
+    preferiti.forEach(nome => {
+        const ricetta = databaseRicette.find(r => r.nome === nome);
+        if (ricetta) {
+            const scheda = creaSchedaRicetta(ricetta, true);
+            contenitorePreferiti.appendChild(scheda);
+        }
+    });
+}
+function aggiornaRicercaAttuale() {
+    const ingredienteScelto = menuTendina.value;
+    const ricetteTrovate = databaseRicette.filter(ricetta => 
+        ricetta.ingredienti.includes(ingredienteScelto)
+    );
+    if (contenitoreRisultati.innerHTML !== "" && !contenitoreRisultati.firstChild.classList?.contains("messaggio-vuoto")) {
+        contenitoreRisultati.innerHTML = "";
+        ricetteTrovate.forEach(ricetta => {
+            const èNeiPreferiti = preferiti.includes(ricetta.nome);
+            const scheda = creaSchedaRicetta(ricetta, èNeiPreferiti);
+            contenitoreRisultati.appendChild(scheda);
+        });
+    }
+}
 bottoneCerca.addEventListener("click", function() {
     const ingredienteScelto = menuTendina.value;
     const ricetteTrovate = databaseRicette.filter(ricetta => 
@@ -39,19 +101,13 @@ bottoneCerca.addEventListener("click", function() {
         contenitoreRisultati.innerHTML = "<p class='messaggio-vuoto'>Nessuna ricetta trovata.</p>";
     } else {
         ricetteTrovate.forEach(ricetta => {
-            const bloccoRicetta = document.createElement("a");
-            bloccoRicetta.href = ricetta.video;
-            bloccoRicetta.target = "_blank"; 
-            bloccoRicetta.className = "scheda-ricetta";
-            bloccoRicetta.innerHTML = `
-                <h3>${ricetta.nome}</h3>
-                <p><strong>Ingredienti:</strong> ${ricetta.ingredienti.join(", ")}</p>
-                <span class="badge-video">▶ Guarda il video</span>
-            `;
-            contenitoreRisultati.appendChild(bloccoRicetta);
+            const èNeiPreferiti = preferiti.includes(ricetta.nome);
+            const scheda = creaSchedaRicetta(ricetta, èNeiPreferiti);
+            contenitoreRisultati.appendChild(scheda);
         });
     }
 });
+mostraPreferiti();
 const tastoTema = document.getElementById("tasto-tema");
 const temaSalvato = localStorage.getItem("tema");
 if (temaSalvato) {
