@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
     <head>
-        <title>Dizionario di Ricette</title>
+        <title>Dizionario di Ricette Pro</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
@@ -12,11 +12,13 @@
             --card-border: rgba(255, 255, 255, 0.1);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --select-bg: rgba(15, 23, 42, 0.6);
+            --input-bg: rgba(15, 23, 42, 0.6);
             --btn-bg: #ffffff;
             --btn-text: #0f172a;
             --title-gradient: linear-gradient(to right, #ffffff, #94a3b8);
-            --arrow-color: %2394a3b8;
+            --tag-bg: rgba(255, 255, 255, 0.08);
+            --tag-selected: #38bdf8;
+            --tag-selected-text: #0f172a;
         }
         [data-theme="light"] {
             --bg-gradient: linear-gradient(135deg, #f1f5f9, #e2e8f0);
@@ -24,11 +26,13 @@
             --card-border: rgba(15, 23, 42, 0.08);
             --text-main: #0f172a;
             --text-muted: #475569;
-            --select-bg: #ffffff;
+            --input-bg: #ffffff;
             --btn-bg: #0f172a;
             --btn-text: #ffffff;
             --title-gradient: linear-gradient(to right, #0f172a, #334155);
-            --arrow-color: %23475569;
+            --tag-bg: rgba(15, 23, 42, 0.08);
+            --tag-selected: #0284c7;
+            --tag-selected-text: #ffffff;
             --primary-color: #d97706;
         }
         body {
@@ -38,7 +42,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 60px 20px 40px 20px;
+            padding: 80px 20px 40px 20px;
             box-sizing: border-box;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-gradient);
@@ -69,7 +73,6 @@
         }
         .tasto-tema:hover {
             transform: scale(1.05);
-            background: rgba(255, 255, 255, 0.15);
         }
         h1 {
             font-size: 2.5rem;
@@ -98,73 +101,92 @@
             padding: 30px;
             border-radius: 16px;
             width: 100%;
-            max-width: 420px;
+            max-width: 460px;
             display: flex;
             flex-direction: column;
             gap: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             margin-bottom: 30px;
-            transition: background 0.3s ease, border 0.3s ease;
+            transition: background 0.3s ease;
         }
         label {
-            font-size: 0.9rem;
-            font-weight: 600;
+            font-size: 0.85rem;
+            font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: -10px;
         }
-        select {
+        .barra-ricerca {
+            width: 100%;
             padding: 14px 16px;
             font-size: 1rem;
-            background: var(--select-bg);
+            background: var(--input-bg);
             border: 1px solid var(--card-border);
             border-radius: 10px;
-            cursor: pointer;
             outline: none;
-            width: 100%;
             transition: all 0.3s ease;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://w3.org' viewBox='0 0 24 24' fill='none' stroke='var(--arrow-color)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            background-size: 16px;
-            padding-right: 40px;
         }
-        select option {
-            background: var(--select-bg);
-            color: var(--text-main);
-        }
-        select:focus {
+        .barra-ricerca:focus {
             border-color: #38bdf8;
             box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
         }
-        button#bottone-cerca {
-            padding: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            background: var(--btn-bg);
-            color: var(--btn-text);
-            border: none;
-            border-radius: 10px;
+        .griglia-ingredienti {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 8px;
+            margin-top: 5px;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+            -webkit-mask-image: linear-gradient(to right, transparent, white 8%, white 92%, transparent);
+            mask-image: linear-gradient(to right, transparent, white 8%, white 92%, transparent);
+            padding-left: 15px;
+            padding-right: 15px;
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+        .griglia-ingredienti::-webkit-scrollbar {
+            display: none; 
+        }
+        .tag-ingrediente {
+            flex-shrink: 0; 
+            background: var(--tag-bg);
+            border: 1px solid var(--card-border);
+            padding: 8px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
             cursor: pointer;
-            width: 100%;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            user-select: none;
         }
-        button#bottone-cerca:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+        .tag-ingrediente:hover {
+            background: rgba(255, 255, 255, 0.15);
         }
-        button#bottone-cerca:active {
-            transform: translateY(0);
+        .tag-ingrediente.selezionato {
+            background: var(--tag-selected);
+            border-color: var(--tag-selected);
         }
-        #risultati {
+        .tag-ingrediente.selezionato * {
+            color: var(--tag-selected-text);
+        }
+        #risultati, #preferiti {
             width: 100%;
-            max-width: 420px;
+            max-width: 460px;
             display: flex;
             flex-direction: column;
             gap: 15px;
+        }
+        @keyframes comparsaMorbida {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .scheda-ricetta {
             display: block;
@@ -178,13 +200,15 @@
             width: 100%;
             text-align: left;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            animation: comparsaMorbida 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .scheda-ricetta:hover {
             background: rgba(255, 255, 255, 0.12);
             border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-4px);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
         }
         [data-theme="light"] .scheda-ricetta:hover {
             background: rgba(255, 255, 255, 0.9);
@@ -195,6 +219,7 @@
             font-size: 1.25rem;
             font-weight: 700;
             color: var(--text-main);
+            padding-right: 35px;
         }
         .scheda-ricetta p {
             margin: 0 0 12px 0;
@@ -215,64 +240,51 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        .messaggio-vuoto {
-            color: var(--text-muted);
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.95rem;
-        }
         .titolo-preferiti {
-            margin-top: 50px;
+            margin-top: 40px;
             font-size: 1.5rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             text-align: center;
             width: 100%;
-            max-width: 420px;
+            max-width: 460px;
             display: none;
         }
+        .messaggio-vuoto {
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            animation: comparsaMorbida 0.3s ease forwards;
+        }
         @media screen and (max-width: 768px) {
-            .scheda-ricetta h3 {
-            padding-right: 35px;
-        }
-            .titolo-preferiti {
-            font-size: 1.2rem;
-            margin-top: 35px;
-            padding: 0 10px;
-        }
             body { padding: 80px 16px 20px 16px; }
             h1 { font-size: 2rem; }
             .Cassa-interfaccia { padding: 20px; }
-            button#bottone-cerca:hover, .scheda-ricetta:hover { transform: none; }
+            .scheda-ricetta:hover { transform: none; }
             .tasto-tema:hover { transform: none; }
+            .titolo-preferiti { font-size: 1.2rem; margin-top: 35px; padding: 0 10px; }
         }
         </style>
     </head>
     <body>
             <button id="tasto-tema" class="tasto-tema">🌙 Chiaro/Scuro</button>
             <h1>Dizionario di ricette</h1>
-            <div class="sottotitolo">Trova piatti fantastici con ciò che hai in frigo</div>
+            <div class="sottotitolo">Cerca piatti o seleziona cosa hai in frigo</div>
             <div class="Cassa-interfaccia">
-                <label for="Ingredienti">Scegli un ingrediente</label>
-                <select id="Ingredienti" name="Ingredienti">
-                    <option value="farina">Farina</option>
-                    <option value="uova">Uova</option>
-                    <option value="cereali">Cereali</option>
-                    <option value="latte">Latte</option>
-                    <option value="burro">Burro</option>
-                    <option value="ragù">Ragù</option>
-                    <option value="cipolla">Cipolla</option>
-                    <option value="formaggio">Formaggio</option>
-                    <option value="patate">Patate</option>
-                    <option value="miele">Miele</option>
-                    <option value="caffè">Caffè</option>
-                </select>
-                <button id="bottone-cerca">Cerca Ricette</button>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label for="barra-ricerca">Cerca per nome piatto</label>
+                    <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata...">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label>Filtra per ingredienti (Scorri lateralmente ↔️)</label>
+                    <div id="griglia-ingredienti" class="griglia-ingredienti"></div>
+                </div>
             </div>
             <div id="risultati"></div>
-         <h2 id="titolo-preferiti" class="titolo-preferiti">❤️ Le Tue Ricette Preferite</h2>
-        <div id="preferiti" style="width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 15px; margin-top: 15px;"></div>
+            <h2 id="titolo-preferiti" class="titolo-preferiti">❤️ Le Tue Ricette Preferite</h2>
+            <div id="preferiti"></div>
         <script src="dizionario_di_ricette.js"></script>
     </body>
 </html>
