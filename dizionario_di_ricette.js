@@ -26,16 +26,37 @@ const databaseRicette = [
     { nome: "Panna cotta al caffè", ingredienti: ["caffè", "panna"], video: "https://youtube.com" },
     { nome: "Affogato al caffè", ingredienti: ["caffè", "gelato"], video: "https://youtube.com" },
 ];
-const menuTendina = document.getElementById("Ingredienti");
-const bottoneCerca = document.getElementById("bottone-cerca");
+const tuttiGliIngredienti = [...new Set(databaseRicette.flatMap(r => r.ingredienti))].sort();
+const barraRicerca = document.getElementById("barra-ricerca");
+const grigliaIngredienti = document.getElementById("griglia-ingredienti");
 const contenitoreRisultati = document.getElementById("risultati");
 const contenitorePreferiti = document.getElementById("preferiti");
 const titoloPreferiti = document.getElementById("titolo-preferiti");
+let ingredientiSelezionati = [];
 let preferiti = JSON.parse(localStorage.getItem("ricettePreferite")) || [];
+function inizializzaTagIngredienti() {
+    grigliaIngredienti.innerHTML = "";
+    tuttiGliIngredienti.forEach(ingrediente => {
+        const tag = document.createElement("div");
+        tag.className = "tag-ingrediente";
+        tag.innerHTML = `<span>${ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1)}</span>`;
+        
+        tag.addEventListener("click", () => {
+            if (ingredientiSelezionati.includes(ingrediente)) {
+                ingredientiSelezionati = ingredientiSelezionati.filter(i => i !== ingrediente);
+                tag.classList.remove("selezionato");
+            } else {
+                ingredientiSelezionati.push(ingrediente);
+                tag.classList.add("selezionato");
+            }
+            eseguiRicercaFiltri();
+        });
+        grigliaIngredienti.appendChild(tag);
+    });
+}
 function creaSchedaRicetta(ricetta, èNeiPreferiti) {
     const bloccoRicetta = document.createElement("div");
     bloccoRicetta.className = "scheda-ricetta";
-    bloccoRicetta.style.position = "relative";
     bloccoRicetta.addEventListener("click", (e) => {
         if (!e.target.classList.contains("tasto-cuore")) {
             window.open(ricetta.video, "_blank");
@@ -52,6 +73,31 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
     bottoneCuore.addEventListener("click", () => invertiPreferito(ricetta.nome));
     return bloccoRicetta;
 }
+function eseguiRicercaFiltri() {
+    const testoCercato = barraRicerca.value.toLowerCase().trim();
+    if (testoCercato === "" && ingredientiSelezionati.length === 0) {
+        contenitoreRisultati.innerHTML = "<p class='messaggio-vuoto'>Digita qualcosa o seleziona gli ingredienti che hai nel frigo!</p>";
+        return;
+    }
+    const ricetteFiltrate = databaseRicette.filter(ricetta => {
+        const corrispondeTesto = ricetta.nome.toLowerCase().includes(testoCercato);
+        const corrispondeIngredienti = ingredientiSelezionati.every(ingrediente => 
+            ricetta.ingredienti.includes(ingrediente)
+        );
+        return corrispondeTesto && corrispondeIngredienti;
+    });
+    contenitoreRisultati.innerHTML = "";
+    if (ricetteFiltrate.length === 0) {
+        contenitoreRisultati.innerHTML = "<p class='messaggio-vuoto'>Nessuna ricetta corrisponde ai filtri selezionati.</p>";
+    } else {
+        ricetteFiltrate.forEach((ricetta, indice) => {
+            const èNeiPreferiti = preferiti.includes(ricetta.nome);
+            const scheda = creaSchedaRicetta(ricetta, èNeiPreferiti);
+            scheda.style.animationDelay = `${indice * 0.05}s`;
+            contenitoreRisultati.appendChild(scheda);
+        });
+    }
+}
 function invertiPreferito(nomeRicetta) {
     if (preferiti.includes(nomeRicetta)) {
         preferiti = preferiti.filter(nome => nome !== nomeRicetta);
@@ -60,7 +106,7 @@ function invertiPreferito(nomeRicetta) {
     }
     localStorage.setItem("ricettePreferite", JSON.stringify(preferiti));
     mostraPreferiti();
-    aggiornaRicercaAttuale();
+    eseguiRicercaFiltri();
 }
 function mostraPreferiti() {
     contenitorePreferiti.innerHTML = "";
@@ -69,44 +115,18 @@ function mostraPreferiti() {
         return;
     }
     titoloPreferiti.style.display = "block";
-    preferiti.forEach(nome => {
+    preferiti.forEach((nome, indice) => {
         const ricetta = databaseRicette.find(r => r.nome === nome);
         if (ricetta) {
             const scheda = creaSchedaRicetta(ricetta, true);
+            scheda.style.animationDelay = `${indice * 0.05}s`;
             contenitorePreferiti.appendChild(scheda);
         }
     });
 }
-function aggiornaRicercaAttuale() {
-    const ingredienteScelto = menuTendina.value;
-    const ricetteTrovate = databaseRicette.filter(ricetta => 
-        ricetta.ingredienti.includes(ingredienteScelto)
-    );
-    if (contenitoreRisultati.innerHTML !== "" && !contenitoreRisultati.firstChild.classList?.contains("messaggio-vuoto")) {
-        contenitoreRisultati.innerHTML = "";
-        ricetteTrovate.forEach(ricetta => {
-            const èNeiPreferiti = preferiti.includes(ricetta.nome);
-            const scheda = creaSchedaRicetta(ricetta, èNeiPreferiti);
-            contenitoreRisultati.appendChild(scheda);
-        });
-    }
-}
-bottoneCerca.addEventListener("click", function() {
-    const ingredienteScelto = menuTendina.value;
-    const ricetteTrovate = databaseRicette.filter(ricetta => 
-        ricetta.ingredienti.includes(ingredienteScelto)
-    );
-    contenitoreRisultati.innerHTML = "";
-    if (ricetteTrovate.length === 0) {
-        contenitoreRisultati.innerHTML = "<p class='messaggio-vuoto'>Nessuna ricetta trovata.</p>";
-    } else {
-        ricetteTrovate.forEach(ricetta => {
-            const èNeiPreferiti = preferiti.includes(ricetta.nome);
-            const scheda = creaSchedaRicetta(ricetta, èNeiPreferiti);
-            contenitoreRisultati.appendChild(scheda);
-        });
-    }
-});
+barraRicerca.addEventListener("input", eseguiRicercaFiltri);
+inizializzaTagIngredienti();
+eseguiRicercaFiltri();
 mostraPreferiti();
 const tastoTema = document.getElementById("tasto-tema");
 const temaSalvato = localStorage.getItem("tema");
