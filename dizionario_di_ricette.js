@@ -52,3 +52,21 @@ bottoneCerca.addEventListener("click", function() {
         });
     }
 });
+const tastoTema = document.getElementById("tasto-tema");
+const temaSalvato = localStorage.getItem("tema");
+if (temaSalvato) {
+    document.documentElement.setAttribute("data-theme", temaSalvato);
+    tastoTema.textContent = temaSalvato === "light" ? "☀️ Tema Chiaro" : "🌙 Tema Scuro";
+}
+tastoTema.addEventListener("click", () => {
+    const temaAttuale = document.documentElement.getAttribute("data-theme");
+    if (temaAttuale === "light") {
+        document.documentElement.removeAttribute("data-theme");
+        tastoTema.textContent = "🌙 Tema Scuro";
+        localStorage.setItem("tema", "dark");
+    } else {
+        document.documentElement.setAttribute("data-theme", "light");
+        tastoTema.textContent = "☀️ Tema Chiaro";
+        localStorage.setItem("tema", "light");
+    }
+});
