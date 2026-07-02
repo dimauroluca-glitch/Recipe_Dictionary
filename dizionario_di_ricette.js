@@ -362,6 +362,7 @@ bottoneTornaSu.addEventListener("click", () => {
 function saltaAiRisultati() {
     barraRicerca.blur();
     if (inputCercaIngrediente) inputCercaIngrediente.blur();
+    
     window.location.hash = "risultati";
     setTimeout(() => {
         history.replaceState("", document.title, window.location.pathname + window.location.search);
@@ -369,10 +370,18 @@ function saltaAiRisultati() {
 }
 barraRicerca.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.keyCode === 13 || e.keyCode === 9) {
-        e.preventDefault();
+        e.preventDefault(); 
         saltaAiRisultati();
     }
 });
+if (inputCercaIngrediente) {
+    inputCercaIngrediente.addEventListener("focus", (e) => {
+        if (document.activeElement === inputCercaIngrediente && barraRicerca.value.trim() !== "") {
+            e.preventDefault();
+            saltaAiRisultati();
+        }
+    });
+}
 filtroTipo.addEventListener("change", () => {
     eseguiRicercaFiltri();
     setTimeout(saltaAiRisultati, 150);
