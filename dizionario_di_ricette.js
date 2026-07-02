@@ -176,3 +176,17 @@ tastoTema.addEventListener("click", () => {
         localStorage.setItem("tema", "light");
     }
 });
+const bottoneTornaSu = document.getElementById("torna-su");
+bottoneTornaSu.addEventListener("click", () => {
+    const titoloInCima = document.querySelector("h1");
+    if (titoloInCima) {
+        titoloInCima.scrollIntoView({ 
+            behavior: "smooth", 
+            block: "start" 
+        });
+    } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        document.documentElement.scrollTo({ top: 0, behavior: "smooth" });
+        document.body.scrollTo({ top: 0, behavior: "smooth" });
+    }
+});
