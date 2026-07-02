@@ -361,35 +361,21 @@ bottoneTornaSu.addEventListener("click", () => {
 });
 function saltaAiRisultati() {
     barraRicerca.blur();
+    if (inputCercaIngrediente) inputCercaIngrediente.blur();
     window.location.hash = "risultati";
     setTimeout(() => {
         history.replaceState("", document.title, window.location.pathname + window.location.search);
     }, 10);
 }
 barraRicerca.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-        e.preventDefault(); 
-        barraRicerca.blur();
-        const cornice = document.querySelector(".Cassa-interfaccia");
-        if (cornice) {
-            cornice.scrollIntoView({ 
-                behavior: "smooth", 
-                block: "start" 
-            });
-        }
+    if (e.key === "Enter" || e.keyCode === 13 || e.keyCode === 9) {
+        e.preventDefault();
+        saltaAiRisultati();
     }
 });
 filtroTipo.addEventListener("change", () => {
     eseguiRicercaFiltri();
-    setTimeout(() => {
-        const cornice = document.querySelector(".Cassa-interfaccia");
-        if (cornice) {
-            cornice.scrollIntoView({ 
-                behavior: "smooth", 
-                block: "start" 
-            });
-        }
-    }, 150);
+    setTimeout(saltaAiRisultati, 150);
 });
 function cambiaScheda(schedaSelezionata) {
     const sezioneRicette = document.getElementById("sezione-ricette");
