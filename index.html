@@ -436,6 +436,26 @@
             padding: 10px 0 !important;
             box-sizing: border-box !important;
         }
+        .scheda-ricetta:active {
+            transform: scale(0.98) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+            transition: transform 0.1s ease !important;
+        }
+        .badge-contatore-tab {
+            background-color: #ffffff;
+            color: #ff5252;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 6px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .btn-tab.attivo .badge-contatore-tab {
+            background-color: #ffffff;
+            color: #ff5252;
+        }
         @media screen and (max-width: 768px) {
                 #cerca-ingrediente {
         padding: 10px 14px !important;
