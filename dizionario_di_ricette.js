@@ -21,7 +21,7 @@ const databaseRicette = [
     { nome: "Salsa olandese", ingredienti: ["burro", "succo di limone", "uova"], video: "https://www.youtube.com/shorts/IuQIOp13YSY", tipo: "antipasto" },
     { nome: "Risotto alla milanese", ingredienti: ["burro", "zafferano", "cipolla"], video: "https://www.youtube.com/shorts/vLY7OThgQEs", tipo: "primo" },
     { nome: "Melanzane alla parmigiana", ingredienti: ["ragù", "melanzane", "formaggio"], video: "https://www.youtube.com/shorts/InSse_GGwzY", tipo: "secondo" },
-    { nome: "Cacio e pepe", ingredienti: ["formaggio", "pepe nero", "pasta"], video: "https://www.youtube.com/shorts/4-uiBhdmDuI", tipo: "primo" },
+    { nome: "Cacio e pepe", ingredienti: ["formaggio", "pepe", "pasta"], video: "https://www.youtube.com/shorts/4-uiBhdmDuI", tipo: "primo" },
     { nome: "Purè di patate", ingredienti: ["patate", "latte", "burro"], video: "https://www.youtube.com/shorts/4UIQQelcWgE", tipo: "secondo" },
     { nome: "Panna cotta al caffè", ingredienti: ["caffè", "panna"], video: "https://www.youtube.com/shorts/cXOhcR2g3NQ", tipo: "dolce" },
     { nome: "Affogato al caffè", ingredienti: ["caffè", "gelato"], video: "https://www.youtube.com/shorts/FXXWM903I9U", tipo: "dolce" },
@@ -51,6 +51,14 @@ const databaseRicette = [
     { nome: "Tacos messicani", ingredienti: ["tortilla", "carne", "verdure"], video: "https://www.youtube.com/shorts/Hi7gAfusjcQ", tipo: "secondo" },
     { nome: "Moussaka", ingredienti: ["melanzane", "carne", "besciamella"], video: "https://www.youtube.com/watch?v=q5NGOKIu-Sc", tipo: "secondo" },
     { nome: "Pasta alla carbonara", ingredienti: ["pasta", "uova", "guanciale"], video: "https://www.youtube.com/shorts/YIsp44Y0QXM", tipo: "primo" },
+    { nome: "Anelli di funghi", ingredienti: ["funghi", "uova", "farina", "olio"], video: "https://www.youtube.com/shorts/M2aYCBM-2zw", tipo: "antipasto" },
+    { nome: "Carpaccio di cedro", ingredienti: ["pepe", "cedro", "formaggio"], video: "https://www.youtube.com/shorts/lULqIcg6vRI", tipo: "antipasto" },
+    { nome: "Risotto alle fragole", ingredienti: ["riso", "frutta", "burro"], video: "https://www.youtube.com/shorts/V1K2eJk2_cE", tipo: "primo" },
+    { nome: "Maiale in agrodolce", ingredienti: ["carne", "ananas", "pomodoro"], video: "https://www.youtube.com/shorts/kb7DDaDJd-k", tipo: "secondo" },
+    { nome: "Spaghetti all'assassina", ingredienti: ["pasta", "pomodoro", "olio"], video: "https://www.youtube.com/shorts/YIsp44Y0QXM", tipo: "primo" },
+    { nome: "Pere al vino rosso e gorgonzola", ingredienti: ["frutta", "formaggio"], video: "https://www.youtube.com/shorts/Ik9k80Bm1bM", tipo: "secondo" },
+    { nome: "Guacamole con mango", ingredienti: ["avocado", "cipolla", "mango", "pomodoro"], video: "https://www.youtube.com/shorts/iOZk8j4fp7U", tipo: "antipasto" },
+    { nome: "Gamberi in salsa rosa", ingredienti: ["frutti di mare", "panna", "verdure"], video: "https://www.youtube.com/shorts/BBn-tBPZ1ZM", tipo: "antipasto" },
 ];
 const boxSuggerimenti = document.getElementById("suggerimenti-ricerca");
 const tuttiGliIngredienti = [...new Set(databaseRicette.flatMap(r => r.ingredienti))].sort();
