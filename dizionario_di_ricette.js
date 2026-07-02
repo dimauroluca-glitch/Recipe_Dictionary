@@ -368,12 +368,28 @@ function saltaAiRisultati() {
 }
 barraRicerca.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
-        e.preventDefault();
-        saltaAiRisultati();
+        e.preventDefault(); 
+        barraRicerca.blur();
+        const cornice = document.querySelector(".Cassa-interfaccia");
+        if (cornice) {
+            cornice.scrollIntoView({ 
+                behavior: "smooth", 
+                block: "start" 
+            });
+        }
     }
 });
 filtroTipo.addEventListener("change", () => {
-    setTimeout(saltaAiRisultati, 150);
+    eseguiRicercaFiltri();
+    setTimeout(() => {
+        const cornice = document.querySelector(".Cassa-interfaccia");
+        if (cornice) {
+            cornice.scrollIntoView({ 
+                behavior: "smooth", 
+                block: "start" 
+            });
+        }
+    }, 150);
 });
 function cambiaScheda(schedaSelezionata) {
     const sezioneRicette = document.getElementById("sezione-ricette");
