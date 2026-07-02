@@ -239,12 +239,12 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
     const tipoChiave = ricetta.tipo ? ricetta.tipo.toLowerCase().trim() : "";
     const tipoTesto = etichetteTipi[tipoChiave] || "Ricetta";
     const coloriTipi = {
-        antipasto: { testo: "#2b8a3e", bordo: "rgba(43, 138, 62, 0.4)" }, 
-        primo: { testo: "#e03131", bordo: "rgba(224, 49, 49, 0.4)" },     
-        secondo: { testo: "#f59f00", bordo: "rgba(245, 159, 0, 0.4)" },   
-        dolce: { testo: "#9c36b5", bordo: "rgba(156, 54, 181, 0.4)" }     
+        antipasto: { bg: "linear-gradient(135deg, #2b8a3e, #40c057)", ombra: "rgba(43, 138, 62, 0.3)" },
+        primo: { bg: "linear-gradient(135deg, #e03131, #ff6b6b)", ombra: "rgba(224, 49, 49, 0.3)" },
+        secondo: { bg: "linear-gradient(135deg, #f59f00, #ffd43b)", ombra: "rgba(245, 159, 0, 0.3)" },
+        dolce: { bg: "linear-gradient(135deg, #7048e8, #845ef7)", ombra: "rgba(112, 72, 232, 0.3)" }
     };
-    const coloreAttuale = coloriTipi[tipoChiave] || { testo: "currentColor", bordo: "rgba(255,255,255,0.3)" };
+    const coloreAttuale = coloriTipi[tipoChiave] || { bg: "#888888", ombra: "rgba(0,0,0,0.1)" };
     const iconaCuore = èNeiPreferiti ? "❤️" : "🤍";
     const ingredientiColorati = ricetta.ingredienti.map(ingrediente => {
         const ceLhoInFrigo = ingredientiSelezionati.includes(ingrediente);
@@ -255,27 +255,30 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
         }
     }).join(", ");
     bloccoRicetta.innerHTML = `
-        <button class="tasto-cuore" style="position: absolute; top: 15px; right: 15px; background: none !important; border: none !important; font-size: 1.4rem; cursor: pointer; padding: 0; width: auto; box-shadow: none !important; transition: transform 0.2s ease;">${iconaCuore}</button>
+        <button class="tasto-cuore" style="position: absolute; top: 15px; right: 15px; background: none !important; border: none !important; font-size: 1.4rem; cursor: pointer; padding: 0; width: auto; box-shadow: none !important; transition: transform 0.2s ease; z-index: 10;">${iconaCuore}</button>
+        <!-- NUOVO BADGE TRIDIMENSIONALE SFUMATO -->
         <span class="badge-tipo" style="
-            font-size: 0.7rem !important; 
+            font-size: 0.75rem !important; 
             text-transform: uppercase !important; 
-            letter-spacing: 1px !important; 
-            font-weight: 700 !important; 
-            color: ${coloreAttuale.testo} !important; 
-            border: 1px solid ${coloreAttuale.bordo} !important; 
-            padding: 3px 8px !important; 
-            border-radius: 4px !important; 
+            letter-spacing: 0.5px !important; 
+            font-weight: 800 !important; 
+            color: #ffffff !important; 
+            background: ${coloreAttuale.bg} !important; 
+            box-shadow: 0 3px 8px ${coloreAttuale.ombra} !important;
+            padding: 4px 10px !important; 
+            border-radius: 20px !important; 
             display: inline-block !important; 
-            margin-bottom: 8px !important;
-            background-color: rgba(255, 255, 255, 0.05) !important;
+            margin-bottom: 10px !important;
+            border: none !important;
         ">${tipoTesto}</span>
+        
         <h3 style="margin-top: 5px;">${ricetta.nome}</h3>
         <p><strong>Ingredienti:</strong> ${ingredientiColorati}</p>
         <span class="badge-video">▶ Guarda il video</span>
     `;
-        const bottoneCuore = bloccoRicetta.querySelector(".tasto-cuore");
+    const bottoneCuore = bloccoRicetta.querySelector(".tasto-cuore");
     bottoneCuore.addEventListener("click", (e) => {
-        e.stopPropagation(); 
+        e.stopPropagation();
         bottoneCuore.classList.add("cuore-attivo");
         setTimeout(() => {
             invertiPreferito(ricetta.nome);
