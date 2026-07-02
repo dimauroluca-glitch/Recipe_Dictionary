@@ -269,19 +269,33 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
             margin-bottom: 8px !important;
             background-color: rgba(255, 255, 255, 0.05) !important;
         ">${tipoTesto}</span>
-        
         <h3 style="margin-top: 5px;">${ricetta.nome}</h3>
         <p><strong>Ingredienti:</strong> ${ingredientiColorati}</p>
         <span class="badge-video">▶ Guarda il video</span>
     `;
     const bottoneCuore = bloccoRicetta.querySelector(".tasto-cuore");
-    bottoneCuore.addEventListener("click", () => {
+    bottoneCuore.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (navigator.vibrate) {
+            navigator.vibrate(15);
+        }
         bottoneCuore.classList.add("cuore-attivo");
         setTimeout(() => {
             invertiPreferito(ricetta.nome);
         }, 300);
     });
+    
     return bloccoRicetta;
+}
+function invertiPreferito(nomeRicetta) {
+    if (preferiti.includes(nomeRicetta)) {
+        preferiti = preferiti.filter(nome => nome !== nomeRicetta);
+    } else {
+        preferiti.push(nomeRicetta);
+    }
+    localStorage.setItem("ricettePreferite", JSON.stringify(preferiti));
+    mostraPreferiti();
+    eseguiRicercaFiltri();
 }
 function invertiPreferito(nomeRicetta) {
     if (preferiti.includes(nomeRicetta)) {
@@ -506,4 +520,45 @@ function cambiaScheda(schedaSelezionata) {
         mostraPreferiti();
     }
     window.scrollTo({ top: 0, behavior: "instant" });
+}
+const btnPulisciRicerca = document.getElementById("pulisci-ricerca");
+const btnPulisciIngrediente = document.getElementById("pulisci-ingrediente");
+if (barraRicerca && btnPulisciRicerca) {
+    barraRicerca.addEventListener("input", () => {
+        if (barraRicerca.value.trim() !== "") {
+            btnPulisciRicerca.style.opacity = "0.6";
+            btnPulisciRicerca.style.pointerEvents = "auto";
+        } else {
+            btnPulisciRicerca.style.opacity = "0";
+            btnPulisciRicerca.style.pointerEvents = "none";
+        }
+    });
+    btnPulisciRicerca.addEventListener("click", () => {
+        barraRicerca.value = "";
+        btnPulisciRicerca.style.opacity = "0";
+        btnPulisciRicerca.style.pointerEvents = "none";
+        if (boxSuggerimenti) boxSuggerimenti.style.setProperty("display", "none", "important");
+        eseguiRicercaFiltri();
+        barraRicerca.focus();
+    });
+}
+if (inputCercaIngrediente && btnPulisciIngrediente) {
+    inputCercaIngrediente.addEventListener("input", () => {
+        if (inputCercaIngrediente.value.trim() !== "") {
+            btnPulisciIngrediente.style.opacity = "0.6";
+            btnPulisciIngrediente.style.pointerEvents = "auto";
+        } else {
+            btnPulisciIngrediente.style.opacity = "0";
+            btnPulisciIngrediente.style.pointerEvents = "none";
+        }
+    });
+    btnPulisciIngrediente.addEventListener("click", () => {
+        inputCercaIngrediente.value = "";
+        btnPulisciIngrediente.style.opacity = "0";
+        btnPulisciIngrediente.style.pointerEvents = "none";
+        const tuttiITag = document.querySelectorAll(".tag-ingrediente");
+        tuttiITag.forEach(tag => tag.style.setProperty("display", "inline-block", "important"));
+        
+        inputCercaIngrediente.focus();
+    });
 }
