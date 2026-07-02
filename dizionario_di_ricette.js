@@ -363,7 +363,6 @@ function mostraPreferiti() {
         btnWhatsApp.className = "barra-ricerca";
         btnWhatsApp.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #075e54; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(7,94,84,0.2); text-align: center;";
         btnWhatsApp.innerHTML = "💬 Invia Lista della Spesa";
-        
         btnWhatsApp.addEventListener("click", () => {
             if (navigator.share) {
                 navigator.share({ title: 'Lista della Spesa', text: testoSpesa })
@@ -384,32 +383,32 @@ barraRicerca.addEventListener("input", () => {
     const testo = rimuoviAccenti(barraRicerca.value.toLowerCase().trim());
     boxSuggerimenti.innerHTML = "";
     if (testo === "") {
-        boxSuggerimenti.style.display = "none";
+        boxSuggerimenti.style.setProperty("display", "none", "important");
         return;
     }
     const suggeriti = databaseRicette.filter(r => 
         rimuoviAccenti(r.nome.toLowerCase()).includes(testo)
     ).slice(0, 5);
     if (suggeriti.length > 0) {
-        boxSuggerimenti.style.display = "block";
+        boxSuggerimenti.style.setProperty("display", "block", "important");  
         suggeriti.forEach(ricetta => {
             const div = document.createElement("div");
             div.className = "voce-suggerimento";
-            div.textContent = ricetta.nome;
+            div.textContent = ricetta.nome; 
             div.addEventListener("click", () => {
                 barraRicerca.value = ricetta.nome;
-                boxSuggerimenti.style.display = "none";
+                boxSuggerimenti.style.setProperty("display", "none", "important");
                 eseguiRicercaFiltri();
                 barraRicerca.blur();
-                const cornice = document.querySelector(".Cassa-interfaccia");
-                if (cornice) {
-                    cornice.scrollIntoView({ behavior: "smooth", block: "start" });
-                }
+                window.location.hash = "risultati";
+                setTimeout(() => {
+                    history.replaceState("", document.title, window.location.pathname + window.location.search);
+                }, 10);
             });
             boxSuggerimenti.appendChild(div);
         });
     } else {
-        boxSuggerimenti.style.display = "none";
+        boxSuggerimenti.style.setProperty("display", "none", "important");
     }
 });
 document.addEventListener("click", (e) => {
