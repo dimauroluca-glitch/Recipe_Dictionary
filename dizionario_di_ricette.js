@@ -347,7 +347,7 @@ function mostraPreferiti() {
         btnWhatsApp.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #075e54; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(7,94,84,0.2); text-align: center;";
         btnWhatsApp.innerHTML = "💬 Invia Lista della Spesa";   
         btnWhatsApp.addEventListener("click", () => {
-            const testoSpesa = "🛒 *COSE DA COMPRARE (Ti mancano nel frigo)*:\n\n" + listaSpesaMancanti.map(ing => "- " + ing.charAt(0).toUpperCase() + ing.slice(1)).join("\n");
+            const testoSpesa = "🛒 *COSE DA COMPRARE*:\n\n" + listaSpesaMancanti.map(ing => "- " + ing.charAt(0).toUpperCase() + ing.slice(1)).join("\n");
             if (navigator.share) {
                 navigator.share({
                     title: 'Lista della Spesa',
