@@ -316,35 +316,38 @@ function mostraPreferiti() {
         const ingredienteRicettaPulito = rimuoviAccenti(ingrediente.toLowerCase().trim());
         return !frigoPulito.includes(ingredienteRicettaPulito);
     }).sort();
-        if (listaSpesaMancanti.length > 0 && zonaAzionePreferiti) {
+    if (listaSpesaMancanti.length > 0 && zonaAzionePreferiti) {
         zonaAzionePreferiti.style.textAlign = "center";
         zonaAzionePreferiti.style.width = "100%";
         zonaAzionePreferiti.style.display = "block";
-        const btnSpesa = document.createElement("button");
-        btnSpesa.className = "barra-ricerca";
-        btnSpesa.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #2b8a3e; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(43,138,62,0.2); text-align: center;";
-        btnSpesa.innerHTML = "🛒 Copia cose da comprare";
-        const testoSpesa = "🛒 *COSE DA COMPRARE (Ti mancano nel frigo)*:\n\n" + listaSpesaMancanti.map(ing => `- ${ing.charAt(0).toUpperCase() + ing.slice(1)}`).join("\n");
-        btnSpesa.addEventListener("click", () => {
+        let righeIngredienti = "";
+        for (let i = 0; i < listaSpesaMancanti.length; i++) {
+            let ing = listaSpesaMancanti[i];
+            let ingFormattato = ing.charAt(0).toUpperCase() + ing.slice(1);
+            righeIngredienti += "- " + ingFormattato + "\n";
+        }
+        const testoSpesa = "🛒 *COSE DA COMPRARE (Ti mancano nel frigo)*:\n\n" + righeIngredienti;
+        const btnCopia = document.createElement("button");
+        btnCopia.className = "barra-ricerca";
+        btnCopia.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #2b8a3e; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(43,138,62,0.2); text-align: center;";
+        btnCopia.innerHTML = "🛒 Copia cose da comprare"; 
+        btnCopia.addEventListener("click", () => {
             navigator.clipboard.writeText(testoSpesa).then(() => {
-                btnSpesa.innerHTML = "✅ Lista Copiata!";
-                btnSpesa.style.backgroundColor = "#40c057";
+                btnCopia.innerHTML = "✅ Lista Copiata!";
+                btnCopia.style.backgroundColor = "#40c057";
                 setTimeout(() => {
-                    btnSpesa.innerHTML = "🛒 Copia cose da comprare";
-                    btnSpesa.style.backgroundColor = "#2b8a3e";
+                    btnCopia.innerHTML = "🛒 Copia cose da comprare";
+                    btnCopia.style.backgroundColor = "#2b8a3e";
                 }, 2000);
             });
         });
-        zonaAzionePreferiti.appendChild(btnSpesa);
-        const btnWhatsApp = document.createElement("button");
+        zonaAzionePreferiti.appendChild(btnCopia);
+        const btnWhatsApp = document.createElement("a");
         btnWhatsApp.className = "barra-ricerca";
-        btnWhatsApp.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #075e54; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(7,94,84,0.2); text-align: center;";
+        btnWhatsApp.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #075e54; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(7,94,84,0.2); text-align: center; text-decoration: none; line-height: normal;";
         btnWhatsApp.innerHTML = "💬 Invia Lista su WhatsApp";
-        btnWhatsApp.addEventListener("click", () => {
-            const testoSpesa = "🛒 *COSE DA COMPRARE (Ti mancano nel frigo)*:\n\n" + listaSpesaMancanti.map(ing => "- " + ing.charAt(0).toUpperCase() + ing.slice(1)).join("\n");
-            const urlWhatsApp = "https://wa.me" + encodeURIComponent(testoSpesa);
-            window.location.href = urlWhatsApp;
-        });
+        btnWhatsApp.href = "https://wa.me" + encodeURIComponent(testoSpesa);
+        btnWhatsApp.target = "_blank";
         zonaAzionePreferiti.appendChild(btnWhatsApp);
     } else if (preferiti.length > 0 && zonaAzionePreferiti) {
         zonaAzionePreferiti.innerHTML = "<p style='color: #40c057; font-weight: bold; text-align: center; margin: 10px 0;'>🎉 Hai già tutto nel frigo per cucinare i tuoi preferiti!</p>";
