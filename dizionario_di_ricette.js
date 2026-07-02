@@ -186,8 +186,10 @@ function eseguiRicercaFiltri() {
     contenitoreRisultati.innerHTML = "";
     if (ricetteFiltrate.length === 0) {
         contenitoreRisultati.innerHTML = `
-            <div style="text-align: center; padding: 20px;">
-                <p class='messaggio-vuoto' style='margin-bottom: 5px;'>Nessuna ricetta corrisponde ai filtri selezionati.</p>
+           <div class="blocco-errore-animato" style="text-align: center; width: 100%;">
+                <span class="faccina-errore">🍳</span>
+                <p class='messaggio-vuoto' style='margin-top: 0; margin-bottom: 8px; font-weight: 600; font-size: 1.1rem;'>Ops! Nessuna ricetta corrisponde...</p>
+                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 12px; margin-top: 0;">Prova a disattivare qualche filtro o intolleranza.</p>
                 <span class="link-reset" onclick="svuotaTuttiIFiltri()">❌ Svuota tutti i filtri</span>
             </div>
         `;
