@@ -605,16 +605,22 @@
     </div>
     <div id="sezione-ricette" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 0 auto;">
         <div class="sottotitolo" style="text-align: center; width: 100%;">Cerca piatti o seleziona cosa hai in frigo</div>
-        <div class="Cassa-interfaccia" style="width: 100%; box-sizing: border-box;">
+                <div class="Cassa-interfaccia" style="width: 100%; box-sizing: border-box;">
             <div id="contatore-risultati" class="contatore-risultati" style="width: 100%; text-align: center; margin: 0 0 15px 0; font-size: 0.95rem; font-weight: bold; opacity: 0.85;"></div>
-        <div style="display: flex; flex-direction: column; gap: 8px; position: relative;">
-            <label for="barra-ricerca">Cerca per nome piatto</label>
-            <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata..." autocomplete="off">
-            <div id="suggerimenti-ricerca" class="box-suggerimenti"></div>
-        </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; position: relative;">
+                <label for="barra-ricerca">Cerca per nome piatto</label>
+                <div style="position: relative; width: 100%;">
+                    <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata..." autocomplete="off" style="padding-right: 40px;">
+                    <span id="pulisci-ricerca" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.95rem; opacity: 0; pointer-events: none; transition: opacity 0.2s;">❌</span>
+                </div>
+                <div id="suggerimenti-ricerca" class="box-suggerimenti"></div>
+            </div>
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
                 <label for="cerca-ingrediente">Filtra per ingredienti</label>
-                <input type="text" id="cerca-ingrediente" class="barra-ricerca" placeholder="Filtra gli ingredienti... (es. uova, cipolla)" style="padding: 12px 16px; font-size: 1rem; width: 100%; box-sizing: border-box;">
+                <div style="position: relative; width: 100%;">
+                    <input type="text" id="cerca-ingrediente" class="barra-ricerca" placeholder="Filtra gli ingredienti... (es. uova, cipolla)" style="padding: 12px 40px 12px 16px; font-size: 1rem; width: 100%; box-sizing: border-box;">
+                    <span id="pulisci-ingrediente" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.95rem; opacity: 0; pointer-events: none; transition: opacity 0.2s;">❌</span>
+                </div>
                 <div id="griglia-ingredienti" class="griglia-ingredienti"></div>
             </div>
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
