@@ -258,6 +258,41 @@
             font-size: 0.95rem;
             animation: comparsaMorbida 0.3s ease forwards;
         }
+        .torna-su {
+            position: fixed !important;
+            bottom: 30px !important;
+            right: 30px !important;
+            width: 48px !important;
+            height: 48px !important;
+            background-color: rgba(30, 30, 30, 0.75) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            color: #ffffff !important;
+            font-size: 0.95rem !important;
+            font-weight: bold !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+            z-index: 99999 !important;
+            text-decoration: none !important;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s, border-color 0.2s !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+        .torna-su:hover {
+            transform: scale(1.1) translateY(-3px) !important;
+            background-color: rgba(20, 20, 20, 0.9) !important;
+            border-color: rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35) !important;
+        }
+        .torna-su.visibile {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
         @media screen and (max-width: 768px) {
             body { padding: 80px 16px 20px 16px; }
             h1 { font-size: 2rem; }
@@ -265,6 +300,20 @@
             .scheda-ricetta:hover { transform: none; }
             .tasto-tema:hover { transform: none; }
             .titolo-preferiti { font-size: 1.2rem; margin-top: 35px; padding: 0 10px; }
+            .torna-su {
+                bottom: 20px !important;       
+                right: 20px !important;        
+                width: 44px !important;        
+                height: 44px !important;
+                font-size: 0.85rem !important;  
+                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+            }
+            .torna-su:hover {
+                transform: none !important;
+                background-color: rgba(30, 30, 30, 0.75) !important;
+                border-color: rgba(255, 255, 255, 0.2) !important;
+            }
         }
         </style>
     </head>
@@ -296,5 +345,6 @@
     <h2 id="titolo-preferiti" class="titolo-preferiti">❤️ Le Tue Ricette Preferite</h2>
     <div id="preferiti"></div>
     <script src="dizionario_di_ricette.js"></script>
+    <a href="#tasto-tema" id="torna-su" class="torna-su" title="Torna in cima">▲</a>
 </body>
 </html>
