@@ -154,12 +154,14 @@ function eseguiRicercaFiltri() {
         const corrispondeTipo = (tipoSelezionato === "tutti" || ricetta.tipo === tipoSelezionato);
         if (ingredientiSelezionati.length === 0) {
             ricetta.percentualeFattibilita = 0;
+            ricetta.ingredientiMancanti = [];
             return corrispondeTesto && corrispondeTipo;
         }
         const frigoMinuscolo = ingredientiSelezionati.map(ing => ing.toLowerCase().trim());
-        const ingredientiPosseduti = ricetta.ingredienti.filter(ing => 
-            frigoMinuscolo.includes(ing.toLowerCase().trim())
-        ).length;
+        ricetta.ingredientiMancanti = ricetta.ingredienti.filter(ing => 
+            !frigoMinuscolo.includes(ing.toLowerCase().trim())
+        );
+        const ingredientiPosseduti = ricetta.ingredienti.length - ricetta.ingredientiMancanti.length;
         ricetta.percentualeFattibilita = Math.round((ingredientiPosseduti / ricetta.ingredienti.length) * 100);
         return corrispondeTesto && corrispondeTipo && (ricetta.percentualeFattibilita > 0);
     });
@@ -174,13 +176,10 @@ function eseguiRicercaFiltri() {
         if (contatoreRisultati) contatoreRisultati.innerHTML = `🔍 Ricette trovate: ${ricetteFiltrate.length}`;
     }
     contenitoreRisultati.innerHTML = "";
-        contenitoreRisultati.innerHTML = "";
     if (ricetteFiltrate.length === 0) {
         contenitoreRisultati.innerHTML = `
-            <div class="blocco-errore-animato" style="text-align: center; width: 100%;">
-                <span class="faccina-errore">🍳</span>
-                <p class='messaggio-vuoto' style='margin-top: 0; margin-bottom: 8px; font-weight: 600; font-size: 1.1rem;'>Ops! Non abbiamo ancora questa ricetta...</p>
-                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 12px; margin-top: 0;">Prova a cambiare i filtri del frigo o scrivi un altro piatto.</p>
+            <div style="text-align: center; padding: 20px;">
+                <p class='messaggio-vuoto' style='margin-bottom: 5px;'>Nessuna ricetta corrisponde ai filtri selezionati.</p>
                 <span class="link-reset" onclick="svuotaTuttiIFiltri()">❌ Svuota tutti i filtri</span>
             </div>
         `;
@@ -189,12 +188,18 @@ function eseguiRicercaFiltri() {
             const èNeiPreferiti = preferiti.includes(ricetta.nome);
             const scheda = creaSchedaRicetta(ricetta, èNeiPreferiti);
             if (ingredientiSelezionati.length > 0 && ricetta.percentualeFattibilita > 0) {
-                const testoPercentuale = document.createElement("span");
-                testoPercentuale.className = "ingrediente-mappato";
-                testoPercentuale.style.cssText = "font-size: 0.75rem; font-weight: bold; color: #f59f00 !important; display: block; margin-top: 5px; text-transform: uppercase; letter-spacing: 0.5px;";
-                testoPercentuale.innerHTML = `🎯 Compatibilità frigo: ${ricetta.percentualeFattibilita}%`;
+                const bloccoInfoFrigo = document.createElement("div");
+                bloccoInfoFrigo.style.cssText = "margin-top: 6px; margin-bottom: 6px; font-size: 0.75rem; letter-spacing: 0.5px;";
+                let htmlInfo = `<span class="ingrediente-mappato" style="font-weight: bold; color: #f59f00 !important; display: block; text-transform: uppercase;">🎯 Compatibilità frigo: ${ricetta.percentualeFattibilita}%</span>`;
+                if (ricetta.percentualeFattibilita < 100 && ricetta.ingredientiMancanti.length > 0) {
+                    const stringaMancanti = ricetta.ingredientiMancanti.map(ing => ing.charAt(0).toUpperCase() + ing.slice(1)).join(", ");
+                    htmlInfo += `<span style="color: #e03131; font-weight: 600; display: block; margin-top: 2px;">❌ Ti manca: ${stringaMancanti}</span>`;
+                } else if (ricetta.percentualeFattibilita === 100) {
+                    htmlInfo += `<span style="color: #40c057; font-weight: 600; display: block; margin-top: 2px;">🟢 Puoi farla subito!</span>`;
+                }
+                bloccoInfoFrigo.innerHTML = htmlInfo;
                 const titoloScheda = scheda.querySelector("h3");
-                if (titoloScheda) titoloScheda.after(testoPercentuale);
+                if (titoloScheda) titoloScheda.after(bloccoInfoFrigo);
             }
             scheda.style.animationDelay = `${indice * 0.05}s`;
             contenitoreRisultati.appendChild(scheda);
@@ -562,5 +567,17 @@ if (inputCercaIngrediente && btnPulisciIngrediente) {
         tuttiITag.forEach(tag => tag.style.setProperty("display", "inline-block", "important"));
         
         inputCercaIngrediente.focus();
+    });
+}
+const btnSvuotaFrigo = document.getElementById("svuota-frigo");
+if (btnSvuotaFrigo) {
+    btnSvuotaFrigo.addEventListener("click", () => {
+        ingredientiSelezionati = [];
+        const tuttiITag = document.querySelectorAll(".tag-ingrediente");
+        tuttiITag.forEach(tag => {
+            tag.classList.remove("selezionato");
+        });
+        eseguiRicercaFiltri();
+        mostraPreferiti();
     });
 }
