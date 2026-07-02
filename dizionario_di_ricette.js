@@ -375,3 +375,26 @@ barraRicerca.addEventListener("keydown", (e) => {
 filtroTipo.addEventListener("change", () => {
     setTimeout(saltaAiRisultati, 150);
 });
+function cambiaScheda(schedaSelezionata) {
+    const sezioneRicette = document.getElementById("sezione-ricette");
+    const sezionePreferiti = document.getElementById("sezione-preferiti");
+    const btnRicette = document.getElementById("tab-ricette");
+    const btnPreferiti = document.getElementById("tab-preferiti");
+    if (schedaSelezionata === "ricette") {
+        sezioneRicette.style.setProperty("display", "flex", "important");
+        sezioneRicette.style.flexDirection = "column";
+        sezioneRicette.style.alignItems = "center";
+        sezionePreferiti.style.display = "none";
+        btnRicette.classList.add("attivo");
+        btnPreferiti.classList.remove("attivo");
+    } else {
+        sezioneRicette.style.display = "none";
+        sezionePreferiti.style.setProperty("display", "flex", "important");
+        sezionePreferiti.style.flexDirection = "column";
+        sezionePreferiti.style.alignItems = "center";
+        btnRicette.classList.remove("attivo");
+        btnPreferiti.classList.add("attivo");
+        mostraPreferiti();
+    }
+    window.scrollTo({ top: 0, behavior: "instant" });
+}
