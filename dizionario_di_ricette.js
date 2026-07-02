@@ -347,7 +347,6 @@ function mostraPreferiti() {
         btnWhatsApp.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #075e54; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(7,94,84,0.2); text-align: center; text-decoration: none; line-height: normal;";
         btnWhatsApp.innerHTML = "💬 Invia Lista su WhatsApp";
         btnWhatsApp.href = "https://wa.me" + encodeURIComponent(testoSpesa);
-        btnWhatsApp.target = "_blank";
         zonaAzionePreferiti.appendChild(btnWhatsApp);
     } else if (preferiti.length > 0 && zonaAzionePreferiti) {
         zonaAzionePreferiti.innerHTML = "<p style='color: #40c057; font-weight: bold; text-align: center; margin: 10px 0;'>🎉 Hai già tutto nel frigo per cucinare i tuoi preferiti!</p>";
