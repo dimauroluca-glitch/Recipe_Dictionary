@@ -456,6 +456,38 @@
             background-color: #ffffff;
             color: #ff5252;
         }
+        .box-suggerimenti {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            z-index: 2000;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            box-sizing: border-box;
+        }
+        [data-theme="light"] .box-suggerimenti {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        .voce-suggerimento {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: var(--text-color, currentColor);
+            transition: background 0.2s ease;
+        }
+        .voce-suggerimento:hover {
+            background: rgba(255, 82, 82, 0.15);
+            color: #ff9233;
+        }
         @media screen and (max-width: 768px) {
                 #cerca-ingrediente {
         padding: 10px 14px !important;
@@ -468,7 +500,6 @@
         font-size: 0.95rem !important;
         margin-top: 10px !important;
     }
-    
     .btn-casuale:hover {
         transform: none !important;
         box-shadow: 0 4px 15px rgba(255, 82, 82, 0.25) !important;
@@ -510,10 +541,11 @@
         <div class="sottotitolo" style="text-align: center; width: 100%;">Cerca piatti o seleziona cosa hai in frigo</div>
         <div class="Cassa-interfaccia" style="width: 100%; box-sizing: border-box;">
             <div id="contatore-risultati" class="contatore-risultati" style="width: 100%; text-align: center; margin: 0 0 15px 0; font-size: 0.95rem; font-weight: bold; opacity: 0.85;"></div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <label for="barra-ricerca">Cerca per nome piatto</label>
-                <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata...">
-            </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; position: relative;">
+            <label for="barra-ricerca">Cerca per nome piatto</label>
+            <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata..." autocomplete="off">
+            <div id="suggerimenti-ricerca" class="box-suggerimenti"></div>
+        </div>
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
                 <label for="cerca-ingrediente">Filtra per ingredienti</label>
                 <input type="text" id="cerca-ingrediente" class="barra-ricerca" placeholder="Filtra gli ingredienti... (es. uova, cipolla)" style="padding: 12px 16px; font-size: 1rem; width: 100%; box-sizing: border-box;">
