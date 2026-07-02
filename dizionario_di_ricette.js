@@ -192,31 +192,26 @@ bottoneTornaSu.addEventListener("click", () => {
 });
 barraRicerca.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
-        barraRicerca.blur();  
-        const cassaInterfaccia = document.querySelector(".Cassa-interfaccia");
-        if (cassaInterfaccia) {
-            const posizioneInterfaccia = cassaInterfaccia.getBoundingClientRect().top + (window.scrollY || document.documentElement.scrollTop);
-            const altezzaCassa = cassaInterfaccia.offsetHeight;
-            const puntoArrivo = posizioneInterfaccia + altezzaCassa;
-            const opzioniScroll = { top: puntoArrivo - 20, behavior: "smooth" };
-            window.scrollTo(opzioniScroll);
-            document.documentElement.scrollTo(opzioniScroll);
-            document.body.scrollTo(opzioniScroll);
+        e.preventDefault();
+        barraRicerca.blur();
+        const risultati = document.getElementById("risultati");
+        if (risultati) {
+            risultati.scrollIntoView({ 
+                behavior: "smooth", 
+                block: "start" 
+            });
         }
     }
 });
 filtroTipo.addEventListener("change", () => {
+    barraRicerca.blur(); 
     setTimeout(() => {
-        const cassaInterfaccia = document.querySelector(".Cassa-interfaccia");
-        if (cassaInterfaccia) {
-            const posizioneInterfaccia = cassaInterfaccia.getBoundingClientRect().top + (window.scrollY || document.documentElement.scrollTop);
-            const altezzaCassa = cassaInterfaccia.offsetHeight;
-            const puntoArrivo = posizioneInterfaccia + altezzaCassa;
-            
-            const opzioniScroll = { top: puntoArrivo - 20, behavior: "smooth" };
-            window.scrollTo(opzioniScroll);
-            document.documentElement.scrollTo(opzioniScroll);
-            document.body.scrollTo(opzioniScroll);
+        const risultati = document.getElementById("risultati");
+        if (risultati) {
+            risultati.scrollIntoView({ 
+                behavior: "smooth", 
+                block: "start" 
+            });
         }
     }, 150);
 });
