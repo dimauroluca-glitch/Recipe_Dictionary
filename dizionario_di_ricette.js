@@ -1,48 +1,56 @@
 const databaseRicette = [
-    { nome: "Frittata veloce", ingredienti: ["uova", "sale", "formaggio"], video: "https://www.youtube.com/watch?v=xxLq4pHvj3A" },
-    { nome: "Biscotti fatti in casa", ingredienti: ["farina", "burro", "uova"], video: "https://www.youtube.com/shorts/kUBxg-b6PUw" },
-    { nome: "Arancini di riso", ingredienti: ["cereali", "cipolla", "farina"], video: "https://www.youtube.com/shorts/BjBSDKO81Ms" },
-    { nome: "Porridge", ingredienti: ["cereali", "latte"], video: "https://www.youtube.com/shorts/lrs10J530o0" },
-    { nome: "Zuppa di cipolle", ingredienti: ["cipolla", "brodo", "pane"], video: "https://www.youtube.com/watch?v=e-e7DDpu4jE" },
-    { nome: "Riso al curry", ingredienti: ["cereali", "curry", "verdure"], video: "https://www.youtube.com/shorts/jTGANsXQSl4" },
-    { nome: "Patate al forno", ingredienti: ["patate", "olio", "sale"], video: "https://www.youtube.com/shorts/ITzC5ECY9gg" },
-    { nome: "Miele e noci", ingredienti: ["miele", "noci"], video: "https://www.youtube.com/shorts/dUXTKxr6yLA" },
-    { nome: "Insalata mista", ingredienti: ["lattuga", "pomodoro", "olio"], video: "https://www.youtube.com/watch?v=bsp4ev21gxs" },
-    { nome: "Smoothie alla frutta", ingredienti: ["frutta", "yogurt", "miele"], video: "https://www.youtube.com/shorts/dP8Vf9m4ly0" },
-    { nome: "Pizza margherita", ingredienti: ["farina", "pomodoro", "mozzarella"], video: "https://www.youtube.com/shorts/YUNjyDbkZUE" },
-    { nome: "Lasagna", ingredienti: ["pasta", "ragù", "besciamella"], video: "https://www.youtube.com/shorts/dYcXVPIIjEk" },
-    { nome: "Torta al cioccolato", ingredienti: ["farina", "uova", "cioccolato"], video: "https://www.youtube.com/shorts/5eWNEsBXWTg" },
-    { nome: "Crepes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/YWEQh-l3hg8" },
-    { nome: "Polenta", ingredienti: ["farina", "sale"], video: "https://www.youtube.com/shorts/dUtftEfnVlY" },
-    { nome: "Tiramisù", ingredienti: ["savoiardi", "caffè", "mascarpone"], video: "https://www.youtube.com/shorts/8Yz7wREvhAc" },
-    { nome: "Pancakes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/LtSdqM9l5i4" },
-    { nome: "Insalata di riso", ingredienti: ["cereali", "verdure", "olio"], video: "https://www.youtube.com/watch?v=tutpq2RM3C0" },
-    { nome: "Besciamella", ingredienti: ["latte", "patate", "uova"], video: "https://www.youtube.com/shorts/YdY5Mu-rJOM" },
-    { nome: "Salsa olandese", ingredienti: ["burro", "succo di limone", "uova"], video: "https://www.youtube.com/shorts/IuQIOp13YSY" },
-    { nome: "Risotto alla milanese", ingredienti: ["burro", "zafferano", "cipolla"], video: "https://www.youtube.com/shorts/vLY7OThgQEs" },
-    { nome: "Melanzane alla parmigiana", ingredienti: ["ragù", "melanzane", "formaggio"], video: "https://www.youtube.com/shorts/InSse_GGwzY" },
-    { nome: "Cacio e pepe", ingredienti: ["formaggio", "pepe nero", "spaghetti"], video: "https://www.youtube.com/shorts/4-uiBhdmDuI" },
-    { nome: "Purè di patate", ingredienti: ["patate", "latte", "burro"], video: "https://www.youtube.com/shorts/4UIQQelcWgE" },
-    { nome: "Panna cotta al caffè", ingredienti: ["caffè", "panna"], video: "https://www.youtube.com/shorts/cXOhcR2g3NQ" },
-    { nome: "Affogato al caffè", ingredienti: ["caffè", "gelato"], video: "https://www.youtube.com/shorts/FXXWM903I9U" },
-    { nome: "Crostata di frutta", ingredienti: ["farina", "burro", "frutta"], video: "https://www.youtube.com/shorts/UrJn0TH0EfM" },
-    { nome: "Minestrone", ingredienti: ["verdure", "brodo", "pasta"], video: "https://www.youtube.com/shorts/yOORcKXCSIY" },
-    { nome: "Gnocchi di patate", ingredienti: ["patate", "farina", "uova"], video: "https://www.youtube.com/shorts/w0hBkAIxBds" },
-    { nome: "Pollo al curry", ingredienti: ["pollo", "curry", "latte di cocco"], video: "https://www.youtube.com/shorts/ZB9w3DR53xw" },
-    { nome: "Couscous alle verdure", ingredienti: ["couscous", "verdure", "olio"], video: "https://www.youtube.com/shorts/-siVcrdwDwY" },
-    { nome: "Frittelle di mele", ingredienti: ["mele", "farina", "uova"], video: "https://www.youtube.com/shorts/BjEIhGPjv7k" },
-    { nome: "Zuppa di lenticchie", ingredienti: ["lenticchie", "verdure", "brodo"], video: "https://www.youtube.com/shorts/lMzBj2jEXGE" },
-    { nome: "Caponata siciliana", ingredienti: ["melanzane", "pomodoro", "olive"], video: "https://www.youtube.com/shorts/XOnOiCU9ABk" },
-    { nome: "Ratatouille", ingredienti: ["melanzane", "zucchine", "peperoni"], video: "https://www.youtube.com/shorts/VDmOqGHDhKc" },
-    { nome: "Torta di mele", ingredienti: ["mele", "farina", "uova"], video: "https://www.youtube.com/shorts/SUf7pWLi8rE" },
-    { nome: "Brownies al cioccolato", ingredienti: ["cioccolato", "burro", "uova"], video: "https://www.youtube.com/shorts/6blrycMPTe4" },
-    { nome: "Pasta all'amatriciana", ingredienti: ["spaghetti", "pomodoro", "guanciale"], video: "https://www.youtube.com/shorts/HgPblcqdGA4" },
-    { nome: "Pasta alla puttanesca", ingredienti: ["spaghetti", "pomodoro", "olive"], video: "https://www.youtube.com/watch?v=Z59zqJjUG4w" },
-    { nome: "Pasta alla norma", ingredienti: ["spaghetti", "melanzane", "ricotta salata"], video: "https://www.youtube.com/shorts/5pTJDwj626Q" },
-    { nome: "Pasta alla bolognese", ingredienti: ["spaghetti", "ragù", "parmigiano"], video: "https://www.youtube.com/shorts/J9yIITFLYow" },
-    { nome: "Pasta alla siciliana", ingredienti: ["spaghetti", "melanzane", "pomodoro"], video: "https://www.youtube.com/shorts/HyxuJwn-ucM" },
-    { nome: "Pasta alla genovese", ingredienti: ["spaghetti", "cipolla", "carne"], video: "https://www.youtube.com/shorts/c9Gta7MaZDo" },
-    { nome: "Pasta alla sorrentina", ingredienti: ["spaghetti", "pomodoro", "mozzarella"], video: "https://www.youtube.com/shorts/kZ-uRWh4F4g" }
+    { nome: "Frittata veloce", ingredienti: ["uova", "sale", "formaggio"], video: "https://www.youtube.com/watch?v=xxLq4pHvj3A", tipo: "secondo" },
+    { nome: "Biscotti fatti in casa", ingredienti: ["farina", "burro", "uova"], video: "https://www.youtube.com/shorts/kUBxg-b6PUw", tipo: "dolce" },
+    { nome: "Arancini di riso", ingredienti: ["cereali", "cipolla", "farina"], video: "https://www.youtube.com/shorts/BjBSDKO81Ms", tipo: "antipasto" },
+    { nome: "Porridge", ingredienti: ["cereali", "latte"], video: "https://www.youtube.com/shorts/lrs10J530o0", tipo: "dolce" },
+    { nome: "Zuppa di cipolle", ingredienti: ["cipolla", "brodo", "burro"], video: "https://www.youtube.com/watch?v=e-e7DDpu4jE", tipo: "primo" },
+    { nome: "Riso al curry", ingredienti: ["cereali", "curry", "verdure"], video: "https://www.youtube.com/shorts/jTGANsXQSl4", tipo: "primo" },
+    { nome: "Patate al forno", ingredienti: ["patate", "olio", "sale"], video: "https://www.youtube.com/shorts/ITzC5ECY9gg", tipo: "secondo" },
+    { nome: "Miele e noci", ingredienti: ["miele", "noci"], video: "https://www.youtube.com/shorts/dUXTKxr6yLA", tipo: "dolce" },
+    { nome: "Insalata mista", ingredienti: ["verdure", "pomodoro", "olio"], video: "https://www.youtube.com/watch?v=bsp4ev21gxs", tipo: "secondo" },
+    { nome: "Smoothie alla frutta", ingredienti: ["frutta", "yogurt", "miele"], video: "https://www.youtube.com/shorts/dP8Vf9m4ly0", tipo: "dolce" },
+    { nome: "Pizza margherita", ingredienti: ["farina", "pomodoro", "mozzarella"], video: "https://www.youtube.com/shorts/YUNjyDbkZUE", tipo: "primo" },
+    { nome: "Lasagna", ingredienti: ["pasta", "ragù", "besciamella"], video: "https://www.youtube.com/shorts/dYcXVPIIjEk", tipo: "primo" },
+    { nome: "Torta al cioccolato", ingredienti: ["farina", "uova", "cioccolato"], video: "https://www.youtube.com/shorts/5eWNEsBXWTg", tipo: "dolce" },
+    { nome: "Crepes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/YWEQh-l3hg8", tipo: "dolce" },
+    { nome: "Polenta", ingredienti: ["farina", "sale"], video: "https://www.youtube.com/shorts/dUtftEfnVlY", tipo: "primo" },
+    { nome: "Tiramisù", ingredienti: ["savoiardi", "caffè", "mascarpone"], video: "https://www.youtube.com/shorts/8Yz7wREvhAc", tipo: "dolce" },
+    { nome: "Pancakes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/LtSdqM9l5i4", tipo: "dolce" },
+    { nome: "Insalata di riso", ingredienti: ["cereali", "verdure", "olio"], video: "https://www.youtube.com/watch?v=tutpq2RM3C0", tipo: "primo" },
+    { nome: "Besciamella", ingredienti: ["latte", "patate", "uova"], video: "https://www.youtube.com/shorts/YdY5Mu-rJOM", tipo: "antipasto" },
+    { nome: "Salsa olandese", ingredienti: ["burro", "succo di limone", "uova"], video: "https://www.youtube.com/shorts/IuQIOp13YSY", tipo: "antipasto" },
+    { nome: "Risotto alla milanese", ingredienti: ["burro", "zafferano", "cipolla"], video: "https://www.youtube.com/shorts/vLY7OThgQEs", tipo: "primo" },
+    { nome: "Melanzane alla parmigiana", ingredienti: ["ragù", "melanzane", "formaggio"], video: "https://www.youtube.com/shorts/InSse_GGwzY", tipo: "secondo" },
+    { nome: "Cacio e pepe", ingredienti: ["formaggio", "pepe nero", "pasta"], video: "https://www.youtube.com/shorts/4-uiBhdmDuI", tipo: "primo" },
+    { nome: "Purè di patate", ingredienti: ["patate", "latte", "burro"], video: "https://www.youtube.com/shorts/4UIQQelcWgE", tipo: "secondo" },
+    { nome: "Panna cotta al caffè", ingredienti: ["caffè", "panna"], video: "https://www.youtube.com/shorts/cXOhcR2g3NQ", tipo: "dolce" },
+    { nome: "Affogato al caffè", ingredienti: ["caffè", "gelato"], video: "https://www.youtube.com/shorts/FXXWM903I9U", tipo: "dolce" },
+    { nome: "Crostata di frutta", ingredienti: ["farina", "burro", "frutta"], video: "https://www.youtube.com/shorts/UrJn0TH0EfM", tipo: "dolce" },
+    { nome: "Minestrone", ingredienti: ["verdure", "brodo", "pasta"], video: "https://www.youtube.com/shorts/yOORcKXCSIY", tipo: "primo" },
+    { nome: "Gnocchi di patate", ingredienti: ["patate", "farina", "uova"], video: "https://www.youtube.com/shorts/w0hBkAIxBds", tipo: "primo" },
+    { nome: "Pollo al curry", ingredienti: ["carne", "curry", "latte"], video: "https://www.youtube.com/shorts/ZB9w3DR53xw", tipo: "secondo" },
+    { nome: "Couscous alle verdure", ingredienti: ["couscous", "verdure", "olio"], video: "https://www.youtube.com/shorts/-siVcrdwDwY", tipo: "primo" },
+    { nome: "Frittelle di mele", ingredienti: ["mele", "farina", "uova"], video: "https://www.youtube.com/shorts/BjEIhGPjv7k", tipo: "dolce" },
+    { nome: "Zuppa di lenticchie", ingredienti: ["lenticchie", "verdure", "brodo"], video: "https://www.youtube.com/shorts/lMzBj2jEXGE", tipo: "primo" },
+    { nome: "Caponata siciliana", ingredienti: ["melanzane", "pomodoro", "olive"], video: "https://www.youtube.com/shorts/XOnOiCU9ABk", tipo: "antipasto" },
+    { nome: "Ratatouille", ingredienti: ["melanzane", "verdure", "verdure"], video: "https://www.youtube.com/shorts/VDmOqGHDhKc", tipo: "secondo" },
+    { nome: "Torta di mele", ingredienti: ["mele", "farina", "uova"], video: "https://www.youtube.com/shorts/SUf7pWLi8rE", tipo: "dolce" },
+    { nome: "Brownies al cioccolato", ingredienti: ["cioccolato", "burro", "uova"], video: "https://www.youtube.com/shorts/6blrycMPTe4", tipo: "dolce" },
+    { nome: "Pasta all'amatriciana", ingredienti: ["pasta", "pomodoro", "guanciale"], video: "https://www.youtube.com/shorts/HgPblcqdGA4", tipo: "primo" },
+    { nome: "Pasta alla puttanesca", ingredienti: ["pasta", "pomodoro", "olive"], video: "https://www.youtube.com/watch?v=Z59zqJjUG4w", tipo: "primo" },
+    { nome: "Pasta alla norma", ingredienti: ["pasta", "melanzane", "ricotta"], video: "https://www.youtube.com/shorts/5pTJDwj626Q", tipo: "primo" },
+    { nome: "Pasta alla bolognese", ingredienti: ["pasta", "ragù", "formaggio"], video: "https://www.youtube.com/shorts/J9yIITFLYow", tipo: "primo" },
+    { nome: "Pasta alla siciliana", ingredienti: ["pasta", "melanzane", "pomodoro"], video: "https://www.youtube.com/shorts/HyxuJwn-ucM", tipo: "primo" },
+    { nome: "Pasta alla genovese", ingredienti: ["pasta", "cipolla", "carne"], video: "https://www.youtube.com/shorts/c9Gta7MaZDo", tipo: "primo" },
+    { nome: "Pasta alla sorrentina", ingredienti: ["pasta", "pomodoro", "mozzarella"], video: "https://www.youtube.com/shorts/kZ-uRWh4F4g", tipo: "primo" },
+    { nome: "Cannelloni ricotta e spinaci", ingredienti: ["besciamella", "ricotta", "verdure"], video: "https://www.youtube.com/shorts/PWr7c8MaceI", tipo: "primo" },
+    { nome: "Gulasch ungherese", ingredienti: ["carne", "cipolla", "patate"], video: "https://www.youtube.com/shorts/zBufqt5htjw", tipo: "secondo" },
+    { nome: "Chili con carne", ingredienti: ["carne", "verdure", "pomodoro"], video: "https://www.youtube.com/shorts/SPakumjssms", tipo: "secondo" },
+    { nome: "Paella", ingredienti: ["cereali", "frutti di mare", "verdure"], video: "https://www.youtube.com/shorts/6EMK81Cxub0", tipo: "primo" },
+    { nome: "Banana split", ingredienti: ["gelato", "banana", "panna montata"], video: "https://www.youtube.com/shorts/lEzk_W-XMsY", tipo: "dolce" },
+    { nome: "Tacos messicani", ingredienti: ["tortilla", "carne", "verdure"], video: "https://www.youtube.com/shorts/Hi7gAfusjcQ", tipo: "secondo" },
+    { nome: "Moussaka", ingredienti: ["melanzane", "carne", "besciamella"], video: "https://www.youtube.com/watch?v=q5NGOKIu-Sc", tipo: "secondo" },
+    { nome: "Pasta alla carbonara", ingredienti: ["pasta", "uova", "guanciale"], video: "https://www.youtube.com/shorts/YIsp44Y0QXM", tipo: "primo" },
 ];
 const tuttiGliIngredienti = [...new Set(databaseRicette.flatMap(r => r.ingredienti))].sort();
 const barraRicerca = document.getElementById("barra-ricerca");
@@ -50,6 +58,7 @@ const grigliaIngredienti = document.getElementById("griglia-ingredienti");
 const contenitoreRisultati = document.getElementById("risultati");
 const contenitorePreferiti = document.getElementById("preferiti");
 const titoloPreferiti = document.getElementById("titolo-preferiti");
+const filtroTipo = document.getElementById("filtro-tipo");
 let ingredientiSelezionati = [];
 let preferiti = JSON.parse(localStorage.getItem("ricettePreferite")) || [];
 function inizializzaTagIngredienti() {
@@ -80,10 +89,14 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
             window.open(ricetta.video, "_blank");
         }
     });
+    const etichetteTipi = { antipasto: "Antipasto", primo: "Primo", secondo: "Secondo", dolce: "Dolce" };
+    const tipoTesto = etichetteTipi[ricetta.tipo] || "Piatto";
     const iconaCuore = èNeiPreferiti ? "❤️" : "🤍";
     bloccoRicetta.innerHTML = `
-        <button class="tasto-cuore" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.4rem; cursor: pointer; padding: 0; width: auto; box-shadow: none;">${iconaCuore}</button>
-        <h3>${ricetta.nome}</h3>
+        <button class="tasto-cuore" style="position: absolute; top: 15px; right: 15px; background: none !important; border: none !important; font-size: 1.4rem; cursor: pointer; padding: 0; width: auto; box-shadow: none !important;">${iconaCuore}</button>
+        <!-- Forziamo il colore del testo scuro e uno sfondo visibile usando !important -->
+        <span class="badge-tipo" style="font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; font-weight: bold !important; color: #222222 !important; background-color: #f0f0f0 !important; padding: 4px 8px !important; border-radius: 4px !important; display: inline-block !important; margin-bottom: 5px !important;">${tipoTesto}</span>
+        <h3 style="margin-top: 5px;">${ricetta.nome}</h3>
         <p><strong>Ingredienti:</strong> ${ricetta.ingredienti.join(", ")}</p>
         <span class="badge-video">▶ Guarda il video</span>
     `;
@@ -93,16 +106,14 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
 }
 function eseguiRicercaFiltri() {
     const testoCercato = barraRicerca.value.toLowerCase().trim();
-    if (testoCercato === "" && ingredientiSelezionati.length === 0) {
-        contenitoreRisultati.innerHTML = "<p class='messaggio-vuoto'>Digita qualcosa o seleziona gli ingredienti che hai nel frigo!</p>";
-        return;
-    }
+    const tipoSelezionato = filtroTipo.value;
     const ricetteFiltrate = databaseRicette.filter(ricetta => {
         const corrispondeTesto = ricetta.nome.toLowerCase().includes(testoCercato);
         const corrispondeIngredienti = ingredientiSelezionati.every(ingrediente => 
             ricetta.ingredienti.includes(ingrediente)
         );
-        return corrispondeTesto && corrispondeIngredienti;
+        const corrispondeTipo = (tipoSelezionato === "tutti" || ricetta.tipo === tipoSelezionato);
+        return corrispondeTesto && corrispondeIngredienti && corrispondeTipo;
     });
     contenitoreRisultati.innerHTML = "";
     if (ricetteFiltrate.length === 0) {
@@ -142,6 +153,7 @@ function mostraPreferiti() {
         }
     });
 }
+filtroTipo.addEventListener("change", eseguiRicercaFiltri);
 barraRicerca.addEventListener("input", eseguiRicercaFiltri);
 inizializzaTagIngredienti();
 eseguiRicercaFiltri();
