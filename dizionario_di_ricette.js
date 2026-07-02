@@ -77,6 +77,7 @@ function inizializzaTagIngredienti() {
                 tag.classList.add("selezionato");
             }
             eseguiRicercaFiltri();
+            mostraPreferiti();
         });
         grigliaIngredienti.appendChild(tag);
     });
@@ -273,6 +274,7 @@ function invertiPreferito(nomeRicetta) {
     eseguiRicercaFiltri();
 }
 const zonaAzionePreferiti = document.getElementById("zona-azione-preferiti");
+const zonaAzionePreferiti = document.getElementById("zona-azione-preferiti");
 function mostraPreferiti() {
     contenitorePreferiti.innerHTML = "";
     if (zonaAzionePreferiti) zonaAzionePreferiti.innerHTML = "";
@@ -292,27 +294,32 @@ function mostraPreferiti() {
             tuttiGliIngredientiSpesa.push(...ricetta.ingredienti);
         }
     });
-    const listaSpesaUnica = [...new Set(tuttiGliIngredientiSpesa)].sort();
-    if (listaSpesaUnica.length > 0 && zonaAzionePreferiti) {
+    const listaSenzaDoppioni = [...new Set(tuttiGliIngredientiSpesa)];
+    const listaSpesaMancanti = listaSenzaDoppioni.filter(ingrediente => 
+        !ingredientiSelezionati.includes(ingrediente)
+    ).sort();
+    if (listaSpesaMancanti.length > 0 && zonaAzionePreferiti) {
         zonaAzionePreferiti.style.textAlign = "center";
         zonaAzionePreferiti.style.width = "100%";
         zonaAzionePreferiti.style.display = "block";
         const btnSpesa = document.createElement("button");
         btnSpesa.className = "barra-ricerca";
         btnSpesa.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px auto; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #2b8a3e; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(43,138,62,0.2); text-align: center;";
-        btnSpesa.innerHTML = "🛒 Copia lista della spesa";
+        btnSpesa.innerHTML = "🛒 Copia cose da comprare";
         btnSpesa.addEventListener("click", () => {
-            const testoSpesa = "🛒 *LISTA DELLA SPESA (Dizionario Ricette)*:\n\n" + listaSpesaUnica.map(ing => `- ${ing.charAt(0).toUpperCase() + ing.slice(1)}`).join("\n");
+            const testoSpesa = "🛒 *COSE DA COMPRARE (Ti mancano nel frigo)*:\n\n" + listaSpesaMancanti.map(ing => `- ${ing.charAt(0).toUpperCase() + ing.slice(1)}`).join("\n");
             navigator.clipboard.writeText(testoSpesa).then(() => {
                 btnSpesa.innerHTML = "✅ Lista Copiata!";
                 btnSpesa.style.backgroundColor = "#40c057";
                 setTimeout(() => {
-                    btnSpesa.innerHTML = "🛒 Copia lista della spesa";
+                    btnSpesa.innerHTML = "🛒 Copia cose da comprare";
                     btnSpesa.style.backgroundColor = "#2b8a3e";
                 }, 2000);
             });
         });
         zonaAzionePreferiti.appendChild(btnSpesa);
+    } else if (preferiti.length > 0 && zonaAzionePreferiti) {
+        zonaAzionePreferiti.innerHTML = "<p style='color: #40c057; font-weight: bold; text-align: center; margin: 10px 0;'>🎉 Hai già tutto nel frigo per cucinare i tuoi preferiti!</p>";
     }
 }
 filtroTipo.addEventListener("change", eseguiRicercaFiltri);
