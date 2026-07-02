@@ -402,6 +402,37 @@
             padding: 12px 16px !important;
             margin-bottom: 4px !important;
         }
+        .btn-tab {
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid rgba(128, 128, 128, 0.3);
+            background-color: var(--barra-ricerca-bg, rgba(255, 255, 255, 0.1));
+            color: var(--text-color, currentColor);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            flex: 1;
+            max-width: 200px;
+            text-align: center;
+        }
+        .btn-tab:hover {
+            background-color: rgba(128, 128, 128, 0.2);
+        }
+        .btn-tab.attivo {
+            background: linear-gradient(135deg, #ff9233, #ff5252) !important;
+            color: #ffffff !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 12px rgba(255, 82, 82, 0.25);
+        }
+        #risultati, #preferiti {
+            width: 100% !important;
+            max-width: 800px !important;
+            display: grid !important;
+            gap: 16px !important;
+            padding: 10px 0 !important;
+            box-sizing: border-box !important;
+        }
         @media screen and (max-width: 768px) {
                 #cerca-ingrediente {
         padding: 10px 14px !important;
@@ -445,39 +476,46 @@
         }
         </style>
     </head>
- <body>
+<body>
     <button id="tasto-tema" class="tasto-tema">🌙 Chiaro/Scuro</button>
     <h1>Dizionario di ricette</h1>
-    <div class="sottotitolo">Cerca piatti o seleziona cosa hai in frigo</div>
-    <div class="Cassa-interfaccia">
-        <div id="contatore-risultati" style="margin: 15px 0; font-size: 0.9rem; font-weight: bold; opacity: 0.8;"></div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label for="barra-ricerca">Cerca per nome piatto</label>
-            <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata...">
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-    <label>Filtra per ingredienti</label>
-<input type="text" id="cerca-ingrediente" class="barra-ricerca" placeholder="Filtra gli ingredienti... (es. uova, cipolla)" style="padding: 12px 16px; font-size: 1rem; width: 100%; box-sizing: border-box;">
-    <div id="griglia-ingredienti" class="griglia-ingredienti"></div>
-</div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label for="filtro-tipo">Filtra per tipo di piatto</label>
-            <select id="filtro-tipo" class="barra-ricerca" style="width: 100%; cursor: pointer; padding-right: 30px;">
-                <option value="tutti">Tutti i piatti</option>
-                <option value="antipasto">Antipasti</option>
-                <option value="primo">Primi piatti</option>
-                <option value="secondo">Secondi piatti</option>
-                <option value="dolce">Dolci</option>
-            </select>
-        </div>
+    <div class="contenitore-tab" style="display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 800px; justify-content: center;">
+        <button id="tab-ricette" class="btn-tab attivo" onclick="cambiaScheda('ricette')">📖 Esplora Ricette</button>
+        <button id="tab-preferiti" class="btn-tab" onclick="cambiaScheda('preferiti')">❤️ I Miei Preferiti</button>
     </div>
-    <button id="tasto-casuale" class="btn-casuale">🎲 Scegli una ricetta casuale</button>
+    <div id="sezione-ricette" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 0 auto;">
+        <div class="sottotitolo" style="text-align: center; width: 100%;">Cerca piatti o seleziona cosa hai in frigo</div>
+        <div class="Cassa-interfaccia" style="width: 100%; box-sizing: border-box;">
+            <div id="contatore-risultati" class="contatore-risultati" style="width: 100%; text-align: center; margin: 0 0 15px 0; font-size: 0.95rem; font-weight: bold; opacity: 0.85;"></div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label for="barra-ricerca">Cerca per nome piatto</label>
+                <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata...">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                <label for="cerca-ingrediente">Filtra per ingredienti</label>
+                <input type="text" id="cerca-ingrediente" class="barra-ricerca" placeholder="Filtra gli ingredienti... (es. uova, cipolla)" style="padding: 12px 16px; font-size: 1rem; width: 100%; box-sizing: border-box;">
+                <div id="griglia-ingredienti" class="griglia-ingredienti"></div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                <label for="filtro-tipo">Filtra per tipo di piatto</label>
+                <select id="filtro-tipo" class="barra-ricerca" style="width: 100%; cursor: pointer; padding-right: 30px;">
+                    <option value="tutti">Tutti i piatti</option>
+                    <option value="antipasto">Antipasti</option>
+                    <option value="primo">Primi piatti</option>
+                    <option value="secondo">Secondi piatti</option>
+                    <option value="dolce">Dolci</option>
+                </select>
+            </div>
+            <button id="tasto-casuale" class="btn-casuale">🎲 Scegli una ricetta casuale</button>
+        </div>
+        <div id="risultati" style="width: 100%;"></div>
     </div>
-    <div id="risultati"></div>
-   <h2 id="titolo-preferiti" class="titolo-preferiti">❤️ Le Tue Ricette Preferite</h2>
-    <div id="zona-azione-preferiti" style="margin-bottom: 15px; width: 100%;"></div>
-    <div id="preferiti"></div>
-    <script src="dizionario_di_ricette.js"></script>
+    <div id="sezione-preferiti" style="display: none; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 0 auto;">
+        <h2 id="titolo-preferiti" class="titolo-preferiti" style="text-align: center; width: 100%;">❤️ Le Tue Ricette Preferite</h2>
+        <div id="zona-azione-preferiti" style="margin-bottom: 15px; width: 100%;"></div>
+        <div id="preferiti" style="width: 100%;"></div>
+    </div>
     <a href="#tasto-tema" id="torna-su" class="torna-su" title="Torna in cima">▲</a>
+    <script src="dizionario_di_ricette.js"></script>
 </body>
 </html>
