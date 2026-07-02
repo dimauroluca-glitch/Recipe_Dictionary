@@ -90,12 +90,31 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
         }
     });
     const etichetteTipi = { antipasto: "Antipasto", primo: "Primo", secondo: "Secondo", dolce: "Dolce" };
-    const tipoTesto = etichetteTipi[ricetta.tipo] || "Piatto";
+    const tipoChiave = ricetta.tipo ? ricetta.tipo.toLowerCase().trim() : "";
+    const tipoTesto = etichetteTipi[tipoChiave] || "Ricetta";
+    const coloriTipi = {
+        antipasto: { testo: "#2b8a3e", bordo: "rgba(43, 138, 62, 0.4)" },
+        primo: { testo: "#e03131", bordo: "rgba(224, 49, 49, 0.4)" },
+        secondo: { testo: "#f59f00", bordo: "rgba(245, 159, 0, 0.4)" },
+        dolce: { testo: "#9c36b5", bordo: "rgba(156, 54, 181, 0.4)" }
+    };
+    const coloreAttuale = coloriTipi[tipoChiave] || { testo: "currentColor", bordo: "rgba(255,255,255,0.3)" };
     const iconaCuore = èNeiPreferiti ? "❤️" : "🤍";
     bloccoRicetta.innerHTML = `
         <button class="tasto-cuore" style="position: absolute; top: 15px; right: 15px; background: none !important; border: none !important; font-size: 1.4rem; cursor: pointer; padding: 0; width: auto; box-shadow: none !important;">${iconaCuore}</button>
-        <!-- Forziamo il colore del testo scuro e uno sfondo visibile usando !important -->
-        <span class="badge-tipo" style="font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; font-weight: bold !important; color: #222222 !important; background-color: #f0f0f0 !important; padding: 4px 8px !important; border-radius: 4px !important; display: inline-block !important; margin-bottom: 5px !important;">${tipoTesto}</span>
+        <span class="badge-tipo" style="
+            font-size: 0.7rem !important; 
+            text-transform: uppercase !important; 
+            letter-spacing: 1px !important; 
+            font-weight: 700 !important; 
+            color: ${coloreAttuale.testo} !important; 
+            border: 1px solid ${coloreAttuale.bordo} !important; 
+            padding: 3px 8px !important; 
+            border-radius: 4px !important; 
+            display: inline-block !important; 
+            margin-bottom: 8px !important;
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        ">${tipoTesto}</span>
         <h3 style="margin-top: 5px;">${ricetta.nome}</h3>
         <p><strong>Ingredienti:</strong> ${ricetta.ingredienti.join(", ")}</p>
         <span class="badge-video">▶ Guarda il video</span>
@@ -104,10 +123,11 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
     bottoneCuore.addEventListener("click", () => invertiPreferito(ricetta.nome));
     return bloccoRicetta;
 }
+const contatoreRisultati = document.getElementById("contatore-risultati");
 function eseguiRicercaFiltri() {
     const testoCercato = barraRicerca.value.toLowerCase().trim();
     const tipoSelezionato = filtroTipo.value;
-    const ricetteFiltrate = databaseRicette.filter(ricetta => {
+    let ricetteFiltrate = databaseRicette.filter(ricetta => {
         const corrispondeTesto = ricetta.nome.toLowerCase().includes(testoCercato);
         const corrispondeIngredienti = ingredientiSelezionati.every(ingrediente => 
             ricetta.ingredienti.includes(ingrediente)
@@ -115,6 +135,12 @@ function eseguiRicercaFiltri() {
         const corrispondeTipo = (tipoSelezionato === "tutti" || ricetta.tipo === tipoSelezionato);
         return corrispondeTesto && corrispondeIngredienti && corrispondeTipo;
     });
+    ricetteFiltrate.sort((a, b) => a.nome.localeCompare(b.nome));
+    if (testoCercato === "" && ingredientiSelezionati.length === 0 && tipoSelezionato === "tutti") {
+        contatoreRisultati.innerHTML = `📚 Totale ricette disponibili: ${ricetteFiltrate.length}`;
+    } else {
+        contatoreRisultati.innerHTML = `🔍 Ricette trovate: ${ricetteFiltrate.length}`;
+    }
     contenitoreRisultati.innerHTML = "";
     if (ricetteFiltrate.length === 0) {
         contenitoreRisultati.innerHTML = "<p class='messaggio-vuoto'>Nessuna ricetta corrisponde ai filtri selezionati.</p>";
