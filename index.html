@@ -293,6 +293,17 @@
             opacity: 1 !important;
             pointer-events: auto !important;
         }
+        .scheda-ricetta {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: comparsaMorbida 0.3s ease forwards;
+        }
+        @keyframes comparsaMorbida {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         @media screen and (max-width: 768px) {
             body { padding: 80px 16px 20px 16px; }
             h1 { font-size: 2rem; }
@@ -322,6 +333,7 @@
     <h1>Dizionario di ricette</h1>
     <div class="sottotitolo">Cerca piatti o seleziona cosa hai in frigo</div>
     <div class="Cassa-interfaccia">
+        <div id="contatore-risultati" style="margin: 15px 0; font-size: 0.9rem; font-weight: bold; opacity: 0.8;"></div>
         <div style="display: flex; flex-direction: column; gap: 8px;">
             <label for="barra-ricerca">Cerca per nome piatto</label>
             <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata...">
