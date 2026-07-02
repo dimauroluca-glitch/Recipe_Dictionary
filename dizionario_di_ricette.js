@@ -290,12 +290,28 @@ function invertiPreferito(nomeRicetta) {
     eseguiRicercaFiltri();
 }
 const zonaAzionePreferiti = document.getElementById("zona-azione-preferiti");
+function aggiornaContatoreTabPreferiti() {
+    const btnPreferiti = document.getElementById("tab-preferiti");
+    if (btnPreferiti) {
+        if (preferiti.length > 0) {
+            btnPreferiti.innerHTML = `❤️ I Miei Preferiti <span class="badge-contatore-tab">${preferiti.length}</span>`;
+        } else {
+            btnPreferiti.innerHTML = `❤️ I Miei Preferiti`;
+        }
+    }
+}
 function mostraPreferiti() {
     contenitorePreferiti.innerHTML = "";
     if (zonaAzionePreferiti) zonaAzionePreferiti.innerHTML = "";
-
+    aggiornaContatoreTabPreferiti();
     if (preferiti.length === 0) {
-        titoloPreferiti.style.display = "none";
+        titoloPreferiti.style.display = "block";
+        contenitorePreferiti.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px; opacity: 0.7;">
+                <p style="font-size: 1.1rem; font-weight: 500; margin-bottom: 8px;">🤍 Non hai ancora aggiunto nessuna ricetta ai tuoi preferiti!</p>
+                <p style="font-size: 0.9rem; opacity: 0.8;">Esplora il ricettario e clicca sul cuore in alto a destra delle schede per salvarle qui.</p>
+            </div>
+        `;
         return;
     }
     titoloPreferiti.style.display = "block";
@@ -326,11 +342,11 @@ function mostraPreferiti() {
             let ingFormattato = ing.charAt(0).toUpperCase() + ing.slice(1);
             righeIngredienti += "- " + ingFormattato + "\n";
         }
-        const testoSpesa = "🛒 *COSE DA COMPRARE*:\n\n" + righeIngredienti;
+        const testoSpesa = "🛒 *COSE DA COMPRARE (Ti mancano nel frigo)*:\n\n" + righeIngredienti;
         const btnCopia = document.createElement("button");
         btnCopia.className = "barra-ricerca";
         btnCopia.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #2b8a3e; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(43,138,62,0.2); text-align: center;";
-        btnCopia.innerHTML = "🛒 Copia cose da comprare"; 
+        btnCopia.innerHTML = "🛒 Copia cose da comprare";
         btnCopia.addEventListener("click", () => {
             navigator.clipboard.writeText(testoSpesa).then(() => {
                 btnCopia.innerHTML = "✅ Lista Copiata!";
@@ -345,14 +361,10 @@ function mostraPreferiti() {
         const btnWhatsApp = document.createElement("button");
         btnWhatsApp.className = "barra-ricerca";
         btnWhatsApp.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #075e54; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(7,94,84,0.2); text-align: center;";
-        btnWhatsApp.innerHTML = "💬 Invia Lista della Spesa";   
+        btnWhatsApp.innerHTML = "💬 Invia Lista della Spesa";
         btnWhatsApp.addEventListener("click", () => {
-            const testoSpesa = "🛒 *COSE DA COMPRARE*:\n\n" + listaSpesaMancanti.map(ing => "- " + ing.charAt(0).toUpperCase() + ing.slice(1)).join("\n");
             if (navigator.share) {
-                navigator.share({
-                    title: 'Lista della Spesa',
-                    text: testoSpesa
-                })
+                navigator.share({ title: 'Lista della Spesa', text: testoSpesa })
                 .catch((error) => console.log('Condivisione annullata', error));
             } else {
                 const urlRiserva = "https://wa.me" + encodeURIComponent(testoSpesa);
@@ -369,6 +381,7 @@ barraRicerca.addEventListener("input", eseguiRicercaFiltri);
 inizializzaTagIngredienti();
 eseguiRicercaFiltri();
 mostraPreferiti();
+aggiornaContatoreTabPreferiti();
 const tastoTema = document.getElementById("tasto-tema");
 const temaSalvato = localStorage.getItem("tema");
 if (temaSalvato) {
