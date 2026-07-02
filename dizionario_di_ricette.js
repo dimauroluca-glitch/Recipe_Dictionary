@@ -190,3 +190,20 @@ bottoneTornaSu.addEventListener("click", () => {
         document.body.scrollTo({ top: 0, behavior: "smooth" });
     }
 });
+barraRicerca.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        barraRicerca.blur();
+        contenitoreRisultati.scrollIntoView({ 
+            behavior: "smooth", 
+            block: "start" 
+        });
+    }
+});
+filtroTipo.addEventListener("change", () => {
+    setTimeout(() => {
+        contenitoreRisultati.scrollIntoView({ 
+            behavior: "smooth", 
+            block: "start" 
+        });
+    }, 100);
+});
