@@ -273,18 +273,14 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
         <p><strong>Ingredienti:</strong> ${ingredientiColorati}</p>
         <span class="badge-video">▶ Guarda il video</span>
     `;
-    const bottoneCuore = bloccoRicetta.querySelector(".tasto-cuore");
+        const bottoneCuore = bloccoRicetta.querySelector(".tasto-cuore");
     bottoneCuore.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (navigator.vibrate) {
-            navigator.vibrate(15);
-        }
+        e.stopPropagation(); 
         bottoneCuore.classList.add("cuore-attivo");
         setTimeout(() => {
             invertiPreferito(ricetta.nome);
         }, 300);
     });
-    
     return bloccoRicetta;
 }
 function invertiPreferito(nomeRicetta) {
@@ -298,6 +294,9 @@ function invertiPreferito(nomeRicetta) {
     eseguiRicercaFiltri();
 }
 function invertiPreferito(nomeRicetta) {
+    if (navigator.vibrate) {
+        navigator.vibrate(15);
+    }
     if (preferiti.includes(nomeRicetta)) {
         preferiti = preferiti.filter(nome => nome !== nomeRicetta);
     } else {
