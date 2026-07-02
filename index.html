@@ -268,23 +268,33 @@
         }
         </style>
     </head>
-    <body>
-            <button id="tasto-tema" class="tasto-tema">🌙 Chiaro/Scuro</button>
-            <h1>Dizionario di ricette</h1>
-            <div class="sottotitolo">Cerca piatti o seleziona cosa hai in frigo</div>
-            <div class="Cassa-interfaccia">
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <label for="barra-ricerca">Cerca per nome piatto</label>
-                    <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata...">
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <label>Filtra per ingredienti (scroll+shift)</label>
-                    <div id="griglia-ingredienti" class="griglia-ingredienti"></div>
-                </div>
-            </div>
-            <div id="risultati"></div>
-            <h2 id="titolo-preferiti" class="titolo-preferiti">❤️ Le Tue Ricette Preferite</h2>
-            <div id="preferiti"></div>
-        <script src="dizionario_di_ricette.js"></script>
-    </body>
+ <body>
+    <button id="tasto-tema" class="tasto-tema">🌙 Chiaro/Scuro</button>
+    <h1>Dizionario di ricette</h1>
+    <div class="sottotitolo">Cerca piatti o seleziona cosa hai in frigo</div>
+    <div class="Cassa-interfaccia">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="barra-ricerca">Cerca per nome piatto</label>
+            <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata...">
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label>Filtra per ingredienti (scroll+shift)</label>
+            <div id="griglia-ingredienti" class="griglia-ingredienti"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label for="filtro-tipo">Filtra per tipo di piatto</label>
+            <select id="filtro-tipo" class="barra-ricerca" style="width: 100%; cursor: pointer; padding-right: 30px;">
+                <option value="tutti">Tutti i piatti</option>
+                <option value="antipasto">Antipasti</option>
+                <option value="primo">Primi piatti</option>
+                <option value="secondo">Secondi piatti</option>
+                <option value="dolce">Dolci</option>
+            </select>
+        </div>
+    </div>
+    <div id="risultati"></div>
+    <h2 id="titolo-preferiti" class="titolo-preferiti">❤️ Le Tue Ricette Preferite</h2>
+    <div id="preferiti"></div>
+    <script src="dizionario_di_ricette.js"></script>
+</body>
 </html>
