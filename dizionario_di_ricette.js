@@ -190,28 +190,19 @@ bottoneTornaSu.addEventListener("click", () => {
         document.body.scrollTo({ top: 0, behavior: "smooth" });
     }
 });
+function saltaAiRisultati() {
+    barraRicerca.blur();
+    window.location.hash = "risultati";
+    setTimeout(() => {
+        history.replaceState("", document.title, window.location.pathname + window.location.search);
+    }, 10);
+}
 barraRicerca.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
         e.preventDefault();
-        barraRicerca.blur();
-        const risultati = document.getElementById("risultati");
-        if (risultati) {
-            risultati.scrollIntoView({ 
-                behavior: "smooth", 
-                block: "start" 
-            });
-        }
+        saltaAiRisultati();
     }
 });
 filtroTipo.addEventListener("change", () => {
-    barraRicerca.blur(); 
-    setTimeout(() => {
-        const risultati = document.getElementById("risultati");
-        if (risultati) {
-            risultati.scrollIntoView({ 
-                behavior: "smooth", 
-                block: "start" 
-            });
-        }
-    }, 150);
+    setTimeout(saltaAiRisultati, 150);
 });
