@@ -52,6 +52,7 @@ const databaseRicette = [
     { nome: "Moussaka", ingredienti: ["melanzane", "carne", "besciamella"], video: "https://www.youtube.com/watch?v=q5NGOKIu-Sc", tipo: "secondo" },
     { nome: "Pasta alla carbonara", ingredienti: ["pasta", "uova", "guanciale"], video: "https://www.youtube.com/shorts/YIsp44Y0QXM", tipo: "primo" },
 ];
+const boxSuggerimenti = document.getElementById("suggerimenti-ricerca");
 const tuttiGliIngredienti = [...new Set(databaseRicette.flatMap(r => r.ingredienti))].sort();
 const barraRicerca = document.getElementById("barra-ricerca");
 const grigliaIngredienti = document.getElementById("griglia-ingredienti");
@@ -362,6 +363,7 @@ function mostraPreferiti() {
         btnWhatsApp.className = "barra-ricerca";
         btnWhatsApp.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #075e54; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(7,94,84,0.2); text-align: center;";
         btnWhatsApp.innerHTML = "💬 Invia Lista della Spesa";
+        
         btnWhatsApp.addEventListener("click", () => {
             if (navigator.share) {
                 navigator.share({ title: 'Lista della Spesa', text: testoSpesa })
@@ -377,7 +379,44 @@ function mostraPreferiti() {
     }
 }
 filtroTipo.addEventListener("change", eseguiRicercaFiltri);
-barraRicerca.addEventListener("input", eseguiRicercaFiltri);
+barraRicerca.addEventListener("input", () => {
+    eseguiRicercaFiltri();
+    const testo = rimuoviAccenti(barraRicerca.value.toLowerCase().trim());
+    boxSuggerimenti.innerHTML = "";
+    if (testo === "") {
+        boxSuggerimenti.style.display = "none";
+        return;
+    }
+    const suggeriti = databaseRicette.filter(r => 
+        rimuoviAccenti(r.nome.toLowerCase()).includes(testo)
+    ).slice(0, 5);
+    if (suggeriti.length > 0) {
+        boxSuggerimenti.style.display = "block";
+        suggeriti.forEach(ricetta => {
+            const div = document.createElement("div");
+            div.className = "voce-suggerimento";
+            div.textContent = ricetta.nome;
+            div.addEventListener("click", () => {
+                barraRicerca.value = ricetta.nome;
+                boxSuggerimenti.style.display = "none";
+                eseguiRicercaFiltri();
+                barraRicerca.blur();
+                const cornice = document.querySelector(".Cassa-interfaccia");
+                if (cornice) {
+                    cornice.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            });
+            boxSuggerimenti.appendChild(div);
+        });
+    } else {
+        boxSuggerimenti.style.display = "none";
+    }
+});
+document.addEventListener("click", (e) => {
+    if (e.target !== barraRicerca && e.target !== boxSuggerimenti) {
+        if (boxSuggerimenti) boxSuggerimenti.style.display = "none";
+    }
+});
 inizializzaTagIngredienti();
 eseguiRicercaFiltri();
 mostraPreferiti();
@@ -401,19 +440,21 @@ tastoTema.addEventListener("click", () => {
     }
 });
 const bottoneTornaSu = document.getElementById("torna-su");
-bottoneTornaSu.addEventListener("click", () => {
-    const titoloInCima = document.querySelector("h1");
-    if (titoloInCima) {
-        titoloInCima.scrollIntoView({ 
-            behavior: "smooth", 
-            block: "start" 
-        });
-    } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        document.documentElement.scrollTo({ top: 0, behavior: "smooth" });
-        document.body.scrollTo({ top: 0, behavior: "smooth" });
-    }
-});
+if (bottoneTornaSu) {
+    bottoneTornaSu.addEventListener("click", () => {
+        const titoloInCima = document.querySelector("h1");
+        if (titoloInCima) {
+            titoloInCima.scrollIntoView({ 
+                behavior: "smooth", 
+                block: "start" 
+            });
+        } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            document.documentElement.scrollTo({ top: 0, behavior: "smooth" });
+            document.body.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    });
+}
 function saltaAiRisultati() {
     barraRicerca.blur();
     if (inputCercaIngrediente) inputCercaIngrediente.blur();
