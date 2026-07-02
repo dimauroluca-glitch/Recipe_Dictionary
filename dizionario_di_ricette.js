@@ -326,7 +326,7 @@ function mostraPreferiti() {
             let ingFormattato = ing.charAt(0).toUpperCase() + ing.slice(1);
             righeIngredienti += "- " + ingFormattato + "\n";
         }
-        const testoSpesa = "🛒 *COSE DA COMPRARE (Ti mancano nel frigo)*:\n\n" + righeIngredienti;
+        const testoSpesa = "🛒 *COSE DA COMPRARE*:\n\n" + righeIngredienti;
         const btnCopia = document.createElement("button");
         btnCopia.className = "barra-ricerca";
         btnCopia.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #2b8a3e; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(43,138,62,0.2); text-align: center;";
