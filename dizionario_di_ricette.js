@@ -150,17 +150,27 @@ function eseguiRicercaFiltri() {
     let ricetteFiltrate = databaseRicette.filter(ricetta => {
         const nomeRicettaSenzaAccenti = rimuoviAccenti(ricetta.nome.toLowerCase());
         const corrispondeTesto = nomeRicettaSenzaAccenti.includes(testoCercato);
-        const corrispondeIngredienti = ingredientiSelezionati.every(ingrediente => 
-            ricetta.ingredienti.includes(ingrediente)
-        );
         const corrispondeTipo = (tipoSelezionato === "tutti" || ricetta.tipo === tipoSelezionato);
-        return corrispondeTesto && corrispondeIngredienti && corrispondeTipo;
+        if (ingredientiSelezionati.length === 0) {
+            ricetta.percentualeFattibilita = 0;
+            return corrispondeTesto && corrispondeTipo;
+        }
+        const frigoMinuscolo = ingredientiSelezionati.map(ing => ing.toLowerCase().trim());
+        const ingredientiPosseduti = ricetta.ingredienti.filter(ing => 
+            frigoMinuscolo.includes(ing.toLowerCase().trim())
+        ).length;
+        ricetta.percentualeFattibilita = Math.round((ingredientiPosseduti / ricetta.ingredienti.length) * 100);
+        return corrispondeTesto && corrispondeTipo && (ricetta.percentualeFattibilita > 0);
     });
-    ricetteFiltrate.sort((a, b) => a.nome.localeCompare(b.nome));
-    if (testoCercato === "" && ingredientiSelezionati.length === 0 && tipoSelezionato === "tutti") {
-        contatoreRisultati.innerHTML = `📚 Totale ricette disponibili: ${ricetteFiltrate.length}`;
+    if (ingredientiSelezionati.length > 0) {
+        ricetteFiltrate.sort((a, b) => b.percentualeFattibilita - a.percentualeFattibilita);
     } else {
-        contatoreRisultati.innerHTML = `🔍 Ricette trovate: ${ricetteFiltrate.length}`;
+        ricetteFiltrate.sort((a, b) => a.nome.localeCompare(b.nome));
+    }
+    if (testoCercato === "" && ingredientiSelezionati.length === 0 && tipoSelezionato === "tutti") {
+        if (contatoreRisultati) contatoreRisultati.innerHTML = `📚 Totale ricette disponibili: ${ricetteFiltrate.length}`;
+    } else {
+        if (contatoreRisultati) contatoreRisultati.innerHTML = `🔍 Ricette trovate: ${ricetteFiltrate.length}`;
     }
     contenitoreRisultati.innerHTML = "";
     if (ricetteFiltrate.length === 0) {
@@ -174,6 +184,14 @@ function eseguiRicercaFiltri() {
         ricetteFiltrate.forEach((ricetta, indice) => {
             const èNeiPreferiti = preferiti.includes(ricetta.nome);
             const scheda = creaSchedaRicetta(ricetta, èNeiPreferiti);
+            if (ingredientiSelezionati.length > 0 && ricetta.percentualeFattibilita > 0) {
+                const testoPercentuale = document.createElement("span");
+                testoPercentuale.className = "ingrediente-mappato";
+                testoPercentuale.style.cssText = "font-size: 0.75rem; font-weight: bold; color: #f59f00 !important; display: block; margin-top: 5px; text-transform: uppercase; letter-spacing: 0.5px;";
+                testoPercentuale.innerHTML = `🎯 Compatibilità frigo: ${ricetta.percentualeFattibilita}%`;
+                const titoloScheda = scheda.querySelector("h3");
+                if (titoloScheda) titoloScheda.after(testoPercentuale);
+            }
             scheda.style.animationDelay = `${indice * 0.05}s`;
             contenitoreRisultati.appendChild(scheda);
         });
@@ -213,7 +231,7 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
             window.open(ricetta.video, "_blank");
         }
     });
-    const etichetteTipi = { antipasto: "Antipasto", primo: "Primo", secondo: "Secondo", dolce: "Dolce" };
+    const etichetteTipi = { antipasto: "🥗 Antipasto", primo: "🍝 Primo", secondo: "🥩 Secondo", dolce: "🍰 Dolce" };
     const tipoChiave = ricetta.tipo ? ricetta.tipo.toLowerCase().trim() : "";
     const tipoTesto = etichetteTipi[tipoChiave] || "Ricetta";
     const coloriTipi = {
@@ -298,16 +316,16 @@ function mostraPreferiti() {
         const ingredienteRicettaPulito = rimuoviAccenti(ingrediente.toLowerCase().trim());
         return !frigoPulito.includes(ingredienteRicettaPulito);
     }).sort();
-    if (listaSpesaMancanti.length > 0 && zonaAzionePreferiti) {
+        if (listaSpesaMancanti.length > 0 && zonaAzionePreferiti) {
         zonaAzionePreferiti.style.textAlign = "center";
         zonaAzionePreferiti.style.width = "100%";
         zonaAzionePreferiti.style.display = "block";
         const btnSpesa = document.createElement("button");
         btnSpesa.className = "barra-ricerca";
-        btnSpesa.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px auto; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #2b8a3e; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(43,138,62,0.2); text-align: center;";
+        btnSpesa.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #2b8a3e; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(43,138,62,0.2); text-align: center;";
         btnSpesa.innerHTML = "🛒 Copia cose da comprare";
+        const testoSpesa = "🛒 *COSE DA COMPRARE (Ti mancano nel frigo)*:\n\n" + listaSpesaMancanti.map(ing => `- ${ing.charAt(0).toUpperCase() + ing.slice(1)}`).join("\n");
         btnSpesa.addEventListener("click", () => {
-            const testoSpesa = "🛒 *COSE DA COMPRARE (Ti mancano nel frigo)*:\n\n" + listaSpesaMancanti.map(ing => `- ${ing.charAt(0).toUpperCase() + ing.slice(1)}`).join("\n");
             navigator.clipboard.writeText(testoSpesa).then(() => {
                 btnSpesa.innerHTML = "✅ Lista Copiata!";
                 btnSpesa.style.backgroundColor = "#40c057";
@@ -318,6 +336,15 @@ function mostraPreferiti() {
             });
         });
         zonaAzionePreferiti.appendChild(btnSpesa);
+        const btnWhatsApp = document.createElement("button");
+        btnWhatsApp.className = "barra-ricerca";
+        btnWhatsApp.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #075e54; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(7,94,84,0.2); text-align: center;";
+        btnWhatsApp.innerHTML = "💬 Invia Lista su WhatsApp";
+        btnWhatsApp.addEventListener("click", () => {
+            const urlWhatsApp = `https://whatsapp.com{encodeURIComponent(testoSpesa)}`;
+            window.open(urlWhatsApp, "_blank");
+        });
+        zonaAzionePreferiti.appendChild(btnWhatsApp);
     } else if (preferiti.length > 0 && zonaAzionePreferiti) {
         zonaAzionePreferiti.innerHTML = "<p style='color: #40c057; font-weight: bold; text-align: center; margin: 10px 0;'>🎉 Hai già tutto nel frigo per cucinare i tuoi preferiti!</p>";
     }
