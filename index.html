@@ -488,12 +488,78 @@
             background: rgba(255, 82, 82, 0.15);
             color: #ff9233;
         }
+        .blocco-errore-animato {
+            text-align: center !important;
+            padding: 30px 20px;
+            opacity: 0;
+            transform: scale(0.95);
+            animation: comparsaErrore 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes comparsaErrore {
+        to {
+            opacity: 1;
+            transform: scale(1);
+            }
+        }
+        .faccina-errore {
+            font-size: 3rem;
+            display: inline-block;
+            margin-bottom: 10px;
+            animation: dondolio 2s ease-in-out infinite;
+        }
+        @keyframes dondolio {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(15deg); }
+        }
+        .tasto-tema {
+            position: absolute !important;
+            top: 20px !important;
+            right: 20px !important;
+            padding: 10px 16px !important;
+            font-size: 0.9rem !important;
+            font-weight: bold !important;
+            cursor: pointer !important;
+            border-radius: 20px !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            color: var(--text-color) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+            transition: transform 0.2s ease, background-color 0.2s, border-color 0.2s !important;
+        }
+        [data-theme="light"] .tasto-tema {
+            background: rgba(0, 0, 0, 0.04) !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+        }
+        .tasto-tema:hover {
+            transform: translateY(-1px) !important;
+            background: rgba(255, 255, 255, 0.15) !important;
+            border-color: rgba(255, 255, 255, 0.4) !important;
+        }
+        [data-theme="light"] .tasto-tema:hover {
+            background: rgba(0, 0, 0, 0.08) !important;
+            border-color: rgba(0, 0, 0, 0.2) !important;
+        }
+        .tasto-tema:active {
+            transform: scale(0.96) !important;
+        }
         @media screen and (max-width: 768px) {
-                #cerca-ingrediente {
+        .tasto-tema {
+        top: 15px !important;
+        right: 15px !important;
+        padding: 8px 12px !important;
+        font-size: 0.8rem !important;
+    }
+        .tasto-tema:hover {
+        transform: none !important;
+    }
+        #cerca-ingrediente {
         padding: 10px 14px !important;
         font-size: 0.95rem !important;
     }
-            .btn-casuale {
+        .btn-casuale {
         width: 100% !important;
         min-width: none !important;
         padding: 14px 16px !important;
