@@ -66,8 +66,8 @@ function inizializzaTagIngredienti() {
     tuttiGliIngredienti.forEach(ingrediente => {
         const tag = document.createElement("div");
         tag.className = "tag-ingrediente";
+        tag.setAttribute("data-ingrediente", ingrediente.toLowerCase().trim());
         tag.innerHTML = `<span>${ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1)}</span>`;
-        
         tag.addEventListener("click", () => {
             if (ingredientiSelezionati.includes(ingrediente)) {
                 ingredientiSelezionati = ingredientiSelezionati.filter(i => i !== ingrediente);
@@ -79,6 +79,22 @@ function inizializzaTagIngredienti() {
             eseguiRicercaFiltri();
         });
         grigliaIngredienti.appendChild(tag);
+    });
+}
+const inputCercaIngrediente = document.getElementById("cerca-ingrediente");
+if (inputCercaIngrediente) {
+    inputCercaIngrediente.addEventListener("input", () => {
+        const testoFiltro = rimuoviAccenti(inputCercaIngrediente.value.toLowerCase().trim());
+        const tuttiITag = document.querySelectorAll(".tag-ingrediente");
+        tuttiITag.forEach(tag => {
+            const nomeIngredientePura = tag.getAttribute("data-ingrediente") || "";
+            const nomeIngredienteSenzaAccenti = rimuoviAccenti(nomeIngredientePura);
+            if (nomeIngredienteSenzaAccenti.includes(testoFiltro) || tag.classList.contains("selezionato")) {
+                tag.style.setProperty("display", "inline-block", "important");
+            } else {
+                tag.style.setProperty("display", "none", "important");
+            }
+        });
     });
 }
 function creaSchedaRicetta(ricetta, èNeiPreferiti) {
@@ -124,11 +140,16 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
     return bloccoRicetta;
 }
 const contatoreRisultati = document.getElementById("contatore-risultati");
+function rimuoviAccenti(testo) {
+    return testo.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+const tastoCasuale = document.getElementById("tasto-casuale");
 function eseguiRicercaFiltri() {
-    const testoCercato = barraRicerca.value.toLowerCase().trim();
+    const testoCercato = rimuoviAccenti(barraRicerca.value.toLowerCase().trim());
     const tipoSelezionato = filtroTipo.value;
     let ricetteFiltrate = databaseRicette.filter(ricetta => {
-        const corrispondeTesto = ricetta.nome.toLowerCase().includes(testoCercato);
+        const nomeRicettaSenzaAccenti = rimuoviAccenti(ricetta.nome.toLowerCase());
+        const corrispondeTesto = nomeRicettaSenzaAccenti.includes(testoCercato);
         const corrispondeIngredienti = ingredientiSelezionati.every(ingrediente => 
             ricetta.ingredienti.includes(ingrediente)
         );
@@ -143,7 +164,12 @@ function eseguiRicercaFiltri() {
     }
     contenitoreRisultati.innerHTML = "";
     if (ricetteFiltrate.length === 0) {
-        contenitoreRisultati.innerHTML = "<p class='messaggio-vuoto'>Nessuna ricetta corrisponde ai filtri selezionati.</p>";
+        contenitoreRisultati.innerHTML = `
+            <div style="text-align: center; padding: 20px;">
+                <p class='messaggio-vuoto' style='margin-bottom: 5px;'>Nessuna ricetta corrisponde ai filtri selezionati.</p>
+                <span class="link-reset" onclick="svuotaTuttiIFiltri()">❌ Svuota tutti i filtri</span>
+            </div>
+        `;
     } else {
         ricetteFiltrate.forEach((ricetta, indice) => {
             const èNeiPreferiti = preferiti.includes(ricetta.nome);
@@ -152,6 +178,89 @@ function eseguiRicercaFiltri() {
             contenitoreRisultati.appendChild(scheda);
         });
     }
+}
+function svuotaTuttiIFiltri() {
+    barraRicerca.value = "";
+    if (inputCercaIngrediente) inputCercaIngrediente.value = "";
+    filtroTipo.value = "tutti";
+    ingredientiSelezionati = [];
+    const tag = document.querySelectorAll(".tag-ingrediente");
+    tag.forEach(t => {
+        t.classList.remove("selezionato");
+        t.style.display = "inline-block";
+    });
+    eseguiRicercaFiltri();
+}
+tastoCasuale.addEventListener("click", () => {
+    if (databaseRicette.length === 0) return;
+    const indiceCasuale = Math.floor(Math.random() * databaseRicette.length);
+    const ricettaEstratta = databaseRicette[indiceCasuale];
+    svuotaTuttiIFiltri();
+    contenitoreRisultati.innerHTML = "";
+    const èNeiPreferiti = preferiti.includes(ricettaEstratta.nome);
+    const scheda = creaSchedaRicetta(ricettaEstratta, èNeiPreferiti);
+    contenitoreRisultati.appendChild(scheda);
+    contatoreRisultati.innerHTML = `🎲 Ricetta suggerita a sorpresa: 1`;
+    setTimeout(() => {
+        contenitoreRisultati.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+});
+function creaSchedaRicetta(ricetta, èNeiPreferiti) {
+    const bloccoRicetta = document.createElement("div");
+    bloccoRicetta.className = "scheda-ricetta";
+    bloccoRicetta.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("tasto-cuore") && !e.target.classList.contains("ingrediente-mappato")) {
+            window.open(ricetta.video, "_blank");
+        }
+    });
+    const etichetteTipi = { antipasto: "Antipasto", primo: "Primo", secondo: "Secondo", dolce: "Dolce" };
+    const tipoChiave = ricetta.tipo ? ricetta.tipo.toLowerCase().trim() : "";
+    const tipoTesto = etichetteTipi[tipoChiave] || "Ricetta";
+    const coloriTipi = {
+        antipasto: { testo: "#2b8a3e", bordo: "rgba(43, 138, 62, 0.4)" }, 
+        primo: { testo: "#e03131", bordo: "rgba(224, 49, 49, 0.4)" },     
+        secondo: { testo: "#f59f00", bordo: "rgba(245, 159, 0, 0.4)" },   
+        dolce: { testo: "#9c36b5", bordo: "rgba(156, 54, 181, 0.4)" }     
+    };
+    const coloreAttuale = coloriTipi[tipoChiave] || { testo: "currentColor", bordo: "rgba(255,255,255,0.3)" };
+    const iconaCuore = èNeiPreferiti ? "❤️" : "🤍";
+    const ingredientiColorati = ricetta.ingredienti.map(ingrediente => {
+        const ceLhoInFrigo = ingredientiSelezionati.includes(ingrediente);
+        if (ceLhoInFrigo) {
+            return `<span class="ingrediente-mappato" style="color: #40c057 !important; font-weight: bold;">${ingrediente}</span>`;
+        } else {
+            return `<span class="ingrediente-mappato" style="opacity: 0.75;">${ingrediente}</span>`;
+        }
+    }).join(", ");
+    bloccoRicetta.innerHTML = `
+        <button class="tasto-cuore" style="position: absolute; top: 15px; right: 15px; background: none !important; border: none !important; font-size: 1.4rem; cursor: pointer; padding: 0; width: auto; box-shadow: none !important; transition: transform 0.2s ease;">${iconaCuore}</button>
+        <span class="badge-tipo" style="
+            font-size: 0.7rem !important; 
+            text-transform: uppercase !important; 
+            letter-spacing: 1px !important; 
+            font-weight: 700 !important; 
+            color: ${coloreAttuale.testo} !important; 
+            border: 1px solid ${coloreAttuale.bordo} !important; 
+            padding: 3px 8px !important; 
+            border-radius: 4px !important; 
+            display: inline-block !important; 
+            margin-bottom: 8px !important;
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        ">${tipoTesto}</span>
+        
+        <h3 style="margin-top: 5px;">${ricetta.nome}</h3>
+        <p><strong>Ingredienti:</strong> ${ingredientiColorati}</p>
+        <span class="badge-video">▶ Guarda il video</span>
+    `;
+    const bottoneCuore = bloccoRicetta.querySelector(".tasto-cuore");
+    bottoneCuore.addEventListener("click", () => {
+        bottoneCuore.classList.add("cuore-attivo");
+        setTimeout(() => {
+            invertiPreferito(ricetta.nome);
+        }, 300);
+    });
+    
+    return bloccoRicetta;
 }
 function invertiPreferito(nomeRicetta) {
     if (preferiti.includes(nomeRicetta)) {
@@ -163,21 +272,48 @@ function invertiPreferito(nomeRicetta) {
     mostraPreferiti();
     eseguiRicercaFiltri();
 }
+const zonaAzionePreferiti = document.getElementById("zona-azione-preferiti");
 function mostraPreferiti() {
     contenitorePreferiti.innerHTML = "";
+    if (zonaAzionePreferiti) zonaAzionePreferiti.innerHTML = "";
     if (preferiti.length === 0) {
         titoloPreferiti.style.display = "none";
         return;
     }
     titoloPreferiti.style.display = "block";
-    preferiti.forEach((nome, indice) => {
+    const listaPreferitiOrdinata = [...preferiti].sort((a, b) => a.localeCompare(b));
+    let tuttiGliIngredientiSpesa = [];
+    listaPreferitiOrdinata.forEach((nome, indice) => {
         const ricetta = databaseRicette.find(r => r.nome === nome);
         if (ricetta) {
             const scheda = creaSchedaRicetta(ricetta, true);
             scheda.style.animationDelay = `${indice * 0.05}s`;
             contenitorePreferiti.appendChild(scheda);
+            tuttiGliIngredientiSpesa.push(...ricetta.ingredienti);
         }
     });
+    const listaSpesaUnica = [...new Set(tuttiGliIngredientiSpesa)].sort();
+    if (listaSpesaUnica.length > 0 && zonaAzionePreferiti) {
+        zonaAzionePreferiti.style.textAlign = "center";
+        zonaAzionePreferiti.style.width = "100%";
+        zonaAzionePreferiti.style.display = "block";
+        const btnSpesa = document.createElement("button");
+        btnSpesa.className = "barra-ricerca";
+        btnSpesa.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px auto; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #2b8a3e; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(43,138,62,0.2); text-align: center;";
+        btnSpesa.innerHTML = "🛒 Copia lista della spesa";
+        btnSpesa.addEventListener("click", () => {
+            const testoSpesa = "🛒 *LISTA DELLA SPESA (Dizionario Ricette)*:\n\n" + listaSpesaUnica.map(ing => `- ${ing.charAt(0).toUpperCase() + ing.slice(1)}`).join("\n");
+            navigator.clipboard.writeText(testoSpesa).then(() => {
+                btnSpesa.innerHTML = "✅ Lista Copiata!";
+                btnSpesa.style.backgroundColor = "#40c057";
+                setTimeout(() => {
+                    btnSpesa.innerHTML = "🛒 Copia lista della spesa";
+                    btnSpesa.style.backgroundColor = "#2b8a3e";
+                }, 2000);
+            });
+        });
+        zonaAzionePreferiti.appendChild(btnSpesa);
+    }
 }
 filtroTipo.addEventListener("change", eseguiRicercaFiltri);
 barraRicerca.addEventListener("input", eseguiRicercaFiltri);
