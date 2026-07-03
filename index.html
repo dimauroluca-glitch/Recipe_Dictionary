@@ -719,6 +719,9 @@
             background: #2b2b2b !important;
             border-color: rgba(0, 0, 0, 0.1) !important;
         }
+        #griglia-ingredienti:empty {
+            margin-top: 0;
+        }
         @media screen and (max-width: 768px) {
         .tasto-tema {
         top: 15px !important;
@@ -777,51 +780,52 @@
         <button id="tab-ricette" class="btn-tab attivo" onclick="cambiaScheda('ricette')">📖 Esplora Ricette</button>
         <button id="tab-preferiti" class="btn-tab" onclick="cambiaScheda('preferiti')">❤️ I Miei Preferiti</button>
     </div>
-     <div class="blocco-timer" style="margin-top: 15px; padding-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%;">
-                <label>⏱️ Timer da Cucina</label>
-                <div id="display-timer" style="font-size: 2.2rem; font-weight: 800; font-family: monospace; letter-spacing: 2px; color: var(--text-color);">00:00</div>
-                <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; width: 100%;">
-                    <button class="pillola-senza" onclick="impostaMinutiTimer(1)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+1 min</button>
-                    <button class="pillola-senza" onclick="impostaMinutiTimer(3)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+3 min</button>
-                    <button class="pillola-senza" onclick="impostaMinutiTimer(5)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+5 min</button>
-                    <button class="pillola-senza" onclick="impostaMinutiTimer(10)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+10 min</button>
-                </div>
-                <div style="display: flex; gap: 8px; justify-content: center; width: 100%; margin-top: 5px;">
-                    <button id="tasto-avvia-timer" class="btn-tab" style="padding: 8px 16px !important; font-size: 0.85rem !important; max-width: 100px !important;">▶️ Avvia</button>
-                    <button id="tasto-reset-timer" class="btn-tab" style="padding: 8px 16px !important; font-size: 0.85rem !important; max-width: 100px !important; background: rgba(128,128,128,0.1) !important;">🔄 Reset</button>
-                </div>
-            </div>
-            <br>
-            <br>
+    <div class="blocco-timer" style="margin-top: 15px; padding-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%;">
+        <label>⏱️ Timer da Cucina</label>
+        <div id="display-timer" style="font-size: 2.2rem; font-weight: 800; font-family: monospace; letter-spacing: 2px; color: var(--text-color);">00:00</div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; width: 100%;">
+            <button class="pillola-senza" onclick="impostaMinutiTimer(1)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+1 min</button>
+            <button class="pillola-senza" onclick="impostaMinutiTimer(3)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+3 min</button>
+            <button class="pillola-senza" onclick="impostaMinutiTimer(5)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+5 min</button>
+            <button class="pillola-senza" onclick="impostaMinutiTimer(10)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+10 min</button>
+        </div>
+        <div style="display: flex; gap: 8px; justify-content: center; width: 100%; margin-top: 5px;">
+            <button id="tasto-avvia-timer" class="btn-tab" style="padding: 8px 16px !important; font-size: 0.85rem !important; max-width: 100px !important;">▶️ Avvia</button>
+            <button id="tasto-reset-timer" class="btn-tab" style="padding: 8px 16px !important; font-size: 0.85rem !important; max-width: 100px !important; background: rgba(128,128,128,0.1) !important;">🔄 Reset</button>
+        </div>
+    </div>
+    <br>
+    <br>
     <div id="sezione-ricette" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 0 auto;">
         <div class="sottotitolo" style="text-align: center; width: 100%;">Cerca piatti o seleziona cosa hai in frigo</div>
-                <div class="Cassa-interfaccia" style="width: 100%; box-sizing: border-box;">
+        <div class="Cassa-interfaccia" style="width: 100%; box-sizing: border-box;">
             <div id="contatore-risultati" class="contatore-risultati" style="width: 100%; text-align: center; margin: 0 0 15px 0; font-size: 0.95rem; font-weight: bold; opacity: 0.85;"></div>
-        <div class="contenitore-intolleranze" style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; width: 100%; justify-content: center;">
-            <span class="pillola-senza" onclick="toggleFiltroSenza('glutine', this)">🌾 Senza Glutine</span>
-            <span class="pillola-senza" onclick="toggleFiltroSenza('lattosio', this)">🥛 Senza Lattosio</span>
-        </div>
-        <div class="contenitore-tempo-filtro" style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; width: 100%; justify-content: center;">
-            <span class="pillola-senza" data-tempo-max="20" onclick="filtraPerTempo(20, this)">⚡ Veloci (< 20 min)</span>
-            <span class="pillola-senza" data-tempo-max="40" onclick="filtraPerTempo(40, this)">🕒 Medi (< 40 min)</span>
-            <span class="pillola-senza" data-tempo-max="tutti" class="pillola-senza attiva" onclick="filtraPerTempo('tutti', this)">⏳ Tutti i tempi</span>
-        </div>
+            <div class="contenitore-intolleranze" style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; width: 100%; justify-content: center;">
+                <span class="pillola-senza" onclick="toggleFiltroSenza('glutine', this)">🌾 Senza Glutine</span>
+                <span class="pillola-senza" onclick="toggleFiltroSenza('lattosio', this)">🥛 Senza Lattosio</span>
+            </div>
+            <div class="contenitore-tempo-filtro" style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; width: 100%; justify-content: center;">
+                <span class="pillola-senza" data-tempo-max="20" onclick="filtraPerTempo(20, this)">⚡ Veloci (< 20 min)</span>
+                <span class="pillola-senza" data-tempo-max="40" onclick="filtraPerTempo(40, this)">🕒 Medi (< 40 min)</span>
+                <span class="pillola-senza" data-tempo-max="tutti" class="pillola-senza attiva" onclick="filtraPerTempo('tutti', this)">⏳ Tutti i tempi</span>
+            </div>
             <div style="display: flex; flex-direction: column; gap: 8px; position: relative;">
                 <label for="barra-ricerca">Cerca per nome piatto</label>
                 <div style="position: relative; width: 100%;">
                     <input type="text" id="barra-ricerca" class="barra-ricerca" placeholder="Es. Tiramisù, Frittata..." autocomplete="off" style="padding-right: 40px;">
-                    <span id="pulisci-ricerca" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.95rem; opacity: 0; pointer-events: none; transition: opacity 0.2s;">❌</span>
                 </div>
                 <div id="suggerimenti-ricerca" class="box-suggerimenti"></div>
             </div>
-        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <label for="cerca-ingrediente">Filtra per ingredienti</label>
-                <span id="svuota-frigo" style="font-size: 0.8rem; font-weight: bold; color: #e03131; cursor: pointer; text-decoration: underline; user-select: none;">🧊 Svuota frigo</span>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px; position: relative;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label for="cerca-ingrediente">Aggiungi ingredienti al frigo</label>
+                </div>
+                <div style="position: relative; width: 100%;">
+                    <input type="text" id="cerca-ingrediente" class="barra-ricerca" placeholder="Scrivi un ingrediente... (es. uova, pasta)" autocomplete="off">
+                    <div id="suggerimenti-ingrediente" class="box-suggerimenti"></div>
+                </div>
+                <div id="griglia-ingredienti" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px;"></div>
             </div>
-            <input type="text" id="cerca-ingrediente" class="barra-ricerca" placeholder="Filtra gli ingredienti... (es. uova, cipolla)" style="padding: 12px 16px; font-size: 1rem; width: 100%; box-sizing: border-box;">
-            <div id="griglia-ingredienti" class="griglia-ingredienti"></div>
-        </div>
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
                 <label for="filtro-tipo">Filtra per tipo di piatto</label>
                 <select id="filtro-tipo" class="barra-ricerca" style="width: 100%; cursor: pointer; padding-right: 30px;">
@@ -831,19 +835,19 @@
                     <option value="secondo">Secondi piatti</option>
                     <option value="dolce">Dolci</option>
                 </select>
-        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-            <label for="filtro-temperatura">Filtra per temperatura</label>
-            <select id="filtro-temperatura" class="barra-ricerca" style="width: 100%; cursor: pointer; padding-right: 30px;">
-                <option value="tutti">Qualsiasi temperatura</option>
-                <option value="caldo">🔥 Piatti Caldi</option>
-                <option value="freddo">❄️ Piatti Freddi</option>
-                <option value="tiepido">🌡️ Piatti Tiepidi</option>
-            </select>
-        </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                <label for="filtro-temperatura">Filtra per temperatura</label>
+                <select id="filtro-temperatura" class="barra-ricerca" style="width: 100%; cursor: pointer; padding-right: 30px;">
+                    <option value="tutti">Qualsiasi temperatura</option>
+                    <option value="caldo">🔥 Piatti Caldi</option>
+                    <option value="freddo">❄️ Piatti Freddi</option>
+                    <option value="tiepido">🌡️ Piatti Tiepidi</option>
+                </select>
             </div>
             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(128, 128, 128, 0.2); width: 100%;">
+                <button id="tasto-casuale" class="btn-casuale">🎲 Scegli una ricetta casuale</button>
             </div>
-            <button id="tasto-casuale" class="btn-casuale">🎲 Scegli una ricetta casuale</button>
         </div>
         <div id="risultati" style="width: 100%;"></div>
     </div>
