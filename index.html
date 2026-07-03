@@ -787,6 +787,46 @@
         [data-theme="light"] .numero-titolo-preferiti {
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
         }
+        .box-suggerimenti {
+            position: absolute !important;
+            top: 100% !important;
+            left: 0 !important;
+            width: 100% !important;
+            background: rgba(30, 30, 30, 0.75) !important; 
+            backdrop-filter: blur(15px) !important;    
+            -webkit-backdrop-filter: blur(15px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 12px !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+            margin-top: 5px !important;
+            z-index: 99999 !important;
+            max-height: 250px !important;
+            overflow-y: auto !important;
+            padding: 6px !important;
+            box-sizing: border-box !important;
+        }
+        [data-theme="light"] .box-suggerimenti {
+            background: rgba(255, 255, 255, 0.8) !important;
+            border: 1px solid rgba(15, 23, 42, 0.08) !important;
+            box-shadow: 0 8px 32px rgba(15, 23, 42, 0.05) !important;
+        }
+        .voce-suggerimento {
+            padding: 10px 14px !important;
+            font-size: 0.95rem !important;
+            font-weight: 600 !important;
+            color: var(--text-main) !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            transition: all 0.2s ease !important;
+        }
+        .voce-suggerimento:hover, .voce-suggerimento:active {
+            background: linear-gradient(135deg, rgba(255, 146, 51, 0.15), rgba(255, 82, 82, 0.15)) !important;
+            color: #ff5252 !important;
+            padding-left: 18px !important;
+        }
         @media screen and (max-width: 950px) and (orientation: landscape) {
             html, body {
                 width: 100vw !important;
