@@ -1039,20 +1039,27 @@ function avviaSlotDefinitiva() {
     const contenitore = document.getElementById("risultati");
     if (!contenitore || !databaseRicette || databaseRicette.length === 0) return;
     let giri = 0;
-    const durataTotaleGiri = 25;
+    const durataTotaleGiri = 25; 
     const btnSlot = document.getElementById("tasto-casuale");
     if (btnSlot) btnSlot.disabled = true;
+    contenitore.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px; box-sizing: border-box; width: 100%;">
+            <div style="font-size: 1.4rem; font-weight: 800; color: #f59f00; letter-spacing: 2px; margin-bottom: 15px;">
+                🎰 SPINNING... 🎰
+            </div>
+            <!-- Questo micro-box conterrà solo il testo che cambia, evitando ricalcoli pesanti -->
+            <div id="testo-slot-vortice" style="font-size: 1.7rem; font-weight: 700; color: var(--text-main); font-family: monospace; min-height: 50px; display: flex; justify-content: center; align-items: center; word-break: break-word;">
+                Selezionando...
+            </div>
+        </div>
+    `;
+    const elementoTestoVortice = document.getElementById("testo-slot-vortice");
     const intervalloSlot = setInterval(() => {
         const indiceCasuale = Math.floor(Math.random() * databaseRicette.length);
         const ricettaCasuale = databaseRicette[indiceCasuale];
-        contenitore.innerHTML = `
-            <div style="text-align: center; padding: 40px 20px; font-size: 1.5rem; font-weight: 800; color: #f59f00; letter-spacing: 1px;">
-                🎰 SPINNING... 🎰
-                <div style="margin-top: 15px; font-size: 1.8rem; color: var(--text-main); font-family: monospace;">
-                    ${ricettaCasuale ? ricettaCasuale.nome : "Selezionando..."}
-                </div>
-            </div>
-        `;
+        if (elementoTestoVortice && ricettaCasuale) {
+            elementoTestoVortice.textContent = ricettaCasuale.nome;
+        }
         giri++;
         if (giri >= durataTotaleGiri) {
             clearInterval(intervalloSlot);
