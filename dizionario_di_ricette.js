@@ -1044,28 +1044,31 @@ function avviaSlotDefinitiva() {
     if (btnSlot) btnSlot.disabled = true;
     contenitore.innerHTML = `
         <div style="text-align: center; padding: 40px 20px; box-sizing: border-box; width: 100%;">
-            <div style="font-size: 1.4rem; font-weight: 800; color: #f59f00; letter-spacing: 2px; margin-bottom: 15px;">
+            <div id="titolo-spinning" style="font-size: 1.4rem; font-weight: 800; color: #f59f00; letter-spacing: 2px; margin-bottom: 15px; transition: opacity 0.05s ease;">
                 🎰 SPINNING... 🎰
             </div>
-            <!-- Questo micro-box conterrà solo il testo che cambia, evitando ricalcoli pesanti -->
-            <div id="testo-slot-vortice" style="font-size: 1.7rem; font-weight: 700; color: var(--text-main); font-family: monospace; min-height: 50px; display: flex; justify-content: center; align-items: center; word-break: break-word;">
+            <div id="testo-slot-vortice" style="font-size: 1.7rem; font-weight: 700; color: var(--text-main); font-family: monospace; min-height: 50px; display: flex; justify-content: center; align-items: center; word-break: break-word; transition: transform 0.05s ease, opacity 0.05s ease;">
                 Selezionando...
             </div>
         </div>
     `;
     const elementoTestoVortice = document.getElementById("testo-slot-vortice");
+    const titoloSpinning = document.getElementById("titolo-spinning");
     const intervalloSlot = setInterval(() => {
         const indiceCasuale = Math.floor(Math.random() * databaseRicette.length);
         const ricettaCasuale = databaseRicette[indiceCasuale];
         if (elementoTestoVortice && ricettaCasuale) {
             elementoTestoVortice.textContent = ricettaCasuale.nome;
+            elementoTestoVortice.style.opacity = giri % 2 === 0 ? "0.6" : "1";
+            elementoTestoVortice.style.transform = giri % 2 === 0 ? "scale(0.97)" : "scale(1)";
+            if (titoloSpinning) titoloSpinning.style.opacity = giri % 2 === 0 ? "0.4" : "1";
         }
         giri++;
         if (giri >= durataTotaleGiri) {
             clearInterval(intervalloSlot);
             const indiceVincente = Math.floor(Math.random() * databaseRicette.length);
             const piattoVincitore = databaseRicette[indiceVincente];
-            contenitore.innerHTML = "";
+            contenitore.innerHTML = ""; 
             const frigoMinuscolo = (ingredientiSelezionati || []).map(ing => ing.toLowerCase().trim());
             piattoVincitore.ingredientiMancanti = piattoVincitore.ingredienti.filter(ing => 
                 !frigoMinuscolo.includes(ing.toLowerCase().trim())
