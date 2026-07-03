@@ -722,6 +722,71 @@
         #griglia-ingredienti:empty {
             margin-top: 0;
         }
+        .blocco-spesa-consolidata {
+            background: rgba(255, 255, 255, 0.04) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            border: 1px solid rgba(128, 128, 128, 0.2) !important;
+            border-radius: 16px !important;
+            padding: 20px;
+            margin-bottom: 25px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left !important;
+        }
+        [data-theme="light"] .blocco-spesa-consolidata {
+            background: rgba(255, 255, 255, 0.75) !important;
+            border-color: rgba(0, 0, 0, 0.08) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03) !important;
+        }
+        .lista-spesa-voci {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 10px !important;
+            padding: 0 !important;
+            margin: 12px 0 0 0 !important;
+            list-style: none !important;
+        }
+        .voce-spesa-item {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            background: rgba(128, 128, 128, 0.1) !important;
+            padding: 6px 12px !important;
+            border-radius: 20px !important;
+            font-size: 0.9rem !important;
+            cursor: pointer !important;
+            user-select: none !important;
+            border: 1px solid rgba(128, 128, 128, 0.15) !important;
+            transition: all 0.2s ease !important;
+        }
+        .voce-spesa-item input[type="checkbox"] {
+            cursor: pointer !important;
+            margin: 0 !important;
+        }
+        .voce-spesa-item.comprato {
+            opacity: 0.4 !important;
+            background: rgba(0, 0, 0, 0.02) !important;
+        }
+        .voce-spesa-item.comprato span {
+            text-decoration: line-through !important;
+        }
+        .numero-titolo-preferiti {
+            display: inline-block !important;
+            background: #ff5252 !important;
+            color: #ffffff !important;
+            font-size: 0.85rem !important;
+            font-weight: 800 !important;
+            padding: 3px 9px !important;
+            border-radius: 12px !important;
+            margin-left: 8px !important;
+            vertical-align: middle !important;
+            box-shadow: 0 2px 6px rgba(255, 82, 82, 0.2) !important;
+            line-height: normal !important;
+        }
+        [data-theme="light"] .numero-titolo-preferiti {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+        }
         @media screen and (max-width: 950px) and (orientation: landscape) {
             html, body {
                 width: 100vw !important;
