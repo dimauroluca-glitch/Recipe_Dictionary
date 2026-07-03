@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
     <head>
+        <link rel="manifest" href="manifest.json">
         <title>Dizionario di Ricette</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -754,5 +755,14 @@
     </div>
     <a href="#tasto-tema" id="torna-su" class="torna-su" title="Torna in cima">▲</a>
     <script src="dizionario_di_ricette.js"></script>
+    <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('PWA registrata con successo!', reg))
+        .catch(err => console.log('Errore registrazione PWA:', err));
+    });
+  }
+</script>
 </body>
 </html>
