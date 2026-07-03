@@ -102,7 +102,7 @@ const inputCercaIngrediente = document.getElementById("cerca-ingrediente");
 if (inputCercaIngrediente) {
     inputCercaIngrediente.addEventListener("input", () => {
         const testo = rimuoviAccenti(inputCercaIngrediente.value.toLowerCase().trim());
-        boxSuggerimentiIngrediente.innerHTML = "";
+        boxSuggerimentiIngrediente.innerHTML = ""; 
         if (testo === "") {
             boxSuggerimentiIngrediente.style.setProperty("display", "none", "important");
             return;
@@ -116,12 +116,13 @@ if (inputCercaIngrediente) {
             ingredientiTrovati.forEach(ingrediente => {
                 const div = document.createElement("div");
                 div.className = "voce-suggerimento";
-                div.textContent = ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1);
+                const nomeFormattato = ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1);
+                div.innerHTML = `<span>${nomeFormattato}</span>`;
                 div.addEventListener("click", () => {
                     ingredientiSelezionati.push(ingrediente); 
                     inputCercaIngrediente.value = "";         
-                    boxSuggerimentiIngrediente.style.setProperty("display", "none", "important");
-                    inizializzaTagIngredienti();
+                    boxSuggerimentiIngrediente.style.setProperty("display", "none", "important"); 
+                    inizializzaTagIngredienti(); 
                     eseguiRicercaFiltri();       
                     mostraPreferiti();
                     inputCercaIngrediente.focus(); 
