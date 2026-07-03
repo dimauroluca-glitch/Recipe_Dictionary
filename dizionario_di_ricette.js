@@ -396,6 +396,29 @@ function mostraPreferiti() {
     if (titoloPreferiti) {
         titoloPreferiti.innerHTML = `❤️ Le Tue Ricette Preferite <span class="numero-titolo-preferiti">${preferiti.length}</span>`;
     }
+    let piattiProntiSubito = [];
+    const frigoMinuscolo = ingredientiSelezionati.map(i => i.toLowerCase().trim());
+    preferiti.forEach(nomeRicetta => {
+        const ricettaTrovata = databaseRicette.find(r => r.nome === nomeRicetta);
+        if (ricettaTrovata) {
+            const haTutto = ricettaTrovata.ingredienti.every(ing => 
+                frigoMinuscolo.includes(ing.toLowerCase().trim())
+            );
+            if (haTutto) {
+                piattiProntiSubito.push(ricettaTrovata.nome);
+            }
+        }
+    });
+    let htmlAvvisoPronto = "";
+    if (piattiProntiSubito.length > 0) {
+        const elencoPiattiInStringa = piattiProntiSubito.join(", ");
+        htmlAvvisoPronto = `
+            <div class="blocco-spesa-consolidata" style="background: rgba(43, 138, 62, 0.1) !important; border-color: rgba(43, 138, 62, 0.3) !important; margin-bottom: 15px !important;">
+                <h4 style="margin: 0; font-size: 1rem; color: #40c057 !important; display: flex; align-items: center; gap: 6px;">🟢 Puoi farla subito!</h4>
+                <p style="font-size: 0.85rem; margin: 4px 0 0 0; font-weight: 600;">Hai tutti gli ingredienti in frigo per preparare: <span style="color: #40c057;">${elencoPiattiInStringa}</span></p>
+            </div>
+        `;
+    }
     let tuttiGliIngredientiPreferiti = [];
     preferiti.forEach(nomeRicetta => {
         const ricettaTrovata = databaseRicette.find(r => r.nome === nomeRicetta);
@@ -408,58 +431,55 @@ function mostraPreferiti() {
             });
         }
     });
-    const frigoMinuscolo = ingredientiSelezionati.map(i => i.toLowerCase().trim());
     const ingredientiDaComprare = tuttiGliIngredientiPreferiti.filter(ing => !frigoMinuscolo.includes(ing));
     let compratiSalvati = [];
     const memoriaComprati = localStorage.getItem("ingredientiCompratiSpesa");
     if (memoriaComprati) {
         compratiSalvati = JSON.parse(memoriaComprati);
     }
-    if (ingredientiDaComprare.length > 0 && contenitoreZonaAzione) {
-        let htmlListaVoci = "";
-        let testoCondivisione = "🛒 *LISTA DELLA SPESA* 🛒\nEcco gli ingredienti che mi mancano:\n\n";
-        ingredientiDaComprare.forEach((ing, i) => {
-            const nomeFormattato = ing.charAt(0).toUpperCase() + ing.slice(1);
-            const eraGiaComprato = compratiSalvati.includes(ing);
-            const classeComprato = eraGiaComprato ? "comprato" : "";
-            const attributoChecked = eraGiaComprato ? "checked" : "";
-            htmlListaVoci += `
-                <li class="voce-spesa-item ${classeComprato}" id="item-spesa-${i}" data-ingrediente-nome="${ing}">
-                    <input type="checkbox" id="check-spesa-${i}" ${attributoChecked}>
-                    <span>${nomeFormattato}</span>
-                </li>
+    if (contenitoreZonaAzione) {
+        let htmlListaSpesaCompleta = "";
+        if (ingredientiDaComprare.length > 0) {
+            let htmlListaVoci = "";
+            let testoCondivisione = "🛒 *LISTA DELLA SPESA* 🛒\nEcco gli ingredienti che mi mancano:\n\n";
+            ingredientiDaComprare.forEach((ing, i) => {
+                const nomeFormattato = ing.charAt(0).toUpperCase() + ing.slice(1);
+                const eraGiaComprato = compratiSalvati.includes(ing);
+                const classeComprato = eraGiaComprato ? "comprato" : "";
+                const attributoChecked = eraGiaComprato ? "checked" : "";
+                htmlListaVoci += `
+                    <li class="voce-spesa-item ${classeComprato}" id="item-spesa-${i}" data-ingrediente-nome="${ing}">
+                        <input type="checkbox" id="check-spesa-${i}" ${attributoChecked}>
+                        <span>${nomeFormattato}</span>
+                    </li>
+                `;
+                testoCondivisione += eraGiaComprato ? `✅ ~${nomeFormattato}~\n` : `▫️ ${nomeFormattato}\n`;
+            });
+            htmlListaSpesaCompleta = `
+                <div class="blocco-spesa-consolidata" style="position: relative;">
+                    <h4 style="margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 6px;">🛒 Lista della Spesa Intelligente</h4>
+                    <p style="font-size: 0.8rem; opacity: 0.7; margin: 4px 0 0 0;">Ingredienti necessari combinati (esclusi quelli in frigo):</p>
+                    <ul class="lista-spesa-voci">${htmlListaVoci}</ul>
+                    <button id="tasto-condividi-spesa" class="btn-tab" style="width: 100% !important; max-width: none !important; margin-top: 15px !important; padding: 10px 16px !important; font-size: 0.9rem !important; background: linear-gradient(135deg, #ff9233, #ff5252) !important; color: #ffffff !important; border: none !important; box-shadow: 0 4px 12px rgba(255, 82, 82, 0.25) !important;">
+                        📤 Condividi Lista della Spesa
+                    </button>
+                </div>
             `;
-            testoCondivisione += eraGiaComprato ? `✅ ~${nomeFormattato}~\n` : `▫️ ${nomeFormattato}\n`;
-        });
-        contenitoreZonaAzione.innerHTML = `
-            <div class="blocco-spesa-consolidata" style="position: relative;">
-                <h4 style="margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 6px;">🛒 Lista della Spesa Intelligente</h4>
-                <p style="font-size: 0.8rem; opacity: 0.7; margin: 4px 0 0 0;">Ingredienti necessari combinati (esclusi quelli in frigo):</p>
-                <ul class="lista-spesa-voci">${htmlListaVoci}</ul>
-                <button id="tasto-condividi-spesa" class="btn-tab" style="width: 100% !important; max-width: none !important; margin-top: 15px !important; padding: 10px 16px !important; font-size: 0.9rem !important; background: linear-gradient(135deg, #ff9233, #ff5252) !important; color: #ffffff !important; border: none !important; box-shadow: 0 4px 12px rgba(255, 82, 82, 0.25) !important;">
-                    📤 Condividi Lista della Spesa
-                </button>
-            </div>
-        `;
+        }
+        contenitoreZonaAzione.innerHTML = htmlAvvisoPronto + htmlListaSpesaCompleta;
         const btnCondividi = contenitoreZonaAzione.querySelector("#tasto-condividi-spesa");
         if (btnCondividi) {
             btnCondividi.addEventListener("click", async () => {
+                let testoCondivisione = "🛒 *LISTA DELLA SPESA* 🛒\nEcco gli ingredienti che mi mancano:\n\n";
+                ingredientiDaComprare.forEach(ing => {
+                    const eraGiaComprato = compratiSalvati.includes(ing);
+                    testoCondivisione += eraGiaComprato ? `✅ ~${ing}~\n` : `▫️ ${ing}\n`;
+                });
+
                 if (navigator.share) {
-                    try {
-                        await navigator.share({
-                            title: 'Lista della Spesa - Dizionario di Ricette',
-                            text: testoCondivisione
-                        });
-                    } catch (err) {
-                        console.log("Condivisione annullata:", err);
-                    }
+                    try { await navigator.share({ title: 'Lista della Spesa', text: testoCondivisione }); } catch (err) {}
                 } else {
-                    try {
-                        await navigator.clipboard.writeText(testoCondivisione);
-                        alert("📋 Lista della spesa copiata negli appunti!");
-                    } catch (err) {
-                        alert("Impossibile condividere.");
-                    }
+                    try { await navigator.clipboard.writeText(testoCondivisione); alert("📋 Copiata!"); } catch (err) {}
                 }
             });
         }
@@ -468,14 +488,10 @@ function mostraPreferiti() {
             const checkbox = li.querySelector('input[type="checkbox"]');
             const nomeIngrediente = li.getAttribute("data-ingrediente-nome");
             li.addEventListener("click", (e) => {
-                if (e.target !== checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                }
+                if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
                 li.classList.toggle("comprato", checkbox.checked);
                 if (checkbox.checked) {
-                    if (!compratiSalvati.includes(nomeIngrediente)) {
-                        compratiSalvati.push(nomeIngrediente);
-                    }
+                    if (!compratiSalvati.includes(nomeIngrediente)) compratiSalvati.push(nomeIngrediente);
                 } else {
                     compratiSalvati = compratiSalvati.filter(ing => ing !== nomeIngrediente);
                 }
