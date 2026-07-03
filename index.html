@@ -860,6 +860,15 @@
         <div id="preferiti" style="width: 100%;"></div>
     </div>
     <a href="#tasto-tema" id="torna-su" class="torna-su" title="Torna in cima">▲</a>
-    <script src="dizionario_di_ricette.js?v=1"></script>
+    <script>
+        const linkCss = document.querySelector('link[rel="stylesheet"]');
+        if (linkCss) {
+            const urlPulito = linkCss.href.split('?')[0];
+            linkCss.href = urlPulito + '?v=' + Date.now();
+        }
+        const scriptJs = document.createElement('script');
+        scriptJs.src = 'dizionario_di_ricette.js?v=' + Date.now();
+        document.body.appendChild(scriptJs);
+    </script>
 </body>
 </html>
