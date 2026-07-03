@@ -677,23 +677,27 @@ function riproduciBeepElettronico() {
         if (audioCtx.state === 'suspended') audioCtx.resume();
         const oscillatore = audioCtx.createOscillator();
         const guadagnoNode = audioCtx.createGain();
-        oscillatore.type = 'sine';
-        oscillatore.frequency.value = 880;
+        oscillatore.type = 'square'; 
+        oscillatore.frequency.value = 2500; 
         guadagnoNode.gain.setValueAtTime(1.0, audioCtx.currentTime);
         oscillatore.connect(guadagnoNode);
         guadagnoNode.connect(audioCtx.destination);
         oscillatore.start();
-        oscillatore.stop(audioCtx.currentTime + 0.12);
+        oscillatore.stop(audioCtx.currentTime + 0.08); 
     } catch(e) {
         console.log("Suono bloccato:", e);
     }
 }
 function avviaSuoneriaInfinita() {
     riproduciBeepElettronico();
-    setTimeout(riproduciBeepElettronico, 200);
+    setTimeout(riproduciBeepElettronico, 120);
+    setTimeout(riproduciBeepElettronico, 240);
+    setTimeout(riproduciBeepElettronico, 360);
     allarmeIntervalloSuono = setInterval(() => {
         riproduciBeepElettronico();
-        setTimeout(riproduciBeepElettronico, 200);
+        setTimeout(riproduciBeepElettronico, 120);
+        setTimeout(riproduciBeepElettronico, 240);
+        setTimeout(riproduciBeepElettronico, 360);
     }, 2000);
 }
 function fermaSuoneriaInfinita() {
