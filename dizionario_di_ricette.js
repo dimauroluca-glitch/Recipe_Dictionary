@@ -1039,84 +1039,63 @@ function avviaSlotDefinitiva() {
     const contenitore = document.getElementById("risultati");
     if (!contenitore || !databaseRicette || databaseRicette.length === 0) return;
     let giri = 0;
-    const durataTotaleGiri = 15;
+    const durataTotaleGiri = 25;
     const btnSlot = document.getElementById("tasto-casuale");
     if (btnSlot) btnSlot.disabled = true;
-    contenitore.innerHTML = `
-        <div style="text-align: center; padding: 30px 15px; box-sizing: border-box; width: 100%;">
-            <div style="font-size: 1.3rem; font-weight: 800; color: #f59f00; letter-spacing: 2px; margin-bottom: 15px; animation: pulse 0.5s infinite alternate;">
-                🎰 SPINNING... 🎰
-            </div>
-            <div style="height: 60px; overflow: hidden; position: relative; border: 1px solid rgba(128,128,128,0.2); border-radius: 12px; background: rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center;">
-                <div id="testo-slot-vortice" style="font-size: 1.6rem; font-weight: 700; color: var(--text-main); font-family: monospace; position: absolute; width: 100%; text-align: center; transition: all 0.08s ease-in-out; transform: translateY(0); opacity: 1;">
-                    Selezionando...
-                </div> 
-            </div>
-        </div>
-    `;
-    const elementoTestoVortice = document.getElementById("testo-slot-vortice");
     const intervalloSlot = setInterval(() => {
         const indiceCasuale = Math.floor(Math.random() * databaseRicette.length);
         const ricettaCasuale = databaseRicette[indiceCasuale];
-        if (elementoTestoVortice && ricettaCasuale) {
-            elementoTestoVortice.style.transform = "translateY(40px)";
-            elementoTestoVortice.style.opacity = "0";
-            setTimeout(() => {
-                elementoTestoVortice.style.transition = "none";
-                elementoTestoVortice.style.transform = "translateY(-40px)";
-                elementoTestoVortice.textContent = ricettaCasuale.nome;
-                setTimeout(() => {
-                    elementoTestoVortice.style.transition = "all 0.06s ease-in-out";
-                    elementoTestoVortice.style.transform = "translateY(0)";
-                    elementoTestoVortice.style.opacity = "1";
-                }, 15);
-            }, 40);
-        }
+        contenitore.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px; font-size: 1.5rem; font-weight: 800; color: #f59f00; letter-spacing: 1px;">
+                🎰 SPINNING... 🎰
+                <div style="margin-top: 15px; font-size: 1.8rem; color: var(--text-main); font-family: monospace;">
+                    ${ricettaCasuale ? ricettaCasuale.nome : "Selezionando..."}
+                </div>
+            </div>
+        `;
         giri++;
         if (giri >= durataTotaleGiri) {
             clearInterval(intervalloSlot);
-            setTimeout(() => {
-                const indiceVincente = Math.floor(Math.random() * databaseRicette.length);
-                const piattoVincitore = databaseRicette[indiceVincente];
-                contenitore.innerHTML = ""; // Svuota lo schermo dallo spinning
-                const frigoMinuscolo = (ingredientiSelezionati || []).map(ing => ing.toLowerCase().trim());
-                piattoVincitore.ingredientiMancanti = piattoVincitore.ingredienti.filter(ing => 
-                    !frigoMinuscolo.includes(ing.toLowerCase().trim())
-                );
-                const posseduti = piattoVincitore.ingredienti.length - piattoVincitore.ingredientiMancanti.length;
-                piattoVincitore.percentualeFattibilita = Math.round((posseduti / piattoVincitore.ingredienti.length) * 100);
-                const indiceRealeDatabase = databaseRicette.indexOf(piattoVincitore);
-                const èNeiPreferiti = (preferiti || []).includes(piattoVincitore.nome);
-                let schedaEletta = null;
-                if (typeof creaSchedaRicetta === "function") {
-                    schedaEletta = creaSchedaRicetta(piattoVincitore, èNeiPreferiti, indiceRealeDatabase);
-                }
-                if (schedaEletta) {
-                    schedaEletta.classList.add("scheda-estratta-slot");
-                    if (frigoMinuscolo.length > 0 && piattoVincitore.percentualeFattibilita > 0) {
-                        const bloccoInfoFrigo = document.createElement("div");
-                        bloccoInfoFrigo.style.cssText = "margin-top: 6px; margin-bottom: 6px; font-size: 0.75rem; letter-spacing: 0.5px;";
-                        let htmlInfo = `<span class="ingrediente-mappato" style="font-weight: bold; color: #f59f00 !important; display: block; text-transform: uppercase;">🎯 Compatibilità frigo: ${piattoVincitore.percentualeFattibilita}%</span>`;
-                        if (piattoVincitore.percentualeFattibilita < 100) {
-                            const stringaMancanti = piattoVincitore.ingredientiMancanti.map(ing => ing.charAt(0).toUpperCase() + ing.slice(1)).join(", ");
-                            htmlInfo += `<span style="color: #e03131; font-weight: 600; display: block; margin-top: 2px;">❌ Ti manca: ${stringaMancanti}</span>`;
-                        } else if (piattoVincitore.percentualeFattibilita === 100) {
-                            htmlInfo += `<span style="color: #40c057; font-weight: 600; display: block; margin-top: 2px;">🟢 Puoi farla subito!</span>`;
-                        }
-                        bloccoInfoFrigo.innerHTML = htmlInfo;
-                        const titoloScheda = schedaEletta.querySelector("h3");
-                        if (titoloScheda) titoloScheda.after(bloccoInfoFrigo);
+            const indiceVincente = Math.floor(Math.random() * databaseRicette.length);
+            const piattoVincitore = databaseRicette[indiceVincente];
+            contenitore.innerHTML = "";
+            const frigoMinuscolo = (ingredientiSelezionati || []).map(ing => ing.toLowerCase().trim());
+            piattoVincitore.ingredientiMancanti = piattoVincitore.ingredienti.filter(ing => 
+                !frigoMinuscolo.includes(ing.toLowerCase().trim())
+            );
+            const posseduti = piattoVincitore.ingredienti.length - piattoVincitore.ingredientiMancanti.length;
+            piattoVincitore.percentualeFattibilita = Math.round((posseduti / piattoVincitore.ingredienti.length) * 100);
+            const indiceRealeDatabase = databaseRicette.indexOf(piattoVincitore);
+            const èNeiPreferiti = (preferiti || []).includes(piattoVincitore.nome);
+            let schedaEletta = null;
+            if (typeof creaSchedaRicetta === "function") {
+                schedaEletta = creaSchedaRicetta(piattoVincitore, èNeiPreferiti, indiceRealeDatabase);
+            }
+            if (schedaEletta) {
+                schedaEletta.classList.add("scheda-estratta-slot");
+                if (frigoMinuscolo.length > 0 && piattoVincitore.percentualeFattibilita > 0) {
+                    const bloccoInfoFrigo = document.createElement("div");
+                    bloccoInfoFrigo.style.cssText = "margin-top: 6px; margin-bottom: 6px; font-size: 0.75rem; letter-spacing: 0.5px;";
+                    let htmlInfo = `<span class="ingrediente-mappato" style="font-weight: bold; color: #f59f00 !important; display: block; text-transform: uppercase;">🎯 Compatibilità frigo: ${piattoVincitore.percentualeFattibilita}%</span>`;
+                    if (piattoVincitore.percentualeFattibilita < 100) {
+                        const stringaMancanti = piattoVincitore.ingredientiMancanti.map(ing => ing.charAt(0).toUpperCase() + ing.slice(1)).join(", ");
+                        htmlInfo += `<span style="color: #e03131; font-weight: 600; display: block; margin-top: 2px;">❌ Ti manca: ${stringaMancanti}</span>`;
+                    } else if (piattoVincitore.percentualeFattibilita === 100) {
+                        htmlInfo += `<span style="color: #40c057; font-weight: 600; display: block; margin-top: 2px;">🟢 Puoi farla subito!</span>`;
                     }
-                    contenitore.appendChild(schedaEletta);
-                    schedaEletta.scrollIntoView({ behavior: "smooth", block: "center" });
-                } else {
-                    if (typeof barraRicerca !== "undefined" && barraRicerca) {
-                        barraRicerca.value = piattoVincitore.nome;
-                        if (typeof eseguiRicercaFiltri === "function") eseguiRicercaFiltri();
-                    }
+                    bloccoInfoFrigo.innerHTML = htmlInfo;
+                    const titoloScheda = schedaEletta.querySelector("h3");
+                    if (titoloScheda) titoloScheda.after(bloccoInfoFrigo);
                 }
-                if (btnSlot) btnSlot.disabled = false;
-            }, 200);
+                contenitore.appendChild(schedaEletta);
+                schedaEletta.scrollIntoView({ behavior: "smooth", block: "center" });
+            } else {
+                if (typeof barraRicerca !== "undefined" && barraRicerca) {
+                    barraRicerca.value = piattoVincitore.nome;
+                    if (typeof eseguiRicercaFiltri === "function") eseguiRicercaFiltri();
+                }
+            }
+            if (btnSlot) btnSlot.disabled = false;
         }
-    }, 120);
+    }, 60);
 }
