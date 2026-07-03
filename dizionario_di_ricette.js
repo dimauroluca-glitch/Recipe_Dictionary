@@ -152,6 +152,10 @@ function eseguiRicercaFiltri() {
     const testoCercato = rimuoviAccenti(barraRicerca.value.toLowerCase().trim());
     const tipoSelezionato = filtroTipo.value;
     const temperaturaSelezionata = filtroTemperatura ? filtroTemperatura.value : "tutti";
+    const ingredientiSalvatiFrigo = localStorage.getItem("frigoIngredienti");
+    if (ingredientiSalvatiFrigo) {
+        ingredientiSelezionati = JSON.parse(ingredientiSalvatiFrigo);
+    }
     let ricetteFiltrate = databaseRicette.filter(ricetta => {
         const nomeRicettaSenzaAccenti = rimuoviAccenti(ricetta.nome.toLowerCase());
         const corrispondeTesto = nomeRicettaSenzaAccenti.includes(testoCercato);
@@ -206,6 +210,7 @@ function eseguiRicercaFiltri() {
                 <span class="faccina-errore">🍳</span>
                 <p class='messaggio-vuoto' style='margin-top: 0; margin-bottom: 8px; font-weight: 600; font-size: 1.1rem;'>Ops! Nessuna ricetta corrisponde...</p>
                 <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 12px; margin-top: 0;">Prova a cambiare i filtri del tempo o intolleranze.</p>
+                <span class="link-reset" onclick="svuotaTuttiIFiltri()" style="text-decoration: none; cursor: pointer;">❌ Svuota tutti i filtri</span>
             </div>
         `;
     } else {
@@ -396,28 +401,38 @@ function mostraPreferiti() {
     if (titoloPreferiti) {
         titoloPreferiti.innerHTML = `❤️ Le Tue Ricette Preferite <span class="numero-titolo-preferiti">${preferiti.length}</span>`;
     }
-    let piattiProntiSubito = [];
+    const ingredientiSalvatiFrigo = localStorage.getItem("frigoIngredienti");
+    if (ingredientiSalvatiFrigo) {
+        ingredientiSelezionati = JSON.parse(ingredientiSalvatiFrigo);
+    } else {
+        ingredientiSelezionati = [];
+    }
     const frigoMinuscolo = ingredientiSelezionati.map(i => i.toLowerCase().trim());
-    preferiti.forEach(nomeRicetta => {
-        const ricettaTrovata = databaseRicette.find(r => r.nome === nomeRicetta);
-        if (ricettaTrovata) {
-            const haTutto = ricettaTrovata.ingredienti.every(ing => 
-                frigoMinuscolo.includes(ing.toLowerCase().trim())
-            );
-            if (haTutto) {
-                piattiProntiSubito.push(ricettaTrovata.nome);
+    function aggiornaSoloIlBannerVerde() {
+        const vecchioBanner = document.getElementById("banner-pronto-cucina");
+        if (vecchioBanner) vecchioBanner.remove();
+        let piattiProntiSubito = [];
+        const frigoAttuale = ingredientiSelezionati.map(i => i.toLowerCase().trim());
+        preferiti.forEach(nomeRicetta => {
+            const ricettaTrovata = databaseRicette.find(r => r.nome === nomeRicetta);
+            if (ricettaTrovata) {
+                const haTutto = ricettaTrovata.ingredienti.every(ing => 
+                    frigoAttuale.includes(ing.toLowerCase().trim())
+                );
+                if (haTutto) piattiProntiSubito.push(ricettaTrovata.nome);
             }
+        });
+        if (piattiProntiSubito.length > 0 && contenitoreZonaAzione) {
+            const divBanner = document.createElement("div");
+            divBanner.id = "banner-pronto-cucina";
+            divBanner.className = "blocco-spesa-consolidata";
+            divBanner.style.cssText = "background: rgba(43, 138, 62, 0.1) !important; border-color: rgba(43, 138, 62, 0.3) !important; margin-bottom: 15px !important;";
+            divBanner.innerHTML = `
+                <h4 style="margin: 0; font-size: 1rem; color: #40c057 !important; display: flex; align-items: center; gap: 6px;">🟢 Pronta da cucinare!</h4>
+                <p style="font-size: 0.85rem; margin: 4px 0 0 0; font-weight: 600;">Hai preso tutto il necessario per preparare: <span style="color: #40c057;">${piattiProntiSubito.join(", ")}</span></p>
+            `;
+            contenitoreZonaAzione.insertBefore(divBanner, contenitoreZonaAzione.firstChild);
         }
-    });
-    let htmlAvvisoPronto = "";
-    if (piattiProntiSubito.length > 0) {
-        const elencoPiattiInStringa = piattiProntiSubito.join(", ");
-        htmlAvvisoPronto = `
-            <div class="blocco-spesa-consolidata" style="background: rgba(43, 138, 62, 0.1) !important; border-color: rgba(43, 138, 62, 0.3) !important; margin-bottom: 15px !important;">
-                <h4 style="margin: 0; font-size: 1rem; color: #40c057 !important; display: flex; align-items: center; gap: 6px;">🟢 Puoi farla subito!</h4>
-                <p style="font-size: 0.85rem; margin: 4px 0 0 0; font-weight: 600;">Hai tutti gli ingredienti in frigo per preparare: <span style="color: #40c057;">${elencoPiattiInStringa}</span></p>
-            </div>
-        `;
     }
     let tuttiGliIngredientiPreferiti = [];
     preferiti.forEach(nomeRicetta => {
@@ -431,51 +446,40 @@ function mostraPreferiti() {
             });
         }
     });
-    const ingredientiDaComprare = tuttiGliIngredientiPreferiti.filter(ing => !frigoMinuscolo.includes(ing));
-    let compratiSalvati = [];
-    const memoriaComprati = localStorage.getItem("ingredientiCompratiSpesa");
-    if (memoriaComprati) {
-        compratiSalvati = JSON.parse(memoriaComprati);
-    }
-    if (contenitoreZonaAzione) {
-        let htmlListaSpesaCompleta = "";
-        if (ingredientiDaComprare.length > 0) {
-            let htmlListaVoci = "";
-            let testoCondivisione = "🛒 *LISTA DELLA SPESA* 🛒\nEcco gli ingredienti che mi mancano:\n\n";
-            ingredientiDaComprare.forEach((ing, i) => {
-                const nomeFormattato = ing.charAt(0).toUpperCase() + ing.slice(1);
-                const eraGiaComprato = compratiSalvati.includes(ing);
-                const classeComprato = eraGiaComprato ? "comprato" : "";
-                const attributoChecked = eraGiaComprato ? "checked" : "";
-                htmlListaVoci += `
-                    <li class="voce-spesa-item ${classeComprato}" id="item-spesa-${i}" data-ingrediente-nome="${ing}">
-                        <input type="checkbox" id="check-spesa-${i}" ${attributoChecked}>
-                        <span>${nomeFormattato}</span>
-                    </li>
-                `;
-                testoCondivisione += eraGiaComprato ? `✅ ~${nomeFormattato}~\n` : `▫️ ${nomeFormattato}\n`;
-            });
-            htmlListaSpesaCompleta = `
-                <div class="blocco-spesa-consolidata" style="position: relative;">
-                    <h4 style="margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 6px;">🛒 Lista della Spesa Intelligente</h4>
-                    <p style="font-size: 0.8rem; opacity: 0.7; margin: 4px 0 0 0;">Ingredienti necessari combinati (esclusi quelli in frigo):</p>
-                    <ul class="lista-spesa-voci">${htmlListaVoci}</ul>
-                    <button id="tasto-condividi-spesa" class="btn-tab" style="width: 100% !important; max-width: none !important; margin-top: 15px !important; padding: 10px 16px !important; font-size: 0.9rem !important; background: linear-gradient(135deg, #ff9233, #ff5252) !important; color: #ffffff !important; border: none !important; box-shadow: 0 4px 12px rgba(255, 82, 82, 0.25) !important;">
-                        📤 Condividi Lista della Spesa
-                    </button>
-                </div>
+    if (contenitoreZonaAzione && tuttiGliIngredientiPreferiti.length > 0) {
+        let htmlListaVoci = "";
+        tuttiGliIngredientiPreferiti.forEach((ing, i) => {
+            const nomeFormattato = ing.charAt(0).toUpperCase() + ing.slice(1);
+            const ceLhoGia = frigoMinuscolo.includes(ing);
+            const classeComprato = ceLhoGia ? "comprato" : "";
+            const attributoChecked = ceLhoGia ? "checked" : "";
+            htmlListaVoci += `
+                <li class="voce-spesa-item ${classeComprato}" id="item-spesa-${i}" data-ingrediente-nome="${ing}">
+                    <input type="checkbox" id="check-spesa-${i}" ${attributoChecked}>
+                    <span>${nomeFormattato}</span>
+                </li>
             `;
-        }
-        contenitoreZonaAzione.innerHTML = htmlAvvisoPronto + htmlListaSpesaCompleta;
-        const btnCondividi = contenitoreZonaAzione.querySelector("#tasto-condividi-spesa");
+        });
+        const divSpesaBox = document.createElement("div");
+        divSpesaBox.className = "blocco-spesa-consolidata";
+        divSpesaBox.style.position = "relative";
+        divSpesaBox.innerHTML = `
+            <h4 style="margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 6px;">🛒 Lista della Spesa Intelligente</h4>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin: 4px 0 0 0;">Ingredienti necessari combinati (spunta le voci quando le compri):</p>
+            <ul class="lista-spesa-voci">${htmlListaVoci}</ul>
+            <button id="tasto-condividi-spesa" class="btn-tab" style="width: 100% !important; max-width: none !important; margin-top: 15px !important; padding: 10px 16px !important; font-size: 0.9rem !important; background: linear-gradient(135deg, #ff9233, #ff5252) !important; color: #ffffff !important; border: none !important; box-shadow: 0 4px 12px rgba(255, 82, 82, 0.25) !important;">
+                📤 Condividi Lista della Spesa
+            </button>
+        `;
+        contenitoreZonaAzione.appendChild(divSpesaBox);
+        const btnCondividi = divSpesaBox.querySelector("#tasto-condividi-spesa");
         if (btnCondividi) {
             btnCondividi.addEventListener("click", async () => {
-                let testoCondivisione = "🛒 *LISTA DELLA SPESA* 🛒\nEcco gli ingredienti che mi mancano:\n\n";
-                ingredientiDaComprare.forEach(ing => {
-                    const eraGiaComprato = compratiSalvati.includes(ing);
-                    testoCondivisione += eraGiaComprato ? `✅ ~${ing}~\n` : `▫️ ${ing}\n`;
+                let testoCondivisione = "🛒 *LISTA DELLA SPESA* 🛒\nEcco gli ingredienti:\n\n";
+                tuttiGliIngredientiPreferiti.forEach(ing => {
+                    const inFrigo = ingredientiSelezionati.includes(ing);
+                    testoCondivisione += inFrigo ? `✅ ~${ing}~\n` : `▫️ ${ing}\n`;
                 });
-
                 if (navigator.share) {
                     try { await navigator.share({ title: 'Lista della Spesa', text: testoCondivisione }); } catch (err) {}
                 } else {
@@ -483,22 +487,33 @@ function mostraPreferiti() {
                 }
             });
         }
-        const elementiLista = contenitoreZonaAzione.querySelectorAll(".voce-spesa-item");
+        const elementiLista = divSpesaBox.querySelectorAll(".voce-spesa-item");
         elementiLista.forEach(li => {
             const checkbox = li.querySelector('input[type="checkbox"]');
             const nomeIngrediente = li.getAttribute("data-ingrediente-nome");
             li.addEventListener("click", (e) => {
-                if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
-                li.classList.toggle("comprato", checkbox.checked);
-                if (checkbox.checked) {
-                    if (!compratiSalvati.includes(nomeIngrediente)) compratiSalvati.push(nomeIngrediente);
-                } else {
-                    compratiSalvati = compratiSalvati.filter(ing => ing !== nomeIngrediente);
+                if (e.target !== checkbox) {
+                    checkbox.checked = !checkbox.checked;
                 }
-                localStorage.setItem("ingredientiCompratiSpesa", JSON.stringify(compratiSalvati));
+                li.classList.toggle("comprato", checkbox.checked);
+                const memoriaFresca = localStorage.getItem("frigoIngredienti");
+                let ingredientiLocali = memoriaFresca ? JSON.parse(memoriaFresca) : [];
+                if (checkbox.checked) {
+                    if (!ingredientiLocali.includes(nomeIngrediente)) {
+                        ingredientiLocali.push(nomeIngrediente);
+                    }
+                } else {
+                    ingredientiLocali = ingredientiLocali.filter(ing => ing !== nomeIngrediente);
+                }
+                ingredientiSelezionati = ingredientiLocali;
+                localStorage.setItem("frigoIngredienti", JSON.stringify(ingredientiSelezionati));
+                if (typeof disegnaPilloleFrigo === "function") disegnaPilloleFrigo();
+                if (typeof eseguiRicercaFiltri === "function") eseguiRicercaFiltri();
+                aggiornaSoloIlBannerVerde();
             });
         });
     }
+    aggiornaSoloIlBannerVerde();
     preferiti.forEach((nomeRicetta, indice) => {
         const ricetta = databaseRicette.find(r => r.nome === nomeRicetta);
         if (ricetta) {
@@ -630,6 +645,20 @@ function cambiaScheda(schedaSelezionata) {
         sezioneRicette.style.flexDirection = "column";
         sezioneRicette.style.alignItems = "center";
         if (btnRicette) btnRicette.classList.add("attivo");
+        const ingredientiSalvatiFrigo = localStorage.getItem("frigoIngredienti");
+        if (ingredientiSalvatiFrigo) {
+            ingredientiSelezionati = JSON.parse(ingredientiSalvatiFrigo);
+        } else {
+            ingredientiSelezionati = [];
+        }
+        if (typeof disegnaPilloleFrigo === "function") {
+            disegnaPilloleFrigo(); 
+        } else if (typeof inizializzaTagIngredienti === "function") {
+            inizializzaTagIngredienti();
+        }
+        if (typeof eseguiRicercaFiltri === "function") {
+            eseguiRicercaFiltri();
+        }
     } 
     else if (schedaSelezionata === "timer") {
         sezioneTimer.style.setProperty("display", "flex", "important");
@@ -642,7 +671,7 @@ function cambiaScheda(schedaSelezionata) {
         sezionePreferiti.style.flexDirection = "column";
         sezionePreferiti.style.alignItems = "center";
         if (btnPreferiti) btnPreferiti.classList.add("attivo");
-        mostraPreferiti();
+        mostraPreferiti(); 
     }
     window.scrollTo({ top: 0, behavior: "instant" });
 }
@@ -965,7 +994,6 @@ function svuotaTuttiIFiltri() {
     localStorage.removeItem("filtriSenza");
     localStorage.removeItem("filtroTempoMassimo");
     localStorage.removeItem("frigoIngredienti");
-    localStorage.removeItem("ingredientiCompratiSpesa");
     eseguiRicercaFiltri();
     mostraPreferiti();
 }
