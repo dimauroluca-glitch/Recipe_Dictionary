@@ -318,14 +318,11 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
     }).join(", ");
     bloccoRicetta.innerHTML = `
         <button class="tasto-cuore" style="position: absolute; top: 15px; right: 15px; background: none !important; border: none !important; font-size: 1.4rem; cursor: pointer; padding: 0; width: auto; box-shadow: none !important; transition: transform 0.2s ease; z-index: 10;">${iconaCuore}</button>
-        <!-- RIGA 1 -->
         <div style="margin-bottom: 8px; width: 100%; text-align: left;">
             <span class="badge-tipo" style="font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; font-weight: 800 !important; color: #ffffff !important; background: ${coloreAttuale.bg} !important; box-shadow: 0 3px 8px ${coloreAttuale.ombra} !important; padding: 4px 10px !important; border-radius: 20px !important; display: inline-block !important; border: none !important;">${tipoTesto}</span>
         </div>
-        <!-- RIGA 2 -->
         <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; width: 100%; justify-content: flex-start; align-items: center;">
             <span class="badge-temperatura" style="font-size: 0.75rem !important; font-weight: 700 !important; color: var(--text-color) !important; background: rgba(128, 128, 128, 0.15) !important; border: 1px solid rgba(128, 128, 128, 0.25) !important; padding: 3px 10px !important; border-radius: 20px !important; display: inline-block !important;">${temperaturaTesto}</span>
-            <!-- BLOCCO TEMPO CORRETTO -->
             <span class="badge-temperatura" style="font-size: 0.75rem !important; font-weight: 700 !important; color: var(--text-color) !important; background: rgba(128, 128, 128, 0.15) !important; border: 1px solid rgba(128, 128, 128, 0.25) !important; padding: 3px 10px !important; border-radius: 20px !important; display: inline-block !important;">⏱️ ${minutiCottura} min</span>
             ${htmlIntolleranze}
         </div>
@@ -373,9 +370,9 @@ function aggiornaContatoreTabPreferiti() {
     const btnPreferiti = document.getElementById("tab-preferiti");
     if (btnPreferiti) {
         if (preferiti.length > 0) {
-            btnPreferiti.innerHTML = `❤️ I Miei Preferiti <span class="badge-contatore-tab">${preferiti.length}</span>`;
+            btnPreferiti.innerHTML = `❤️ Miei Preferiti <span class="badge-contatore-tab">${preferiti.length}</span>`;
         } else {
-            btnPreferiti.innerHTML = `❤️ I Miei Preferiti`;
+            btnPreferiti.innerHTML = `❤️ Miei Preferiti`;
         }
     }
 }
@@ -561,23 +558,34 @@ filtroTipo.addEventListener("change", () => {
 });
 function cambiaScheda(schedaSelezionata) {
     const sezioneRicette = document.getElementById("sezione-ricette");
+    const sezioneTimer = document.getElementById("sezione-timer");
     const sezionePreferiti = document.getElementById("sezione-preferiti");
     const btnRicette = document.getElementById("tab-ricette");
+    const btnTimer = document.getElementById("tab-timer");
     const btnPreferiti = document.getElementById("tab-preferiti");
+    if (btnRicette) btnRicette.classList.remove("attivo");
+    if (btnTimer) btnTimer.classList.remove("attivo");
+    if (btnPreferiti) btnPreferiti.classList.remove("attivo");
+    if (sezioneRicette) sezioneRicette.style.display = "none";
+    if (sezioneTimer) sezioneTimer.style.display = "none";
+    if (sezionePreferiti) sezionePreferiti.style.display = "none";
     if (schedaSelezionata === "ricette") {
         sezioneRicette.style.setProperty("display", "flex", "important");
         sezioneRicette.style.flexDirection = "column";
         sezioneRicette.style.alignItems = "center";
-        sezionePreferiti.style.display = "none";
-        btnRicette.classList.add("attivo");
-        btnPreferiti.classList.remove("attivo");
-    } else {
-        sezioneRicette.style.display = "none";
+        if (btnRicette) btnRicette.classList.add("attivo");
+    } 
+    else if (schedaSelezionata === "timer") {
+        sezioneTimer.style.setProperty("display", "flex", "important");
+        sezioneTimer.style.flexDirection = "column";
+        sezioneTimer.style.alignItems = "center";
+        if (btnTimer) btnTimer.classList.add("attivo");
+    } 
+    else if (schedaSelezionata === "preferiti") {
         sezionePreferiti.style.setProperty("display", "flex", "important");
         sezionePreferiti.style.flexDirection = "column";
         sezionePreferiti.style.alignItems = "center";
-        btnRicette.classList.remove("attivo");
-        btnPreferiti.classList.add("attivo");
+        if (btnPreferiti) btnPreferiti.classList.add("attivo");
         mostraPreferiti();
     }
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -815,4 +823,6 @@ function svuotaTuttiIFiltri() {
     mostraPreferiti();
 }
 const pilloleTempoAllAvvio = document.querySelectorAll(".contenitore-tempo-filtro .pillola-senza");
-if (pilloleTempoAllAvvio[2]) pilloleTempoAllAvvio[2].classList.add("attiva");
+if (pilloleTempoAllAvvio && pilloleTempoAllAvvio[2]) {
+    pilloleTempoAllAvvio[2].classList.add("attiva");
+}
