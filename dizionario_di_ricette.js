@@ -82,20 +82,24 @@ let preferiti = JSON.parse(localStorage.getItem("ricettePreferite")) || [];
 let filtriSenzaAttivi = [];
 let tempoMassimoSelezionato = "tutti";
 function inizializzaTagIngredienti() {
-    grigliaIngredienti.innerHTML = "";
+    const scatolaFrigoHtml = document.getElementById("griglia-ingredienti");
+    if (!scatolaFrigoHtml) return;
+    scatolaFrigoHtml.innerHTML = "";
     localStorage.setItem("frigoIngredienti", JSON.stringify(ingredientiSelezionati));
-    if (ingredientiSelezionati.length === 0) return;
+    if (!ingredientiSelezionati || ingredientiSelezionati.length === 0) {
+        return; 
+    }
     ingredientiSelezionati.forEach(ingrediente => {
         const tag = document.createElement("div");
         tag.className = "tag-ingrediente selezionato"; 
         tag.innerHTML = `<span>${ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1)}</span>`;
         tag.addEventListener("click", () => {
             ingredientiSelezionati = ingredientiSelezionati.filter(i => i !== ingrediente);
-            inizializzaTagIngredienti();
+            inizializzaTagIngredienti(); 
             eseguiRicercaFiltri();       
             mostraPreferiti();           
         });
-        grigliaIngredienti.appendChild(tag);
+        scatolaFrigoHtml.appendChild(tag);
     });
 }
 const inputCercaIngrediente = document.getElementById("cerca-ingrediente");
@@ -202,7 +206,6 @@ function eseguiRicercaFiltri() {
                 <span class="faccina-errore">🍳</span>
                 <p class='messaggio-vuoto' style='margin-top: 0; margin-bottom: 8px; font-weight: 600; font-size: 1.1rem;'>Ops! Nessuna ricetta corrisponde...</p>
                 <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 12px; margin-top: 0;">Prova a cambiare i filtri del tempo o intolleranze.</p>
-                <span class="link-reset" onclick="svuotaTuttiIFiltri()" style="text-decoration: none; cursor: pointer;">❌ Svuota tutti i filtri</span>
             </div>
         `;
     } else {
@@ -229,20 +232,27 @@ function eseguiRicercaFiltri() {
     }
 }
 function svuotaTuttiIFiltri() {
-    barraRicerca.value = "";
-    if (inputCercaIngrediente) inputCercaIngrediente.value = "";
-    filtroTipo.value = "tutti";
+    if (barraRicerca) barraRicerca.value = "";
+    if (inputCercaIngrediente) {
+        inputCercaIngrediente.value = "";
+        inputCercaIngrediente.blur();
+    }
+    if (filtroTipo) filtroTipo.value = "tutti";
     if (filtroTemperatura) filtroTemperatura.value = "tutti";
     filtriSenzaAttivi = [];
-    const pillole = document.querySelectorAll(".pillola-senza");
-    pillole.forEach(p => p.classList.remove("attiva"));
-    
+    const pilloleSenza = document.querySelectorAll(".contenitore-intolleranze .pillola-senza");
+    pilloleSenza.forEach(p => p.classList.remove("attiva"));
+    tempoMassimoSelezionato = "tutti";
+    const tutteLePilloleTempo = document.querySelectorAll(".contenitore-tempo-filtro .pillola-senza");
+    tutteLePilloleTempo.forEach(p => p.classList.remove("attiva"));
+    if (tutteLePilloleTempo && tutteLePilloleTempo) tutteLePilloleTempo.classList.add("attiva");
     ingredientiSelezionati = [];
-    const tag = document.querySelectorAll(".tag-ingrediente");
-    tag.forEach(t => {
-        t.classList.remove("selezionato");
-        t.style.setProperty("display", "inline-block", "important");
-    });
+    localStorage.removeItem("filtroTipo");
+    localStorage.removeItem("filtroTemperatura");
+    localStorage.removeItem("filtriSenza");
+    localStorage.removeItem("filtroTempoMassimo");
+    localStorage.removeItem("frigoIngredienti");
+    inizializzaTagIngredienti(); 
     eseguiRicercaFiltri();
     mostraPreferiti();
 }
