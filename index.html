@@ -743,6 +743,15 @@
                     <option value="secondo">Secondi piatti</option>
                     <option value="dolce">Dolci</option>
                 </select>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+            <label for="filtro-temperatura">Filtra per temperatura</label>
+            <select id="filtro-temperatura" class="barra-ricerca" style="width: 100%; cursor: pointer; padding-right: 30px;">
+                <option value="tutti">Qualsiasi temperatura</option>
+                <option value="caldo">🔥 Piatti Caldi</option>
+                <option value="freddo">❄️ Piatti Freddi</option>
+                <option value="tiepido">🌡️ Piatti Tiepidi</option>
+            </select>
+        </div>
             </div>
             <button id="tasto-casuale" class="btn-casuale">🎲 Scegli una ricetta casuale</button>
         </div>
