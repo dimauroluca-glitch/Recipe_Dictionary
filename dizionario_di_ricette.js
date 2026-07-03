@@ -78,6 +78,7 @@ const titoloPreferiti = document.getElementById("titolo-preferiti");
 const filtroTipo = document.getElementById("filtro-tipo");
 let ingredientiSelezionati = [];
 let preferiti = JSON.parse(localStorage.getItem("ricettePreferite")) || [];
+let filtriSenzaAttivi = [];
 function inizializzaTagIngredienti() {
     grigliaIngredienti.innerHTML = "";
     tuttiGliIngredienti.forEach(ingrediente => {
@@ -190,6 +191,17 @@ function eseguiRicercaFiltri() {
         const corrispondeTesto = nomeRicettaSenzaAccenti.includes(testoCercato);
         const corrispondeTipo = (tipoSelezionato === "tutti" || ricetta.tipo === tipoSelezionato);
         const corrispondeTemperatura = (temperaturaSelezionata === "tutti" || ricetta.temperatura === temperaturaSelezionata);
+        const ingMinuscoli = ricetta.ingredienti.map(i => i.toLowerCase().trim());
+        if (filtriSenzaAttivi.includes("glutine")) {
+            if (ingMinuscoli.some(i => i.includes("farina") || i.includes("pasta") || i.includes("savoiardi") || i.includes("biscotti") || i.includes("pane"))) {
+                return false;
+            }
+        }
+        if (filtriSenzaAttivi.includes("lattosio")) {
+            if (ingMinuscoli.some(i => i.includes("latte") || i.includes("burro") || i.includes("panna") || i.includes("formaggio") || i.includes("mozzarella") || i.includes("mascarpone") || i.includes("ricotta") || i.includes("besciamella") || i.includes("yogurt"))) {
+                return false;
+            }
+        }
         if (ingredientiSelezionati.length === 0) {
             ricetta.percentualeFattibilita = 0;
             ricetta.ingredientiMancanti = [];
@@ -204,11 +216,11 @@ function eseguiRicercaFiltri() {
         return corrispondeTesto && corrispondeTipo && corrispondeTemperatura && (ricetta.percentualeFattibilita > 0);
     });
     if (ingredientiSelezionati.length > 0) {
-        ricetteFiltrate.sort((a, b) => b.percentualeFattibilita - a.percentualeFattibilita);
+        ricetteFiltrate.sort((a, b) => b.percentualeFattibilita - a.percentwakeFattibilita);
     } else {
         ricetteFiltrate.sort((a, b) => a.nome.localeCompare(b.nome));
     }
-    if (testoCercato === "" && ingredientiSelezionati.length === 0 && tipoSelezionato === "tutti" && temperaturaSelezionata === "tutti") {
+    if (testoCercato === "" && ingredientiSelezionati.length === 0 && tipoSelezionato === "tutti" && temperaturaSelezionata === "tutti" && filtriSenzaAttivi.length === 0) {
         if (contatoreRisultati) contatoreRisultati.innerHTML = `📚 Totale ricette disponibili: ${ricetteFiltrate.length}`;
     } else {
         if (contatoreRisultati) contatoreRisultati.innerHTML = `🔍 Ricette trovate: ${ricetteFiltrate.length}`;
@@ -219,7 +231,7 @@ function eseguiRicercaFiltri() {
            <div class="blocco-errore-animato" style="text-align: center; width: 100%;">
                 <span class="faccina-errore">🍳</span>
                 <p class='messaggio-vuoto' style='margin-top: 0; margin-bottom: 8px; font-weight: 600; font-size: 1.1rem;'>Ops! Nessuna ricetta corrisponde...</p>
-                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 12px; margin-top: 0;">Prova a cambiare i filtri del frigo o scrivi un altro piatto.</p>
+                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 12px; margin-top: 0;">Prova a disattivare qualche filtro intolleranza o svuota il frigo.</p>
                 <span class="link-reset" onclick="svuotaTuttiIFiltri()" style="text-decoration: none; cursor: pointer;">❌ Svuota tutti i filtri</span>
             </div>
         `;
@@ -250,9 +262,11 @@ function svuotaTuttiIFiltri() {
     barraRicerca.value = "";
     if (inputCercaIngrediente) inputCercaIngrediente.value = "";
     filtroTipo.value = "tutti";
-    if (typeof filtroTemperatura !== 'undefined' && filtroTemperatura) {
-        filtroTemperatura.value = "tutti";
-    }
+    if (filtroTemperatura) filtroTemperatura.value = "tutti";
+    filtriSenzaAttivi = [];
+    const pillole = document.querySelectorAll(".pillola-senza");
+    pillole.forEach(p => p.classList.remove("attiva"));
+    
     ingredientiSelezionati = [];
     const tag = document.querySelectorAll(".tag-ingrediente");
     tag.forEach(t => {
@@ -651,3 +665,120 @@ if (filtroTemperatura) {
         }, 200);
     });
 }
+function toggleFiltroSenza(tipo, elemento) {
+    if (filtriSenzaAttivi.includes(tipo)) {
+        filtriSenzaAttivi = filtriSenzaAttivi.filter(f => f !== tipo);
+        elemento.classList.remove("attiva");
+    } else {
+        filtriSenzaAttivi.push(tipo);
+        elemento.classList.add("attiva");
+    }
+    eseguiRicercaFiltri();
+}
+let tempoRimanenteS = 0;
+let countdownIntervallo = null;
+let audioCtx = null;
+let allarmeIntervalloSuono = null;
+const displayTimer = document.getElementById("display-timer");
+const btnAvviaTimer = document.getElementById("tasto-avvia-timer");
+const btnResetTimer = document.getElementById("tasto-reset-timer");
+function aggiornaGraficaDisplay() {
+    if (!displayTimer) return;
+    const minuti = Math.floor(tempoRimanenteS / 60);
+    const secondi = tempoRimanenteS % 60;
+    const stringaMinuti = minuti < 10 ? "0" + minuti : minuti;
+    const stringaSecondi = secondi < 10 ? "0" + secondi : secondi;
+    displayTimer.textContent = stringaMinuti + ":" + stringaSecondi;
+}
+function impostaMinutiTimer(minutiDaAggiungere) {
+    if (displayTimer) displayTimer.classList.remove("allarme-attivo");
+    tempoRimanenteS += (minutiDaAggiungere * 60);
+    if (tempoRimanenteS > 5999) tempoRimanenteS = 5999;
+    aggiornaGraficaDisplay();
+}
+function riproduciBeepElettronico() {
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const oscillatore = audioCtx.createOscillator();
+        const guadagnoNode = audioCtx.createGain();
+        oscillatore.type = 'sine';
+        oscillatore.frequency.value = 880;
+        guadagnoNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        oscillatore.connect(guadagnoNode);
+        guadagnoNode.connect(audioCtx.destination);
+        oscillatore.start();
+        oscillatore.stop(audioCtx.currentTime + 0.12);
+    } catch(e) {
+        console.log("Suono bloccato:", e);
+    }
+}
+function avviaSuoneriaInfinita() {
+    riproduciBeepElettronico();
+    setTimeout(riproduciBeepElettronico, 200);
+    allarmeIntervalloSuono = setInterval(() => {
+        riproduciBeepElettronico();
+        setTimeout(riproduciBeepElettronico, 200);
+    }, 2000);
+}
+function fermaSuoneriaInfinita() {
+    if (allarmeIntervalloSuono) {
+        clearInterval(allarmeIntervalloSuono);
+        allarmeIntervalloSuono = null;
+    }
+    if (displayTimer) displayTimer.classList.remove("allarme-attivo");
+}
+if (btnAvviaTimer) {
+    btnAvviaTimer.addEventListener("click", () => {
+        if (allarmeIntervalloSuono) {
+            fermaSuoneriaInfinita();
+            btnAvviaTimer.textContent = "▶️ Avvia";
+            btnAvviaTimer.classList.remove("attivo");
+            return;
+        }
+        if (countdownIntervallo) {
+            clearInterval(countdownIntervallo);
+            countdownIntervallo = null;
+            btnAvviaTimer.textContent = "▶️ Avvia";
+            btnAvviaTimer.classList.remove("attivo");
+        }
+        else {
+            if (tempoRimanenteS <= 0) return;
+            btnAvviaTimer.textContent = "⏸️ Pausa";
+            btnAvviaTimer.classList.add("attivo");
+            countdownIntervallo = setInterval(() => {
+                tempoRimanenteS--;
+                aggiornaGraficaDisplay();
+                if (tempoRimanenteS <= 0) {
+                    clearInterval(countdownIntervallo);
+                    countdownIntervallo = null;
+                    tempoRimanenteS = 0;
+                    aggiornaGraficaDisplay();
+                    
+                    btnAvviaTimer.textContent = "🛑 STOP";
+                    btnAvviaTimer.classList.add("attivo");
+                    
+                    if (displayTimer) displayTimer.classList.add("allarme-attivo");
+                    avviaSuoneriaInfinita();
+                }
+            }, 1000);
+        }
+    });
+}
+if (btnResetTimer) {
+    btnResetTimer.addEventListener("click", () => {
+        if (countdownIntervallo) {
+            clearInterval(countdownIntervallo);
+            countdownIntervallo = null;
+        }
+        fermaSuoneriaInfinita();
+        tempoRimanenteS = 0;
+        aggiornaGraficaDisplay();
+        if (btnAvviaTimer) {
+            btnAvviaTimer.textContent = "▶️ Avvia";
+            btnAvviaTimer.classList.remove("attivo");
+        }
+    });
+}
+tempoRimanenteS = 0;
+aggiornaGraficaDisplay();
