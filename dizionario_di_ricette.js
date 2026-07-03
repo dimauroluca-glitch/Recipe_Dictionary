@@ -350,21 +350,9 @@ function invertiPreferito(nomeRicetta) {
         preferiti.push(nomeRicetta);
     }
     localStorage.setItem("ricettePreferite", JSON.stringify(preferiti));
-    mostraPreferiti();
-    eseguiRicercaFiltri();
-}
-function invertiPreferito(nomeRicetta) {
-    if (navigator.vibrate) {
-        navigator.vibrate(15);
-    }
-    if (preferiti.includes(nomeRicetta)) {
-        preferiti = preferiti.filter(nome => nome !== nomeRicetta);
-    } else {
-        preferiti.push(nomeRicetta);
-    }
-    localStorage.setItem("ricettePreferite", JSON.stringify(preferiti));
-    mostraPreferiti();
-    eseguiRicercaFiltri();
+    aggiornaContatoreTabPreferiti(); 
+    mostraPreferiti();             
+    eseguiRicercaFiltri();           
 }
 const zonaAzionePreferiti = document.getElementById("zona-azione-preferiti");
 function aggiornaContatoreTabPreferiti() {
@@ -378,80 +366,104 @@ function aggiornaContatoreTabPreferiti() {
     }
 }
 function mostraPreferiti() {
+    const contenitoreZonaAzione = document.getElementById("zona-azione-preferiti");
+    const contenitorePreferiti = document.getElementById("preferiti");
+    const titoloPreferiti = document.getElementById("titolo-preferiti");
+    if (!contenitorePreferiti) return;
     contenitorePreferiti.innerHTML = "";
-    if (zonaAzionePreferiti) zonaAzionePreferiti.innerHTML = "";
-    aggiornaContatoreTabPreferiti();
+    if (contenitoreZonaAzione) contenitoreZonaAzione.innerHTML = "";
     if (preferiti.length === 0) {
-        titoloPreferiti.style.display = "block";
+        if (titoloPreferiti) titoloPreferiti.textContent = "❤️ Miei Preferiti";
         contenitorePreferiti.innerHTML = `
-            <div style="text-align: center; padding: 40px 20px; opacity: 0.7;">
-                <p style="font-size: 1.1rem; font-weight: 500; margin-bottom: 8px;">🤍 Non hai ancora aggiunto nessuna ricetta ai tuoi preferiti!</p>
-                <p style="font-size: 0.9rem; opacity: 0.8;">Esplora il ricettario e clicca sul cuore in alto a destra delle schede per salvarle qui.</p>
+            <div style="text-align: center; padding: 30px 20px; opacity: 0.7;">
+                <p style="font-weight: 600; margin-bottom: 5px;">Il tuo ricettario salvato è vuoto.</p>
+                <p style="font-size: 0.85rem; margin-top: 0;">Esplora i piatti e clicca sul cuore per salvare le tue ricette preferite qui!</p>
             </div>
         `;
         return;
     }
-    titoloPreferiti.style.display = "block";
-    const listaPreferitiOrdinata = [...preferiti].sort((a, b) => a.localeCompare(b));
-    let tuttiGliIngredientiSpesa = [];
-    listaPreferitiOrdinata.forEach((nome, indice) => {
-        const ricetta = databaseRicette.find(r => r.nome === nome);
+    if (titoloPreferiti) {
+        titoloPreferiti.innerHTML = `❤️ Le Tue Ricette Preferite <span class="numero-titolo-preferiti">${preferiti.length}</span>`;
+    }
+    let tuttiGliIngredientiPreferiti = [];
+    preferiti.forEach(nomeRicetta => {
+        const ricettaTrovata = databaseRicette.find(r => r.nome === nomeRicetta);
+        if (ricettaTrovata) {
+            ricettaTrovata.ingredienti.forEach(ing => {
+                const ingPulito = ing.toLowerCase().trim();
+                if (!tuttiGliIngredientiPreferiti.includes(ingPulito)) {
+                    tuttiGliIngredientiPreferiti.push(ingPulito);
+                }
+            });
+        }
+    });
+    const frigoMinuscolo = ingredientiSelezionati.map(i => i.toLowerCase().trim());
+    const ingredientiDaComprare = tuttiGliIngredientiPreferiti.filter(ing => !frigoMinuscolo.includes(ing));
+    if (ingredientiDaComprare.length > 0 && contenitoreZonaAzione) {
+        let htmlListaVoci = "";
+        let testoCondivisione = "🛒 *LISTA DELLA SPESA* 🛒\nEcco gli ingredienti che mi mancano:\n\n";
+        ingredientiDaComprare.forEach((ing, i) => {
+            const nomeFormattato = ing.charAt(0).toUpperCase() + ing.slice(1);
+            htmlListaVoci += `
+                <li class="voce-spesa-item" id="item-spesa-${i}">
+                    <input type="checkbox" id="check-spesa-${i}">
+                    <span>${nomeFormattato}</span>
+                </li>
+            `;
+            testoCondivisione += `▫️ ${nomeFormattato}\n`;
+        });
+        contenitoreZonaAzione.innerHTML = `
+            <div class="blocco-spesa-consolidata" style="position: relative;">
+                <h4 style="margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 6px;">🛒 Lista della Spesa Intelligente</h4>
+                <p style="font-size: 0.8rem; opacity: 0.7; margin: 4px 0 0 0;">Ingredienti necessari combinati (esclusi quelli in frigo):</p>
+                <ul class="lista-spesa-voci">${htmlListaVoci}</ul>
+                <!-- NUOVO PULSANTE CONDIVIDI NATIVO (Usa lo stile arancione/corallo del sito) -->
+                <button id="tasto-condividi-spesa" class="btn-tab" style="width: 100% !important; max-width: none !important; margin-top: 15px !important; padding: 10px 16px !important; font-size: 0.9rem !important; background: linear-gradient(135deg, #ff9233, #ff5252) !important; color: #ffffff !important; border: none !important; box-shadow: 0 4px 12px rgba(255, 82, 82, 0.25) !important;">
+                    📤 Condividi Lista della Spesa
+                </button>
+            </div>
+        `;
+        const btnCondividi = contenitoreZonaAzione.querySelector("#tasto-condividi-spesa");
+        if (btnCondividi) {
+            btnCondividi.addEventListener("click", async () => {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'Lista della Spesa - Dizionario di Ricette',
+                            text: testoCondivisione
+                        });
+                    } catch (err) {
+                        console.log("Condivisione annullata o fallita:", err);
+                    }
+                } else {
+                    try {
+                        await navigator.clipboard.writeText(testoCondivisione);
+                        alert("📋 Lista della spesa copiata negli appunti!");
+                    } catch (err) {
+                        alert("Impossibile condividere o copiare la lista.");
+                    }
+                }
+            });
+        }
+        const elementiLista = contenitoreZonaAzione.querySelectorAll(".voce-spesa-item");
+        elementiLista.forEach(li => {
+            const checkbox = li.querySelector('input[type="checkbox"]');
+            li.addEventListener("click", (e) => {
+                if (e.target !== checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                }
+                li.classList.toggle("comprato", checkbox.checked);
+            });
+        });
+    }
+    preferiti.forEach((nomeRicetta, indice) => {
+        const ricetta = databaseRicette.find(r => r.nome === nomeRicetta);
         if (ricetta) {
             const scheda = creaSchedaRicetta(ricetta, true);
             scheda.style.animationDelay = `${indice * 0.05}s`;
             contenitorePreferiti.appendChild(scheda);
-            tuttiGliIngredientiSpesa.push(...ricetta.ingredienti);
         }
     });
-    const listaSenzaDoppioni = [...new Set(tuttiGliIngredientiSpesa)];
-    const frigoPulito = ingredientiSelezionati.map(ing => rimuoviAccenti(ing.toLowerCase().trim()));
-    const listaSpesaMancanti = listaSenzaDoppioni.filter(ingrediente => {
-        const ingredienteRicettaPulito = rimuoviAccenti(ingrediente.toLowerCase().trim());
-        return !frigoPulito.includes(ingredienteRicettaPulito);
-    }).sort();
-    if (listaSpesaMancanti.length > 0 && zonaAzionePreferiti) {
-        zonaAzionePreferiti.style.textAlign = "center";
-        zonaAzionePreferiti.style.width = "100%";
-        zonaAzionePreferiti.style.display = "block";
-        let righeIngredienti = "";
-        for (let i = 0; i < listaSpesaMancanti.length; i++) {
-            let ing = listaSpesaMancanti[i];
-            let ingFormattato = ing.charAt(0).toUpperCase() + ing.slice(1);
-            righeIngredienti += "- " + ingFormattato + "\n";
-        }
-        const testoSpesa = "🛒 *COSE DA COMPRARE*:\n\n" + righeIngredienti;
-        const btnCopia = document.createElement("button");
-        btnCopia.className = "barra-ricerca";
-        btnCopia.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #2b8a3e; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(43,138,62,0.2); text-align: center;";
-        btnCopia.innerHTML = "🛒 Copia cose da comprare";
-        btnCopia.addEventListener("click", () => {
-            navigator.clipboard.writeText(testoSpesa).then(() => {
-                btnCopia.innerHTML = "✅ Lista Copiata!";
-                btnCopia.style.backgroundColor = "#40c057";
-                setTimeout(() => {
-                    btnCopia.innerHTML = "🛒 Copia cose da comprare";
-                    btnCopia.style.backgroundColor = "#2b8a3e";
-                }, 2000);
-            });
-        });
-        zonaAzionePreferiti.appendChild(btnCopia);
-        const btnWhatsApp = document.createElement("button");
-        btnWhatsApp.className = "barra-ricerca";
-        btnWhatsApp.style.cssText = "display: inline-block; width: auto; min-width: 220px; margin: 10px 5px; padding: 10px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer; background-color: #075e54; color: #fff; border: none; border-radius: 6px; box-shadow: 0 3px 8px rgba(7,94,84,0.2); text-align: center;";
-        btnWhatsApp.innerHTML = "💬 Invia Lista della Spesa";
-        btnWhatsApp.addEventListener("click", () => {
-            if (navigator.share) {
-                navigator.share({ title: 'Lista della Spesa', text: testoSpesa })
-                .catch((error) => console.log('Condivisione annullata', error));
-            } else {
-                const urlRiserva = "https://wa.me" + encodeURIComponent(testoSpesa);
-                window.open(urlRiserva, "_blank");
-            }
-        });
-        zonaAzionePreferiti.appendChild(btnWhatsApp);
-    } else if (preferiti.length > 0 && zonaAzionePreferiti) {
-        zonaAzionePreferiti.innerHTML = "<p style='color: #40c057; font-weight: bold; text-align: center; margin: 10px 0;'>🎉 Hai già tutto nel frigo per cucinare i tuoi preferiti!</p>";
-    }
 }
 filtroTipo.addEventListener("change", eseguiRicercaFiltri);
 barraRicerca.addEventListener("input", () => {
