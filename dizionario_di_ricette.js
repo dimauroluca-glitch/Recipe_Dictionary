@@ -18,7 +18,7 @@ const databaseRicette = [
     { nome: "Pancakes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/LtSdqM9l5i4", tipo: "dolce" },
     { nome: "Insalata di riso", ingredienti: ["cereali", "verdure", "olio"], video: "https://www.youtube.com/watch?v=tutpq2RM3C0", tipo: "primo" },
     { nome: "Besciamella", ingredienti: ["latte", "patate", "uova"], video: "https://www.youtube.com/shorts/YdY5Mu-rJOM", tipo: "antipasto" },
-    { nome: "Salsa olandese", ingredienti: ["burro", "succo di limone", "uova"], video: "https://www.youtube.com/shorts/IuQIOp13YSY", tipo: "antipasto" },
+    { nome: "Salsa olandese", ingredienti: ["burro", "limone", "uova"], video: "https://www.youtube.com/shorts/IuQIOp13YSY", tipo: "antipasto" },
     { nome: "Risotto alla milanese", ingredienti: ["burro", "zafferano", "cipolla"], video: "https://www.youtube.com/shorts/vLY7OThgQEs", tipo: "primo" },
     { nome: "Melanzane alla parmigiana", ingredienti: ["ragù", "melanzane", "formaggio"], video: "https://www.youtube.com/shorts/InSse_GGwzY", tipo: "secondo" },
     { nome: "Cacio e pepe", ingredienti: ["formaggio", "pepe", "pasta"], video: "https://www.youtube.com/shorts/4-uiBhdmDuI", tipo: "primo" },
@@ -59,6 +59,13 @@ const databaseRicette = [
     { nome: "Pere al vino rosso e gorgonzola", ingredienti: ["frutta", "formaggio"], video: "https://www.youtube.com/shorts/Ik9k80Bm1bM", tipo: "secondo" },
     { nome: "Guacamole con mango", ingredienti: ["avocado", "cipolla", "mango", "pomodoro"], video: "https://www.youtube.com/shorts/iOZk8j4fp7U", tipo: "antipasto" },
     { nome: "Gamberi in salsa rosa", ingredienti: ["frutti di mare", "panna", "verdure"], video: "https://www.youtube.com/shorts/BBn-tBPZ1ZM", tipo: "antipasto" },
+    { nome: "Scaloppine al limone", ingredienti: ["carne", "farina", "limone", "pepe"], video: "https://www.youtube.com/shorts/9UrxVwMJ0mA", tipo: "secondo" },
+    { nome: "Mousse di mortadella e pistacchi", ingredienti: ["prosciutto", "ricotta", "pistacchio", "formaggio"], video: "https://www.youtube.com/shorts/qWCFDprizn0", tipo: "antipasto" },
+    { nome: "Tartare di tonno con avocado e pistacchi", ingredienti: ["tonno", "avocado", "pistacchio"], video: "https://www.youtube.com/shorts/7D6JvprLJW0", tipo: "antipasto" },
+    { nome: "Involtini di zucchine grigliate con crema di tonno", ingredienti: ["tonno", "verdure", "maionese"], video: "https://www.youtube.com/shorts/zk3gXO6qdTY", tipo: "antipasto" },
+    { nome: "Uova ripiene alla salsa tonnata", ingredienti: ["uova", "tonno", "maionese"], video: "https://www.youtube.com/shorts/jm1tmCkE3d8", tipo: "antipasto" },
+    { nome: "Insalata russa", ingredienti: ["maionese", "patate", "verdure"], video: "https://www.youtube.com/shorts/uCTOCNA2q3w", tipo: "antipasto" },
+    { nome: "Quadrotti di sfoglia con cipolle caramellate", ingredienti: ["cipolla", "formaggio", "uova"], video: "https://www.youtube.com/shorts/2DQFcGqWwLI", tipo: "antipasto" },
 ];
 const boxSuggerimenti = document.getElementById("suggerimenti-ricerca");
 const tuttiGliIngredienti = [...new Set(databaseRicette.flatMap(r => r.ingredienti))].sort();
