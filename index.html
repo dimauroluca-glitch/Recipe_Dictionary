@@ -245,7 +245,7 @@
             letter-spacing: 0.05em;
         }
         .titolo-preferiti {
-            margin-top: 40px;
+            margin-top: 30px;
             font-size: 1.5rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -755,7 +755,7 @@
             .Cassa-interfaccia { padding: 20px; }
             .scheda-ricetta:hover { transform: none; }
             .tasto-tema:hover { transform: none; }
-            .titolo-preferiti { font-size: 1.2rem; margin-top: 35px; padding: 0 10px; }
+            .titolo-preferiti { font-size: 1.2rem; margin-top: 20px; padding: 0 10px; }
             .torna-su {
                 bottom: 20px !important;       
                 right: 20px !important;        
@@ -777,26 +777,28 @@
     <button id="tasto-tema" class="tasto-tema">🌙 Tema Scuro</button>
     <h1>Dizionario di ricette</h1>
     <div class="contenitore-tab" style="display: flex; gap: 10px; margin-bottom: 20px; width: 100%; max-width: 800px; justify-content: center;">
-        <button id="tab-ricette" class="btn-tab attivo" onclick="cambiaScheda('ricette')">📖 Esplora Ricette</button>
-        <button id="tab-preferiti" class="btn-tab" onclick="cambiaScheda('preferiti')">❤️ I Miei Preferiti</button>
+        <button id="tab-timer" class="btn-tab attivo" onclick="cambiaScheda('timer')">⏱️ Timer Cucina</button>
+        <button id="tab-ricette" class="btn-tab" onclick="cambiaScheda('ricette')">📖 Esplora Ricette</button>
+        <button id="tab-preferiti" class="btn-tab" onclick="cambiaScheda('preferiti')">❤️ Miei Preferiti</button>
     </div>
-    <div class="blocco-timer" style="margin-top: 15px; padding-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%;">
-        <label>⏱️ Timer da Cucina</label>
-        <div id="display-timer" style="font-size: 2.2rem; font-weight: 800; font-family: monospace; letter-spacing: 2px; color: var(--text-color);">00:00</div>
-        <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; width: 100%;">
-            <button class="pillola-senza" onclick="impostaMinutiTimer(1)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+1 min</button>
-            <button class="pillola-senza" onclick="impostaMinutiTimer(3)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+3 min</button>
-            <button class="pillola-senza" onclick="impostaMinutiTimer(5)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+5 min</button>
-            <button class="pillola-senza" onclick="impostaMinutiTimer(10)" style="font-size: 0.8rem !important; padding: 4px 10px !important;">+10 min</button>
-        </div>
-        <div style="display: flex; gap: 8px; justify-content: center; width: 100%; margin-top: 5px;">
-            <button id="tasto-avvia-timer" class="btn-tab" style="padding: 8px 16px !important; font-size: 0.85rem !important; max-width: 100px !important;">▶️ Avvia</button>
-            <button id="tasto-reset-timer" class="btn-tab" style="padding: 8px 16px !important; font-size: 0.85rem !important; max-width: 100px !important; background: rgba(128,128,128,0.1) !important;">🔄 Reset</button>
+    <div id="sezione-timer" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 0 auto;">
+        <div class="Cassa-interfaccia" style="width: 100%; box-sizing: border-box; padding: 40px 20px; text-align: center;">
+            <h2 style="margin-top: 0; margin-bottom: 10px;">⏱️ Timer da Cucina</h2>
+            <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 25px; margin-top: 0;">Imposta i minuti e avvia il conto alla rovescia per le tue cotture</p>
+            <div id="display-timer" style="font-size: 3.5rem; font-weight: 800; font-family: monospace; letter-spacing: 3px; color: var(--text-color); margin-bottom: 25px;">00:00</div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; margin-bottom: 25px;">
+                <button class="pillola-senza" onclick="impostaMinutiTimer(1)" style="font-size: 0.9rem !important; padding: 6px 14px !important;">+1 min</button>
+                <button class="pillola-senza" onclick="impostaMinutiTimer(3)" style="font-size: 0.9rem !important; padding: 6px 14px !important;">+3 min</button>
+                <button class="pillola-senza" onclick="impostaMinutiTimer(5)" style="font-size: 0.9rem !important; padding: 6px 14px !important;">+5 min</button>
+                <button class="pillola-senza" onclick="impostaMinutiTimer(10)" style="font-size: 0.9rem !important; padding: 6px 14px !important;">+10 min</button>
+            </div>
+            <div style="display: flex; gap: 12px; justify-content: center; width: 100%;">
+                <button id="tasto-avvia-timer" class="btn-tab" style="padding: 12px 24px !important; font-size: 0.95rem !important; max-width: 130px !important;">▶️ Avvia</button>
+                <button id="tasto-reset-timer" class="btn-tab" style="padding: 12px 24px !important; font-size: 12px 24px !important; max-width: 130px !important; background: rgba(128,128,128,0.1) !important;">🔄 Reset</button>
+            </div>
         </div>
     </div>
-    <br>
-    <br>
-    <div id="sezione-ricette" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 0 auto;">
+    <div id="sezione-ricette" style="display: none; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 0 auto;">
         <div class="sottotitolo" style="text-align: center; width: 100%;">Cerca piatti o seleziona cosa hai in frigo</div>
         <div class="Cassa-interfaccia" style="width: 100%; box-sizing: border-box;">
             <div id="contatore-risultati" class="contatore-risultati" style="width: 100%; text-align: center; margin: 0 0 15px 0; font-size: 0.95rem; font-weight: bold; opacity: 0.85;"></div>
@@ -807,7 +809,7 @@
             <div class="contenitore-tempo-filtro" style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; width: 100%; justify-content: center;">
                 <span class="pillola-senza" data-tempo-max="20" onclick="filtraPerTempo(20, this)">⚡ Veloci (< 20 min)</span>
                 <span class="pillola-senza" data-tempo-max="40" onclick="filtraPerTempo(40, this)">🕒 Medi (< 40 min)</span>
-                <span class="pillola-senza" data-tempo-max="tutti" class="pillola-senza attiva" onclick="filtraPerTempo('tutti', this)">⏳ Tutti i tempi</span>
+                <span class="pillola-senza" data-tempo-max="tutti" class="pillola-senza" onclick="filtraPerTempo('tutti', this)">⏳ Tutti i tempi</span>
             </div>
             <div style="display: flex; flex-direction: column; gap: 8px; position: relative;">
                 <label for="barra-ricerca">Cerca per nome piatto</label>
@@ -846,30 +848,22 @@
                 </select>
             </div>
             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(128, 128, 128, 0.2); width: 100%;">
+                <br>
                 <button id="tasto-casuale" class="btn-casuale">🎲 Scegli una ricetta casuale</button>
             </div>
         </div>
         <div id="risultati" style="width: 100%;"></div>
     </div>
     <div id="sezione-preferiti" style="display: none; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 0 auto;">
-        <h2 id="titolo-preferiti" class="titolo-preferiti" style="text-align: center; width: 100%;">❤️ Le Tue Ricette Preferite</h2>
+        <h2 id="titolo-preferiti" class="titolo-preferiti" style="text-align: center; width: 100%; margin-top: -20px !important; margin-bottom: 10px !important;"></h2>
         <div id="zona-azione-preferiti" style="margin-bottom: 15px; width: 100%;"></div>
         <div id="preferiti" style="width: 100%;"></div>
     </div>
     <a href="#tasto-tema" id="torna-su" class="torna-su" title="Torna in cima">▲</a>
-        <script>
-            const script = document.createElement('script');
-            script.src = 'dizionario_di_ricette.js?v=' + Date.now();
-            document.body.appendChild(script);
-        </script>
     <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('PWA registrata con successo!', reg))
-        .catch(err => console.log('Errore registrazione PWA:', err));
-    });
-  }
-</script>
+        const script = document.createElement('script');
+        script.src = 'dizionario_di_ricette.js?v=' + Date.now();
+        document.body.appendChild(script);
+    </script>
 </body>
 </html>
