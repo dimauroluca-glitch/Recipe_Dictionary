@@ -822,6 +822,10 @@ function svuotaTuttiIFiltri() {
     eseguiRicercaFiltri();
     mostraPreferiti();
 }
+inizializzaTagIngredienti();
+eseguiRicercaFiltri();
+mostraPreferiti();
+cambiaScheda('ricette');
 const pilloleTempoAllAvvio = document.querySelectorAll(".contenitore-tempo-filtro .pillola-senza");
 if (pilloleTempoAllAvvio && pilloleTempoAllAvvio[2]) {
     pilloleTempoAllAvvio[2].classList.add("attiva");
