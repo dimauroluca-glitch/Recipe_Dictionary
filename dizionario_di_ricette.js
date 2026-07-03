@@ -66,7 +66,8 @@ const databaseRicette = [
     { nome: "Uova ripiene alla salsa tonnata", ingredienti: ["uova", "tonno", "maionese"], video: "https://www.youtube.com/shorts/jm1tmCkE3d8", tipo: "antipasto", temperatura: "freddo", tempo: 20 },
     { nome: "Insalata russa", ingredienti: ["maionese", "patate", "verdure"], video: "https://www.youtube.com/shorts/uCTOCNA2q3w", tipo: "antipasto", temperatura: "freddo", tempo: 35 },
     { nome: "Quadrotti di sfoglia con cipolle caramellate", ingredienti: ["cipolla", "formaggio", "uova"], video: "https://www.youtube.com/shorts/2DQFcGqWwLI", tipo: "antipasto", temperatura: "tiepido", tempo: 30 }
-];    
+];
+const boxSuggerimentiIngrediente = document.getElementById("suggerimenti-ingrediente");
 const filtroTemperatura = document.getElementById("filtro-temperatura");
 const boxSuggerimenti = document.getElementById("suggerimenti-ricerca");
 const tuttiGliIngredienti = [...new Set(databaseRicette.flatMap(r => r.ingredienti))].sort();
@@ -82,20 +83,16 @@ let filtriSenzaAttivi = [];
 let tempoMassimoSelezionato = "tutti";
 function inizializzaTagIngredienti() {
     grigliaIngredienti.innerHTML = "";
-    tuttiGliIngredienti.forEach(ingrediente => {
+    if (ingredientiSelezionati.length === 0) return;
+    ingredientiSelezionati.forEach(ingrediente => {
         const tag = document.createElement("div");
-        tag.className = "tag-ingrediente";
-        tag.setAttribute("data-ingrediente", ingrediente.toLowerCase().trim());
+        tag.className = "tag-ingrediente selezionato"; 
         tag.innerHTML = `<span>${ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1)}</span>`;
         tag.addEventListener("click", () => {
-            if (ingredientiSelezionati.includes(ingrediente)) {
-                ingredientiSelezionati = ingredientiSelezionati.filter(i => i !== ingrediente);
-                tag.classList.remove("selezionato");
-            } else {
-                ingredientiSelezionati.push(ingrediente);
-                tag.classList.add("selezionato");
-            }
-            eseguiRicercaFiltri();
+            ingredientiSelezionati = ingredientiSelezionati.filter(i => i !== ingrediente);
+            inizializzaTagIngredienti();
+            eseguiRicercaFiltri();      
+            mostraPreferiti();           
         });
         grigliaIngredienti.appendChild(tag);
     });
@@ -103,19 +100,43 @@ function inizializzaTagIngredienti() {
 const inputCercaIngrediente = document.getElementById("cerca-ingrediente");
 if (inputCercaIngrediente) {
     inputCercaIngrediente.addEventListener("input", () => {
-        const testoFiltro = rimuoviAccenti(inputCercaIngrediente.value.toLowerCase().trim());
-        const tuttiITag = document.querySelectorAll(".tag-ingrediente");
-        tuttiITag.forEach(tag => {
-            const nomeIngredientePura = tag.getAttribute("data-ingrediente") || "";
-            const nomeIngredienteSenzaAccenti = rimuoviAccenti(nomeIngredientePura);
-            if (nomeIngredienteSenzaAccenti.includes(testoFiltro) || tag.classList.contains("selezionato")) {
-                tag.style.setProperty("display", "inline-block", "important");
-            } else {
-                tag.style.setProperty("display", "none", "important");
-            }
-        });
+        const testo = rimuoviAccenti(inputCercaIngrediente.value.toLowerCase().trim());
+        boxSuggerimentiIngrediente.innerHTML = "";
+        if (testo === "") {
+            boxSuggerimentiIngrediente.style.setProperty("display", "none", "important");
+            return;
+        }
+        const ingredientiTrovati = tuttiGliIngredienti.filter(ing => 
+            rimuoviAccenti(ing.toLowerCase()).includes(testo) && 
+            !ingredientiSelezionati.includes(ing)
+        ).slice(0, 5);
+        if (ingredientiTrovati.length > 0) {
+            boxSuggerimentiIngrediente.style.setProperty("display", "block", "important");  
+            ingredientiTrovati.forEach(ingrediente => {
+                const div = document.createElement("div");
+                div.className = "voce-suggerimento";
+                div.textContent = ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1);
+                div.addEventListener("click", () => {
+                    ingredientiSelezionati.push(ingrediente);
+                    inputCercaIngrediente.value = "";
+                    boxSuggerimentiIngrediente.style.setProperty("display", "none", "important");
+                    inizializzaTagIngredienti();
+                    eseguiRicercaFiltri();
+                    mostraPreferiti();
+                    inputCercaIngrediente.focus();
+                });
+                boxSuggerimentiIngrediente.appendChild(div);
+            });
+        } else {
+            boxSuggerimentiIngrediente.style.setProperty("display", "none", "important");
+        }
     });
 }
+document.addEventListener("click", (e) => {
+    if (e.target !== inputCercaIngrediente && e.target !== boxSuggerimentiIngrediente) {
+        if (boxSuggerimentiIngrediente) boxSuggerimentiIngrediente.style.setProperty("display", "none", "important");
+    }
+});
 const contatoreRisultati = document.getElementById("contatore-risultati");
 function rimuoviAccenti(testo) {
     return testo.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
