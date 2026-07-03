@@ -83,6 +83,7 @@ let filtriSenzaAttivi = [];
 let tempoMassimoSelezionato = "tutti";
 function inizializzaTagIngredienti() {
     grigliaIngredienti.innerHTML = "";
+    localStorage.setItem("frigoIngredienti", JSON.stringify(ingredientiSelezionati));
     if (ingredientiSelezionati.length === 0) return;
     ingredientiSelezionati.forEach(ingrediente => {
         const tag = document.createElement("div");
@@ -91,7 +92,7 @@ function inizializzaTagIngredienti() {
         tag.addEventListener("click", () => {
             ingredientiSelezionati = ingredientiSelezionati.filter(i => i !== ingrediente);
             inizializzaTagIngredienti();
-            eseguiRicercaFiltri();      
+            eseguiRicercaFiltri();       
             mostraPreferiti();           
         });
         grigliaIngredienti.appendChild(tag);
@@ -111,19 +112,19 @@ if (inputCercaIngrediente) {
             !ingredientiSelezionati.includes(ing)
         ).slice(0, 5);
         if (ingredientiTrovati.length > 0) {
-            boxSuggerimentiIngrediente.style.setProperty("display", "block", "important");  
+            boxSuggerimentiIngrediente.style.setProperty("display", "block", "important");
             ingredientiTrovati.forEach(ingrediente => {
                 const div = document.createElement("div");
                 div.className = "voce-suggerimento";
                 div.textContent = ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1);
                 div.addEventListener("click", () => {
-                    ingredientiSelezionati.push(ingrediente);
-                    inputCercaIngrediente.value = "";
+                    ingredientiSelezionati.push(ingrediente); 
+                    inputCercaIngrediente.value = "";         
                     boxSuggerimentiIngrediente.style.setProperty("display", "none", "important");
                     inizializzaTagIngredienti();
-                    eseguiRicercaFiltri();
+                    eseguiRicercaFiltri();       
                     mostraPreferiti();
-                    inputCercaIngrediente.focus();
+                    inputCercaIngrediente.focus(); 
                 });
                 boxSuggerimentiIngrediente.appendChild(div);
             });
@@ -677,6 +678,7 @@ function toggleFiltroSenza(tipo, elemento) {
         filtriSenzaAttivi.push(tipo);
         elemento.classList.add("attiva");
     }
+    localStorage.setItem("filtriSenza", JSON.stringify(filtriSenzaAttivi));
     eseguiRicercaFiltri();
 }
 let tempoRimanenteS = 0;
@@ -799,6 +801,7 @@ function filtraPerTempo(limiteMinuti, elemento) {
     const tutteLePilloleTempo = document.querySelectorAll(".contenitore-tempo-filtro .pillola-senza");
     tutteLePilloleTempo.forEach(p => p.classList.remove("attiva"));
     elemento.classList.add("attiva");
+    localStorage.setItem("filtroTempoMassimo", tempoMassimoSelezionato);
     eseguiRicercaFiltri(); 
 }
 function svuotaTuttiIFiltri() {
@@ -819,14 +822,42 @@ function svuotaTuttiIFiltri() {
         t.classList.remove("selezionato");
         t.style.setProperty("display", "inline-block", "important");
     });
+    localStorage.removeItem("filtroTipo");
+    localStorage.removeItem("filtroTemperatura");
+    localStorage.removeItem("filtriSenza");
+    localStorage.removeItem("filtroTempoMassimo");
     eseguiRicercaFiltri();
     mostraPreferiti();
+}
+const tipoSalvato = localStorage.getItem("filtroTipo");
+if (tipoSalvato && filtroTipo) filtroTipo.value = tipoSalvato;
+const temperaturaSalvata = localStorage.getItem("filtroTemperatura");
+if (temperaturaSalvata && filtroTemperatura) filtroTemperatura.value = temperaturaSalvata;
+const filtriSenzaSalvati = localStorage.getItem("filtriSenza");
+if (filtriSenzaSalvati) {
+    filtriSenzaAttivi = JSON.parse(filtriSenzaSalvati);
+    const pilloleSenza = document.querySelectorAll(".contenitore-intolleranze .pillola-senza");
+    if (pilloleSenza && pilloleSenza.length >= 2) {
+        if (filtriSenzaAttivi.includes("glutine")) pilloleSenza[0].classList.add("attiva");
+        if (filtriSenzaAttivi.includes("lattosio")) pilloleSenza[1].classList.add("attiva");
+    }
+}
+const tempoSalvatoFiltro = localStorage.getItem("filtroTempoMassimo");
+const tutteLePilloleTempo = document.querySelectorAll(".contenitore-tempo-filtro .pillola-senza");
+if (tempoSalvatoFiltro) {
+    tempoMassimoSelezionato = tempoSalvatoFiltro;
+    if (tutteLePilloleTempo && tutteLePilloleTempo.length >= 3) {
+        tutteLePilloleTempo.forEach(p => p.classList.remove("attiva"));
+        if (tempoMassimoSelezionato === "20") tutteLePilloleTempo[0].classList.add("attiva");
+        else if (tempoMassimoSelezionato === "40") tutteLePilloleTempo[1].classList.add("attiva");
+        else if (tempoMassimoSelezionato === "tutti") tutteLePilloleTempo[2].classList.add("attiva");
+    }
+} else {
+    if (tutteLePilloleTempo && tutteLePilloleTempo[2]) {
+        tutteLePilloleTempo[2].classList.add("attiva");
+    }
 }
 inizializzaTagIngredienti();
 eseguiRicercaFiltri();
 mostraPreferiti();
 cambiaScheda('ricette');
-const pilloleTempoAllAvvio = document.querySelectorAll(".contenitore-tempo-filtro .pillola-senza");
-if (pilloleTempoAllAvvio && pilloleTempoAllAvvio[2]) {
-    pilloleTempoAllAvvio[2].classList.add("attiva");
-}
