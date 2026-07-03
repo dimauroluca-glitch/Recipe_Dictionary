@@ -1,72 +1,73 @@
 const databaseRicette = [
-    { nome: "Frittata veloce", ingredienti: ["uova", "sale", "formaggio"], video: "https://www.youtube.com/watch?v=xxLq4pHvj3A", tipo: "secondo" },
-    { nome: "Biscotti fatti in casa", ingredienti: ["farina", "burro", "uova"], video: "https://www.youtube.com/shorts/kUBxg-b6PUw", tipo: "dolce" },
-    { nome: "Arancini di riso", ingredienti: ["cereali", "cipolla", "farina"], video: "https://www.youtube.com/shorts/BjBSDKO81Ms", tipo: "antipasto" },
-    { nome: "Porridge", ingredienti: ["cereali", "latte"], video: "https://www.youtube.com/shorts/lrs10J530o0", tipo: "dolce" },
-    { nome: "Zuppa di cipolle", ingredienti: ["cipolla", "brodo", "burro"], video: "https://www.youtube.com/watch?v=e-e7DDpu4jE", tipo: "primo" },
-    { nome: "Riso al curry", ingredienti: ["cereali", "curry", "verdure"], video: "https://www.youtube.com/shorts/jTGANsXQSl4", tipo: "primo" },
-    { nome: "Patate al forno", ingredienti: ["patate", "olio", "sale"], video: "https://www.youtube.com/shorts/ITzC5ECY9gg", tipo: "secondo" },
-    { nome: "Miele e noci", ingredienti: ["miele", "noci"], video: "https://www.youtube.com/shorts/dUXTKxr6yLA", tipo: "dolce" },
-    { nome: "Insalata mista", ingredienti: ["verdure", "pomodoro", "olio"], video: "https://www.youtube.com/watch?v=bsp4ev21gxs", tipo: "secondo" },
-    { nome: "Smoothie alla frutta", ingredienti: ["frutta", "yogurt", "miele"], video: "https://www.youtube.com/shorts/dP8Vf9m4ly0", tipo: "dolce" },
-    { nome: "Pizza margherita", ingredienti: ["farina", "pomodoro", "mozzarella"], video: "https://www.youtube.com/shorts/YUNjyDbkZUE", tipo: "primo" },
-    { nome: "Lasagna", ingredienti: ["pasta", "ragù", "besciamella"], video: "https://www.youtube.com/shorts/dYcXVPIIjEk", tipo: "primo" },
-    { nome: "Torta al cioccolato", ingredienti: ["farina", "uova", "cioccolato"], video: "https://www.youtube.com/shorts/5eWNEsBXWTg", tipo: "dolce" },
-    { nome: "Crepes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/YWEQh-l3hg8", tipo: "dolce" },
-    { nome: "Polenta", ingredienti: ["farina", "sale"], video: "https://www.youtube.com/shorts/dUtftEfnVlY", tipo: "primo" },
-    { nome: "Tiramisù", ingredienti: ["savoiardi", "caffè", "mascarpone"], video: "https://www.youtube.com/shorts/8Yz7wREvhAc", tipo: "dolce" },
-    { nome: "Pancakes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/LtSdqM9l5i4", tipo: "dolce" },
-    { nome: "Insalata di riso", ingredienti: ["cereali", "verdure", "olio"], video: "https://www.youtube.com/watch?v=tutpq2RM3C0", tipo: "primo" },
-    { nome: "Besciamella", ingredienti: ["latte", "patate", "uova"], video: "https://www.youtube.com/shorts/YdY5Mu-rJOM", tipo: "antipasto" },
-    { nome: "Salsa olandese", ingredienti: ["burro", "limone", "uova"], video: "https://www.youtube.com/shorts/IuQIOp13YSY", tipo: "antipasto" },
-    { nome: "Risotto alla milanese", ingredienti: ["burro", "zafferano", "cipolla"], video: "https://www.youtube.com/shorts/vLY7OThgQEs", tipo: "primo" },
-    { nome: "Melanzane alla parmigiana", ingredienti: ["ragù", "melanzane", "formaggio"], video: "https://www.youtube.com/shorts/InSse_GGwzY", tipo: "secondo" },
-    { nome: "Cacio e pepe", ingredienti: ["formaggio", "pepe", "pasta"], video: "https://www.youtube.com/shorts/4-uiBhdmDuI", tipo: "primo" },
-    { nome: "Purè di patate", ingredienti: ["patate", "latte", "burro"], video: "https://www.youtube.com/shorts/4UIQQelcWgE", tipo: "secondo" },
-    { nome: "Panna cotta al caffè", ingredienti: ["caffè", "panna"], video: "https://www.youtube.com/shorts/cXOhcR2g3NQ", tipo: "dolce" },
-    { nome: "Affogato al caffè", ingredienti: ["caffè", "gelato"], video: "https://www.youtube.com/shorts/FXXWM903I9U", tipo: "dolce" },
-    { nome: "Crostata di frutta", ingredienti: ["farina", "burro", "frutta"], video: "https://www.youtube.com/shorts/UrJn0TH0EfM", tipo: "dolce" },
-    { nome: "Minestrone", ingredienti: ["verdure", "brodo", "pasta"], video: "https://www.youtube.com/shorts/yOORcKXCSIY", tipo: "primo" },
-    { nome: "Gnocchi di patate", ingredienti: ["patate", "farina", "uova"], video: "https://www.youtube.com/shorts/w0hBkAIxBds", tipo: "primo" },
-    { nome: "Pollo al curry", ingredienti: ["carne", "curry", "latte"], video: "https://www.youtube.com/shorts/ZB9w3DR53xw", tipo: "secondo" },
-    { nome: "Couscous alle verdure", ingredienti: ["couscous", "verdure", "olio"], video: "https://www.youtube.com/shorts/-siVcrdwDwY", tipo: "primo" },
-    { nome: "Frittelle di mele", ingredienti: ["mele", "farina", "uova"], video: "https://www.youtube.com/shorts/BjEIhGPjv7k", tipo: "dolce" },
-    { nome: "Zuppa di lenticchie", ingredienti: ["lenticchie", "verdure", "brodo"], video: "https://www.youtube.com/shorts/lMzBj2jEXGE", tipo: "primo" },
-    { nome: "Caponata siciliana", ingredienti: ["melanzane", "pomodoro", "olive"], video: "https://www.youtube.com/shorts/XOnOiCU9ABk", tipo: "antipasto" },
-    { nome: "Ratatouille", ingredienti: ["melanzane", "verdure", "verdure"], video: "https://www.youtube.com/shorts/VDmOqGHDhKc", tipo: "secondo" },
-    { nome: "Torta di mele", ingredienti: ["mele", "farina", "uova"], video: "https://www.youtube.com/shorts/SUf7pWLi8rE", tipo: "dolce" },
-    { nome: "Brownies al cioccolato", ingredienti: ["cioccolato", "burro", "uova"], video: "https://www.youtube.com/shorts/6blrycMPTe4", tipo: "dolce" },
-    { nome: "Pasta all'amatriciana", ingredienti: ["pasta", "pomodoro", "guanciale"], video: "https://www.youtube.com/shorts/HgPblcqdGA4", tipo: "primo" },
-    { nome: "Pasta alla puttanesca", ingredienti: ["pasta", "pomodoro", "olive"], video: "https://www.youtube.com/watch?v=Z59zqJjUG4w", tipo: "primo" },
-    { nome: "Pasta alla norma", ingredienti: ["pasta", "melanzane", "ricotta"], video: "https://www.youtube.com/shorts/5pTJDwj626Q", tipo: "primo" },
-    { nome: "Pasta alla bolognese", ingredienti: ["pasta", "ragù", "formaggio"], video: "https://www.youtube.com/shorts/J9yIITFLYow", tipo: "primo" },
-    { nome: "Pasta alla siciliana", ingredienti: ["pasta", "melanzane", "pomodoro"], video: "https://www.youtube.com/shorts/HyxuJwn-ucM", tipo: "primo" },
-    { nome: "Pasta alla genovese", ingredienti: ["pasta", "cipolla", "carne"], video: "https://www.youtube.com/shorts/c9Gta7MaZDo", tipo: "primo" },
-    { nome: "Pasta alla sorrentina", ingredienti: ["pasta", "pomodoro", "mozzarella"], video: "https://www.youtube.com/shorts/kZ-uRWh4F4g", tipo: "primo" },
-    { nome: "Cannelloni ricotta e spinaci", ingredienti: ["besciamella", "ricotta", "verdure"], video: "https://www.youtube.com/shorts/PWr7c8MaceI", tipo: "primo" },
-    { nome: "Gulasch ungherese", ingredienti: ["carne", "cipolla", "patate"], video: "https://www.youtube.com/shorts/zBufqt5htjw", tipo: "secondo" },
-    { nome: "Chili con carne", ingredienti: ["carne", "verdure", "pomodoro"], video: "https://www.youtube.com/shorts/SPakumjssms", tipo: "secondo" },
-    { nome: "Paella", ingredienti: ["cereali", "frutti di mare", "verdure"], video: "https://www.youtube.com/shorts/6EMK81Cxub0", tipo: "primo" },
-    { nome: "Banana split", ingredienti: ["gelato", "banana", "panna montata"], video: "https://www.youtube.com/shorts/lEzk_W-XMsY", tipo: "dolce" },
-    { nome: "Tacos messicani", ingredienti: ["tortilla", "carne", "verdure"], video: "https://www.youtube.com/shorts/Hi7gAfusjcQ", tipo: "secondo" },
-    { nome: "Moussaka", ingredienti: ["melanzane", "carne", "besciamella"], video: "https://www.youtube.com/watch?v=q5NGOKIu-Sc", tipo: "secondo" },
-    { nome: "Pasta alla carbonara", ingredienti: ["pasta", "uova", "guanciale"], video: "https://www.youtube.com/shorts/YIsp44Y0QXM", tipo: "primo" },
-    { nome: "Anelli di funghi", ingredienti: ["funghi", "uova", "farina", "olio"], video: "https://www.youtube.com/shorts/M2aYCBM-2zw", tipo: "antipasto" },
-    { nome: "Carpaccio di cedro", ingredienti: ["pepe", "cedro", "formaggio"], video: "https://www.youtube.com/shorts/lULqIcg6vRI", tipo: "antipasto" },
-    { nome: "Risotto alle fragole", ingredienti: ["riso", "frutta", "burro"], video: "https://www.youtube.com/shorts/V1K2eJk2_cE", tipo: "primo" },
-    { nome: "Maiale in agrodolce", ingredienti: ["carne", "ananas", "pomodoro"], video: "https://www.youtube.com/shorts/kb7DDaDJd-k", tipo: "secondo" },
-    { nome: "Spaghetti all'assassina", ingredienti: ["pasta", "pomodoro", "olio"], video: "https://www.youtube.com/shorts/YIsp44Y0QXM", tipo: "primo" },
-    { nome: "Pere al vino rosso e gorgonzola", ingredienti: ["frutta", "formaggio"], video: "https://www.youtube.com/shorts/Ik9k80Bm1bM", tipo: "secondo" },
-    { nome: "Guacamole con mango", ingredienti: ["avocado", "cipolla", "mango", "pomodoro"], video: "https://www.youtube.com/shorts/iOZk8j4fp7U", tipo: "antipasto" },
-    { nome: "Gamberi in salsa rosa", ingredienti: ["frutti di mare", "panna", "verdure"], video: "https://www.youtube.com/shorts/BBn-tBPZ1ZM", tipo: "antipasto" },
-    { nome: "Scaloppine al limone", ingredienti: ["carne", "farina", "limone", "pepe"], video: "https://www.youtube.com/shorts/9UrxVwMJ0mA", tipo: "secondo" },
-    { nome: "Mousse di mortadella e pistacchi", ingredienti: ["prosciutto", "ricotta", "pistacchio", "formaggio"], video: "https://www.youtube.com/shorts/qWCFDprizn0", tipo: "antipasto" },
-    { nome: "Tartare di tonno con avocado e pistacchi", ingredienti: ["tonno", "avocado", "pistacchio"], video: "https://www.youtube.com/shorts/7D6JvprLJW0", tipo: "antipasto" },
-    { nome: "Involtini di zucchine grigliate con crema di tonno", ingredienti: ["tonno", "verdure", "maionese"], video: "https://www.youtube.com/shorts/zk3gXO6qdTY", tipo: "antipasto" },
-    { nome: "Uova ripiene alla salsa tonnata", ingredienti: ["uova", "tonno", "maionese"], video: "https://www.youtube.com/shorts/jm1tmCkE3d8", tipo: "antipasto" },
-    { nome: "Insalata russa", ingredienti: ["maionese", "patate", "verdure"], video: "https://www.youtube.com/shorts/uCTOCNA2q3w", tipo: "antipasto" },
-    { nome: "Quadrotti di sfoglia con cipolle caramellate", ingredienti: ["cipolla", "formaggio", "uova"], video: "https://www.youtube.com/shorts/2DQFcGqWwLI", tipo: "antipasto" },
+    { nome: "Frittata veloce", ingredienti: ["uova", "sale", "formaggio"], video: "https://www.youtube.com/watch?v=xxLq4pHvj3A", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Biscotti fatti in casa", ingredienti: ["farina", "burro", "uova"], video: "https://www.youtube.com/shorts/kUBxg-b6PUw", tipo: "dolce", temperatura: "freddo" },
+    { nome: "Arancini di riso", ingredienti: ["cereali", "cipolla", "farina"], video: "https://www.youtube.com/shorts/BjBSDKO81Ms", tipo: "antipasto", temperatura: "tiepido" },
+    { nome: "Porridge", ingredienti: ["cereali", "latte"], video: "https://www.youtube.com/shorts/lrs10J530o0", tipo: "dolce", temperatura: "caldo" },
+    { nome: "Zuppa di cipolle", ingredienti: ["cipolla", "brodo", "burro"], video: "https://www.youtube.com/watch?v=e-e7DDpu4jE", tipo: "primo", temperatura: "caldo" },
+    { nome: "Riso al curry", ingredienti: ["cereali", "curry", "verdure"], video: "https://www.youtube.com/shorts/jTGANsXQSl4", tipo: "primo", temperatura: "caldo" },
+    { nome: "Patate al forno", ingredienti: ["patate", "olio", "sale"], video: "https://www.youtube.com/shorts/ITzC5ECY9gg", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Miele e noci", ingredienti: ["miele", "noci"], video: "https://www.youtube.com/shorts/dUXTKxr6yLA", tipo: "dolce", temperatura: "freddo" },
+    { nome: "Insalata mista", ingredienti: ["verdure", "pomodoro", "olio"], video: "https://www.youtube.com/watch?v=bsp4ev21gxs", tipo: "secondo", temperatura: "freddo" },
+    { nome: "Smoothie alla frutta", ingredienti: ["frutta", "yogurt", "miele"], video: "https://www.youtube.com/shorts/dP8Vf9m4ly0", tipo: "dolce", temperatura: "freddo" },
+    { nome: "Pizza margherita", ingredienti: ["farina", "pomodoro", "mozzarella"], video: "https://www.youtube.com/shorts/YUNjyDbkZUE", tipo: "primo", temperatura: "caldo" },
+    { nome: "Lasagna", ingredienti: ["pasta", "ragù", "besciamella"], video: "https://www.youtube.com/shorts/dYcXVPIIjEk", tipo: "primo", temperatura: "caldo" },
+    { nome: "Torta al cioccolato", ingredienti: ["farina", "uova", "cioccolato"], video: "https://www.youtube.com/shorts/5eWNEsBXWTg", tipo: "dolce", temperatura: "freddo" },
+    { nome: "Crepes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/YWEQh-l3hg8", tipo: "dolce", temperatura: "tiepido" },
+    { nome: "Polenta", ingredienti: ["farina", "sale"], video: "https://www.youtube.com/shorts/dUtftEfnVlY", tipo: "primo", temperatura: "caldo" },
+    { nome: "Tiramisù", ingredienti: ["savoiardi", "caffè", "mascarpone"], video: "https://www.youtube.com/shorts/8Yz7wREvhAc", tipo: "dolce", temperatura: "freddo" },
+    { nome: "Pancakes", ingredienti: ["farina", "uova", "latte"], video: "https://www.youtube.com/shorts/LtSdqM9l5i4", tipo: "dolce", temperatura: "caldo" },
+    { nome: "Insalata di riso", ingredienti: ["cereali", "verdure", "olio"], video: "https://www.youtube.com/watch?v=tutpq2RM3C0", tipo: "primo", temperatura: "freddo" },
+    { nome: "Besciamella", ingredienti: ["latte", "patate", "uova"], video: "https://www.youtube.com/shorts/YdY5Mu-rJOM", tipo: "antipasto", temperatura: "caldo" },
+    { nome: "Salsa olandese", ingredienti: ["burro", "limone", "uova"], video: "https://www.youtube.com/shorts/IuQIOp13YSY", tipo: "antipasto", temperatura: "tiepido" },
+    { nome: "Risotto alla milanese", ingredienti: ["burro", "zafferano", "cipolla"], video: "https://www.youtube.com/shorts/vLY7OThgQEs", tipo: "primo", temperatura: "caldo" },
+    { nome: "Melanzane alla parmigiana", ingredienti: ["ragù", "melanzane", "formaggio"], video: "https://www.youtube.com/shorts/InSse_GGwzY", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Cacio e pepe", ingredienti: ["formaggio", "pepe", "pasta"], video: "https://www.youtube.com/shorts/4-uiBhdmDuI", tipo: "primo", temperatura: "caldo" },
+    { nome: "Purè di patate", ingredienti: ["patate", "latte", "burro"], video: "https://www.youtube.com/shorts/4UIQQelcWgE", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Panna cotta al caffè", ingredienti: ["caffè", "panna"], video: "https://www.youtube.com/shorts/cXOhcR2g3NQ", tipo: "dolce", temperatura: "freddo" },
+    { nome: "Affogato al caffè", ingredienti: ["caffè", "gelato"], video: "https://www.youtube.com/shorts/FXXWM903I9U", tipo: "dolce", temperatura: "freddo" },
+    { nome: "Crostata di frutta", ingredienti: ["farina", "burro", "frutta"], video: "https://www.youtube.com/shorts/UrJn0TH0EfM", tipo: "dolce", temperatura: "freddo" },
+    { nome: "Minestrone", ingredienti: ["verdure", "brodo", "pasta"], video: "https://www.youtube.com/shorts/yOORcKXCSIY", tipo: "primo", temperatura: "caldo" },
+    { nome: "Gnocchi di patate", ingredienti: ["patate", "farina", "uova"], video: "https://www.youtube.com/shorts/w0hBkAIxBds", tipo: "primo", temperatura: "caldo" },
+    { nome: "Pollo al curry", ingredienti: ["carne", "curry", "latte"], video: "https://www.youtube.com/shorts/ZB9w3DR53xw", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Couscous alle verdure", ingredienti: ["couscous", "verdure", "olio"], video: "https://www.youtube.com/shorts/-siVcrdwDwY", tipo: "primo", temperatura: "tiepido" },
+    { nome: "Frittelle di mele", ingredienti: ["mele", "farina", "uova"], video: "https://www.youtube.com/shorts/BjEIhGPjv7k", tipo: "dolce", temperatura: "caldo" },
+    { nome: "Zuppa di lenticchie", ingredienti: ["lenticchie", "verdure", "brodo"], video: "https://www.youtube.com/shorts/lMzBj2jEXGE", tipo: "primo", temperatura: "caldo" },
+    { nome: "Caponata siciliana", ingredienti: ["melanzane", "pomodoro", "olive"], video: "https://www.youtube.com/shorts/XOnOiCU9ABk", tipo: "antipasto", temperatura: "freddo" },
+    { nome: "Ratatouille", ingredienti: ["melanzane", "verdure", "verdure"], video: "https://www.youtube.com/shorts/VDmOqGHDhKc", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Torta di mele", ingredienti: ["mele", "farina", "uova"], video: "https://www.youtube.com/shorts/SUf7pWLi8rE", tipo: "dolce", temperatura: "tiepido" },
+    { nome: "Brownies al cioccolato", ingredienti: ["cioccolato", "burro", "uova"], video: "https://www.youtube.com/shorts/6blrycMPTe4", tipo: "dolce", temperatura: "freddo" },
+    { nome: "Pasta all'amatriciana", ingredienti: ["pasta", "pomodoro", "guanciale"], video: "https://www.youtube.com/shorts/HgPblcqdGA4", tipo: "primo", temperatura: "caldo" },
+    { nome: "Pasta alla puttanesca", ingredienti: ["pasta", "pomodoro", "olive"], video: "https://www.youtube.com/watch?v=Z59zqJjUG4w", tipo: "primo", temperatura: "caldo" },
+    { nome: "Pasta alla norma", ingredienti: ["pasta", "melanzane", "ricotta"], video: "https://www.youtube.com/shorts/5pTJDwj626Q", tipo: "primo", temperatura: "caldo" },
+    { nome: "Pasta alla bolognese", ingredienti: ["pasta", "ragù", "formaggio"], video: "https://www.youtube.com/shorts/J9yIITFLYow", tipo: "primo", temperatura: "caldo" },
+    { nome: "Pasta alla siciliana", ingredienti: ["pasta", "melanzane", "pomodoro"], video: "https://www.youtube.com/shorts/HyxuJwn-ucM", tipo: "primo", temperatura: "caldo" },
+    { nome: "Pasta alla genovese", ingredienti: ["pasta", "cipolla", "carne"], video: "https://www.youtube.com/shorts/c9Gta7MaZDo", tipo: "primo", temperatura: "caldo" },
+    { nome: "Pasta alla sorrentina", ingredienti: ["pasta", "pomodoro", "mozzarella"], video: "https://www.youtube.com/shorts/kZ-uRWh4F4g", tipo: "primo", temperatura: "caldo" },
+    { nome: "Cannelloni ricotta e spinaci", ingredienti: ["besciamella", "ricotta", "verdure"], video: "https://www.youtube.com/shorts/PWr7c8MaceI", tipo: "primo", temperatura: "caldo" },
+    { nome: "Gulasch ungherese", ingredienti: ["carne", "cipolla", "patate"], video: "https://www.youtube.com/shorts/zBufqt5htjw", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Chili con carne", ingredienti: ["carne", "verdure", "pomodoro"], video: "https://www.youtube.com/shorts/SPakumjssms", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Paella", ingredienti: ["cereali", "frutti di mare", "verdure"], video: "https://www.youtube.com/shorts/6EMK81Cxub0", tipo: "primo", temperatura: "caldo" },
+    { nome: "Banana split", ingredienti: ["gelato", "banana", "panna montata"], video: "https://www.youtube.com/shorts/lEzk_W-XMsY", tipo: "dolce", temperatura: "freddo" },
+    { nome: "Tacos messicani", ingredienti: ["tortilla", "carne", "verdure"], video: "https://www.youtube.com/shorts/Hi7gAfusjcQ", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Moussaka", ingredienti: ["melanzane", "carne", "besciamella"], video: "https://www.youtube.com/watch?v=q5NGOKIu-Sc", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Pasta alla carbonara", ingredienti: ["pasta", "uova", "guanciale"], video: "https://www.youtube.com/shorts/YIsp44Y0QXM", tipo: "primo", temperatura: "caldo" },
+    { nome: "Anelli di funghi", ingredienti: ["funghi", "uova", "farina", "olio"], video: "https://www.youtube.com/shorts/M2aYCBM-2zw", tipo: "antipasto", temperatura: "caldo" },
+    { nome: "Carpaccio di cedro", ingredienti: ["pepe", "cedro", "formaggio"], video: "https://www.youtube.com/shorts/lULqIcg6vRI", tipo: "antipasto", temperatura: "freddo" },
+    { nome: "Risotto alle fragole", ingredienti: ["riso", "frutta", "burro"], video: "https://www.youtube.com/shorts/V1K2eJk2_cE", tipo: "primo", temperatura: "caldo" },
+    { nome: "Maiale in agrodolce", ingredienti: ["carne", "ananas", "pomodoro"], video: "https://www.youtube.com/shorts/kb7DDaDJd-k", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Spaghetti all'assassina", ingredienti: ["pasta", "pomodoro", "olio"], video: "https://www.youtube.com/shorts/YIsp44Y0QXM", tipo: "primo", temperatura: "caldo" },
+    { nome: "Pere al vino rosso e gorgonzola", ingredienti: ["frutta", "formaggio"], video: "https://www.youtube.com/shorts/Ik9k80Bm1bM", tipo: "secondo", temperatura: "tiepido" },
+    { nome: "Guacamole con mango", ingredienti: ["avocado", "cipolla", "mango", "pomodoro"], video: "https://www.youtube.com/shorts/iOZk8j4fp7U", tipo: "antipasto", temperatura: "freddo" },
+    { nome: "Gamberi in salsa rosa", ingredienti: ["frutti di mare", "panna", "verdure"], video: "https://www.youtube.com/shorts/BBn-tBPZ1ZM", tipo: "antipasto", temperatura: "freddo" },
+    { nome: "Scaloppine al limone", ingredienti: ["carne", "farina", "limone", "pepe"], video: "https://www.youtube.com/shorts/9UrxVwMJ0mA", tipo: "secondo", temperatura: "caldo" },
+    { nome: "Mousse di mortadella e pistacchi", ingredienti: ["prosciutto", "ricotta", "pistacchio", "formaggio"], video: "https://www.youtube.com/shorts/qWCFDprizn0", tipo: "antipasto", temperatura: "freddo" },
+    { nome: "Tartare di tonno con avocado e pistacchi", ingredienti: ["tonno", "avocado", "pistacchio"], video: "https://www.youtube.com/shorts/7D6JvprLJW0", tipo: "antipasto", temperatura: "freddo" },
+    { nome: "Involtini di zucchine grigliate con crema di tonno", ingredienti: ["tonno", "verdure", "maionese"], video: "https://www.youtube.com/shorts/zk3gXO6qdTY", tipo: "antipasto", temperatura: "freddo" },
+    { nome: "Uova ripiene alla salsa tonnata", ingredienti: ["uova", "tonno", "maionese"], video: "https://www.youtube.com/shorts/jm1tmCkE3d8", tipo: "antipasto", temperatura: "freddo" },
+    { nome: "Insalata russa", ingredienti: ["maionese", "patate", "verdure"], video: "https://www.youtube.com/shorts/uCTOCNA2q3w", tipo: "antipasto", temperatura: "freddo" },
+    { nome: "Quadrotti di sfoglia con cipolle caramellate", ingredienti: ["cipolla", "formaggio", "uova"], video: "https://www.youtube.com/shorts/2DQFcGqWwLI", tipo: "antipasto", temperatura: "tiepido" }
 ];
+const filtroTemperatura = document.getElementById("filtro-temperatura");
 const boxSuggerimenti = document.getElementById("suggerimenti-ricerca");
 const tuttiGliIngredienti = [...new Set(databaseRicette.flatMap(r => r.ingredienti))].sort();
 const barraRicerca = document.getElementById("barra-ricerca");
@@ -117,42 +118,62 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
     const bloccoRicetta = document.createElement("div");
     bloccoRicetta.className = "scheda-ricetta";
     bloccoRicetta.addEventListener("click", (e) => {
-        if (!e.target.classList.contains("tasto-cuore")) {
+        if (!e.target.classList.contains("tasto-cuore") && !e.target.classList.contains("ingrediente-mappato")) {
             window.open(ricetta.video, "_blank");
         }
     });
-    const etichetteTipi = { antipasto: "Antipasto", primo: "Primo", secondo: "Secondo", dolce: "Dolce" };
+    const etichetteTipi = { antipasto: "🥗 Antipasto", primo: "🍝 Primo", secondo: "🥩 Secondo", dolce: "🍰 Dolce" };
     const tipoChiave = ricetta.tipo ? ricetta.tipo.toLowerCase().trim() : "";
     const tipoTesto = etichetteTipi[tipoChiave] || "Ricetta";
+    let temperaturaChiave = ricetta.temperatura ? ricetta.temperatura.toLowerCase().trim() : "";
+    if (!temperaturaChiave) {
+        const nomeMinuscolo = ricetta.nome.toLowerCase();
+        if (tipoChiave === "dolce" || nomeMinuscolo.includes("insalata") || nomeMinuscolo.includes("carpaccio") || nomeMinuscolo.includes("guacamole") || nomeMinuscolo.includes("tartare") || nomeMinuscolo.includes("russa")) {
+            temperaturaChiave = "freddo";
+        } else if (nomeMinuscolo.includes("arancini") || nomeMinuscolo.includes("crepes") || nomeMinuscolo.includes("pere") || nomeMinuscolo.includes("sfoglia")) {
+            temperaturaChiave = "tiepido";
+        } else {
+            temperaturaChiave = "caldo";
+        }
+    }
+    const iconeTemperatura = { caldo: "🔥 Caldo", freddo: "❄️ Freddo", tiepido: "🌡️ Tiepido" };
+    const temperaturaTesto = iconeTemperatura[temperaturaChiave] || "🔥 Caldo";
     const coloriTipi = {
-        antipasto: { testo: "#2b8a3e", bordo: "rgba(43, 138, 62, 0.4)" },
-        primo: { testo: "#e03131", bordo: "rgba(224, 49, 49, 0.4)" },
-        secondo: { testo: "#f59f00", bordo: "rgba(245, 159, 0, 0.4)" },
-        dolce: { testo: "#9c36b5", bordo: "rgba(156, 54, 181, 0.4)" }
+        antipasto: { bg: "linear-gradient(135deg, #2b8a3e, #40c057)", ombra: "rgba(43, 138, 62, 0.3)" }, 
+        primo: { bg: "linear-gradient(135deg, #e03131, #ff6b6b)", ombra: "rgba(224, 49, 49, 0.3)" },     
+        secondo: { bg: "linear-gradient(135deg, #f59f00, #ffd43b)", ombra: "rgba(245, 159, 0, 0.3)" },   
+        dolce: { bg: "linear-gradient(135deg, #7048e8, #845ef7)", ombra: "rgba(112, 72, 232, 0.3)" }     
     };
-    const coloreAttuale = coloriTipi[tipoChiave] || { testo: "currentColor", bordo: "rgba(255,255,255,0.3)" };
+    const coloreAttuale = coloriTipi[tipoChiave] || { bg: "#888888", ombra: "rgba(0,0,0,0.1)" };
     const iconaCuore = èNeiPreferiti ? "❤️" : "🤍";
+    const ingredientiColorati = ricetta.ingredienti.map(ingrediente => {
+        const ceLhoInFrigo = ingredientiSelezionati.includes(ingrediente);
+        if (ceLhoInFrigo) {
+            return `<span class="ingrediente-mappato" style="color: #40c057 !important; font-weight: bold;">${ingrediente}</span>`;
+        } else {
+            return `<span class="ingrediente-mappato" style="opacity: 0.75;">${ingrediente}</span>`;
+        }
+    }).join(", ");
     bloccoRicetta.innerHTML = `
-        <button class="tasto-cuore" style="position: absolute; top: 15px; right: 15px; background: none !important; border: none !important; font-size: 1.4rem; cursor: pointer; padding: 0; width: auto; box-shadow: none !important;">${iconaCuore}</button>
-        <span class="badge-tipo" style="
-            font-size: 0.7rem !important; 
-            text-transform: uppercase !important; 
-            letter-spacing: 1px !important; 
-            font-weight: 700 !important; 
-            color: ${coloreAttuale.testo} !important; 
-            border: 1px solid ${coloreAttuale.bordo} !important; 
-            padding: 3px 8px !important; 
-            border-radius: 4px !important; 
-            display: inline-block !important; 
-            margin-bottom: 8px !important;
-            background-color: rgba(255, 255, 255, 0.05) !important;
-        ">${tipoTesto}</span>
+        <button class="tasto-cuore" style="position: absolute; top: 15px; right: 15px; background: none !important; border: none !important; font-size: 1.4rem; cursor: pointer; padding: 0; width: auto; box-shadow: none !important; transition: transform 0.2s ease; z-index: 10;">${iconaCuore}</button>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; width: 100%;">
+            <!-- Badge della Categoria Sfumato -->
+            <span class="badge-tipo" style="font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; font-weight: 800 !important; color: #ffffff !important; background: ${coloreAttuale.bg} !important; box-shadow: 0 3px 8px ${coloreAttuale.ombra} !important; padding: 4px 10px !important; border-radius: 20px !important; display: inline-block !important; border: none !important;">${tipoTesto}</span>
+            <!-- Badge della Temperatura con protezione anti-sparizione -->
+            <span class="badge-temperatura" style="font-size: 0.75rem !important; font-weight: 700 !important; color: var(--text-color) !important; background: rgba(128, 128, 128, 0.15) !important; border: 1px solid rgba(128, 128, 128, 0.25) !important; padding: 3px 10px !important; border-radius: 20px !important; display: inline-block !important;">${temperaturaTesto}</span>
+        </div>
         <h3 style="margin-top: 5px;">${ricetta.nome}</h3>
-        <p><strong>Ingredienti:</strong> ${ricetta.ingredienti.join(", ")}</p>
+        <p><strong>Ingredienti:</strong> ${ingredientiColorati}</p>
         <span class="badge-video">▶ Guarda il video</span>
     `;
     const bottoneCuore = bloccoRicetta.querySelector(".tasto-cuore");
-    bottoneCuore.addEventListener("click", () => invertiPreferito(ricetta.nome));
+    bottoneCuore.addEventListener("click", (e) => {
+        e.stopPropagation();
+        bottoneCuore.classList.add("cuore-attivo");
+        setTimeout(() => {
+            invertiPreferito(ricetta.nome);
+        }, 300);
+    });
     return bloccoRicetta;
 }
 const contatoreRisultati = document.getElementById("contatore-risultati");
@@ -163,14 +184,16 @@ const tastoCasuale = document.getElementById("tasto-casuale");
 function eseguiRicercaFiltri() {
     const testoCercato = rimuoviAccenti(barraRicerca.value.toLowerCase().trim());
     const tipoSelezionato = filtroTipo.value;
+    const temperaturaSelezionata = filtroTemperatura ? filtroTemperatura.value : "tutti";
     let ricetteFiltrate = databaseRicette.filter(ricetta => {
         const nomeRicettaSenzaAccenti = rimuoviAccenti(ricetta.nome.toLowerCase());
         const corrispondeTesto = nomeRicettaSenzaAccenti.includes(testoCercato);
         const corrispondeTipo = (tipoSelezionato === "tutti" || ricetta.tipo === tipoSelezionato);
+        const corrispondeTemperatura = (temperaturaSelezionata === "tutti" || ricetta.temperatura === temperaturaSelezionata);
         if (ingredientiSelezionati.length === 0) {
             ricetta.percentualeFattibilita = 0;
             ricetta.ingredientiMancanti = [];
-            return corrispondeTesto && corrispondeTipo;
+            return corrispondeTesto && corrispondeTipo && corrispondeTemperatura;
         }
         const frigoMinuscolo = ingredientiSelezionati.map(ing => ing.toLowerCase().trim());
         ricetta.ingredientiMancanti = ricetta.ingredienti.filter(ing => 
@@ -178,14 +201,14 @@ function eseguiRicercaFiltri() {
         );
         const ingredientiPosseduti = ricetta.ingredienti.length - ricetta.ingredientiMancanti.length;
         ricetta.percentualeFattibilita = Math.round((ingredientiPosseduti / ricetta.ingredienti.length) * 100);
-        return corrispondeTesto && corrispondeTipo && (ricetta.percentualeFattibilita > 0);
+        return corrispondeTesto && corrispondeTipo && corrispondeTemperatura && (ricetta.percentualeFattibilita > 0);
     });
     if (ingredientiSelezionati.length > 0) {
         ricetteFiltrate.sort((a, b) => b.percentualeFattibilita - a.percentualeFattibilita);
     } else {
         ricetteFiltrate.sort((a, b) => a.nome.localeCompare(b.nome));
     }
-    if (testoCercato === "" && ingredientiSelezionati.length === 0 && tipoSelezionato === "tutti") {
+    if (testoCercato === "" && ingredientiSelezionati.length === 0 && tipoSelezionato === "tutti" && temperaturaSelezionata === "tutti") {
         if (contatoreRisultati) contatoreRisultati.innerHTML = `📚 Totale ricette disponibili: ${ricetteFiltrate.length}`;
     } else {
         if (contatoreRisultati) contatoreRisultati.innerHTML = `🔍 Ricette trovate: ${ricetteFiltrate.length}`;
@@ -196,7 +219,7 @@ function eseguiRicercaFiltri() {
            <div class="blocco-errore-animato" style="text-align: center; width: 100%;">
                 <span class="faccina-errore">🍳</span>
                 <p class='messaggio-vuoto' style='margin-top: 0; margin-bottom: 8px; font-weight: 600; font-size: 1.1rem;'>Ops! Nessuna ricetta corrisponde...</p>
-                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 12px; margin-top: 0;">Prova a disattivare qualche filtro o intolleranza.</p>
+                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 12px; margin-top: 0;">Prova a cambiare i filtri del frigo o scrivi un altro piatto.</p>
                 <span class="link-reset" onclick="svuotaTuttiIFiltri()" style="text-decoration: none; cursor: pointer;">❌ Svuota tutti i filtri</span>
             </div>
         `;
@@ -227,13 +250,17 @@ function svuotaTuttiIFiltri() {
     barraRicerca.value = "";
     if (inputCercaIngrediente) inputCercaIngrediente.value = "";
     filtroTipo.value = "tutti";
+    if (typeof filtroTemperatura !== 'undefined' && filtroTemperatura) {
+        filtroTemperatura.value = "tutti";
+    }
     ingredientiSelezionati = [];
     const tag = document.querySelectorAll(".tag-ingrediente");
     tag.forEach(t => {
         t.classList.remove("selezionato");
-        t.style.display = "inline-block";
+        t.style.setProperty("display", "inline-block", "important");
     });
     eseguiRicercaFiltri();
+    mostraPreferiti();
 }
 tastoCasuale.addEventListener("click", () => {
     if (databaseRicette.length === 0) return;
@@ -596,5 +623,31 @@ if (btnSvuotaFrigo) {
         });
         eseguiRicercaFiltri();
         mostraPreferiti();
+    });
+}
+filtroTipo.addEventListener("change", () => {
+    eseguiRicercaFiltri();
+    setTimeout(() => {
+        const contenitoreRisultati = document.getElementById("risultati");
+        if (contenitoreRisultati) {
+            contenitoreRisultati.scrollIntoView({ 
+                behavior: "smooth", 
+                block: "start" 
+            });
+        }
+    }, 200);
+});
+if (filtroTemperatura) {
+    filtroTemperatura.addEventListener("change", () => {
+        eseguiRicercaFiltri();
+        setTimeout(() => {
+            const contenitoreRisultati = document.getElementById("risultati");
+            if (contenitoreRisultati) {
+                contenitoreRisultati.scrollIntoView({ 
+                    behavior: "smooth", 
+                    block: "start" 
+                });
+            }
+        }, 200);
     });
 }
