@@ -704,7 +704,7 @@ function riproduciBeepElettronico() {
         const guadagnoNode = audioCtx.createGain();
         oscillatore.type = 'sine';
         oscillatore.frequency.value = 880;
-        guadagnoNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        guadagnoNode.gain.setValueAtTime(1.0, audioCtx.currentTime);
         oscillatore.connect(guadagnoNode);
         guadagnoNode.connect(audioCtx.destination);
         oscillatore.start();
