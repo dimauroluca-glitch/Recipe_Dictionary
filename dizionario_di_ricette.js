@@ -702,6 +702,9 @@ function fermaSuoneriaInfinita() {
         allarmeIntervalloSuono = null;
     }
     if (displayTimer) displayTimer.classList.remove("allarme-attivo");
+    if (btnResetTimer) {
+        btnResetTimer.style.setProperty("display", "inline-block", "important");
+    }
 }
 if (btnAvviaTimer) {
     btnAvviaTimer.addEventListener("click", () => {
@@ -716,7 +719,7 @@ if (btnAvviaTimer) {
             countdownIntervallo = null;
             btnAvviaTimer.textContent = "▶️ Avvia";
             btnAvviaTimer.classList.remove("attivo");
-        }
+        } 
         else {
             if (tempoRimanenteS <= 0) return;
             btnAvviaTimer.textContent = "⏸️ Pausa";
@@ -732,6 +735,9 @@ if (btnAvviaTimer) {
                     btnAvviaTimer.textContent = "🛑 STOP";
                     btnAvviaTimer.classList.add("attivo");
                     if (displayTimer) displayTimer.classList.add("allarme-attivo");
+                    if (btnResetTimer) {
+                        btnResetTimer.style.setProperty("display", "none", "important");
+                    }
                     avviaSuoneriaInfinita();
                 }
             }, 1000);
