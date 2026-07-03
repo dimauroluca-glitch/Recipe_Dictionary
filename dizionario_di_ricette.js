@@ -190,7 +190,7 @@ function eseguiRicercaFiltri() {
                 <span class="faccina-errore">🍳</span>
                 <p class='messaggio-vuoto' style='margin-top: 0; margin-bottom: 8px; font-weight: 600; font-size: 1.1rem;'>Ops! Nessuna ricetta corrisponde...</p>
                 <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 12px; margin-top: 0;">Prova a disattivare qualche filtro o intolleranza.</p>
-                <span class="link-reset" onclick="svuotaTuttiIFiltri()">❌ Svuota tutti i filtri</span>
+                <span class="link-reset" onclick="svuotaTuttiIFiltri()" style="text-decoration: none; cursor: pointer;">❌ Svuota tutti i filtri</span>
             </div>
         `;
     } else {
