@@ -77,7 +77,7 @@ const contenitoreRisultati = document.getElementById("risultati");
 const contenitorePreferiti = document.getElementById("preferiti");
 const titoloPreferiti = document.getElementById("titolo-preferiti");
 const filtroTipo = document.getElementById("filtro-tipo");
-let ingredientiSelezionati = [];
+let ingredientiSelezionati = localStorage.getItem("frigoIngredienti") ? JSON.parse(localStorage.getItem("frigoIngredienti")) : [];
 let preferiti = JSON.parse(localStorage.getItem("ricettePreferite")) || [];
 let filtriSenzaAttivi = [];
 let tempoMassimoSelezionato = "tutti";
@@ -838,8 +838,15 @@ function svuotaTuttiIFiltri() {
     localStorage.removeItem("filtroTemperatura");
     localStorage.removeItem("filtriSenza");
     localStorage.removeItem("filtroTempoMassimo");
+    localStorage.removeItem("frigoIngredienti");
     eseguiRicercaFiltri();
     mostraPreferiti();
+}
+const ingredientiSalvatiFrigo = localStorage.getItem("frigoIngredienti");
+if (ingredientiSalvatiFrigo) {
+    ingredientiSelezionati = JSON.parse(ingredientiSalvatiFrigo);
+} else {
+    ingredientiSelezionati = [];
 }
 const tipoSalvato = localStorage.getItem("filtroTipo");
 if (tipoSalvato && filtroTipo) filtroTipo.value = tipoSalvato;
