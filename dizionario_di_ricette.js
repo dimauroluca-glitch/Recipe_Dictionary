@@ -344,7 +344,7 @@ function creaSchedaRicetta(ricetta, èNeiPreferiti) {
             ${htmlIntolleranze}
         </div>
         <h3 style="margin-top: 5px; margin-bottom: 6px; text-align: left; width: 100%; font-size: 1.25rem;">${ricetta.nome}</h3>
-        <p style="text-align: left; width: 100%; margin-bottom: 10px;"><strong>Ingredients:</strong> ${ingredientiColorati}</p>
+        <p style="text-align: left; width: 100%; margin-bottom: 10px;"><strong>Ingredienti:</strong> ${ingredientiColorati}</p>
         <div style="text-align: left; width: 100%;">
             <span class="badge-video" style="display: inline-block; cursor: pointer; font-size: 0.85rem; font-weight: bold; color: #ff5252;">▶ Guarda la video-ricetta</span>
         </div>
@@ -1035,3 +1035,67 @@ inizializzaTagIngredienti();
 eseguiRicercaFiltri();
 mostraPreferiti();
 cambiaScheda('ricette');
+function avviaSlotDefinitiva() {
+    const contenitore = document.getElementById("risultati");
+    if (!contenitore || !databaseRicette || databaseRicette.length === 0) return;
+    let giri = 0;
+    const durataTotaleGiri = 25;
+    const btnSlot = document.getElementById("tasto-casuale");
+    if (btnSlot) btnSlot.disabled = true;
+    const intervalloSlot = setInterval(() => {
+        const indiceCasuale = Math.floor(Math.random() * databaseRicette.length);
+        const ricettaCasuale = databaseRicette[indiceCasuale];
+        contenitore.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px; font-size: 1.5rem; font-weight: 800; color: #f59f00; letter-spacing: 1px;">
+                🎰 SPINNING... 🎰
+                <div style="margin-top: 15px; font-size: 1.8rem; color: var(--text-main); font-family: monospace;">
+                    ${ricettaCasuale ? ricettaCasuale.nome : "Selezionando..."}
+                </div>
+            </div>
+        `;
+        giri++;
+        if (giri >= durataTotaleGiri) {
+            clearInterval(intervalloSlot);
+            const indiceVincente = Math.floor(Math.random() * databaseRicette.length);
+            const piattoVincitore = databaseRicette[indiceVincente];
+            contenitore.innerHTML = "";
+            const frigoMinuscolo = (ingredientiSelezionati || []).map(ing => ing.toLowerCase().trim());
+            piattoVincitore.ingredientiMancanti = piattoVincitore.ingredienti.filter(ing => 
+                !frigoMinuscolo.includes(ing.toLowerCase().trim())
+            );
+            const posseduti = piattoVincitore.ingredienti.length - piattoVincitore.ingredientiMancanti.length;
+            piattoVincitore.percentualeFattibilita = Math.round((posseduti / piattoVincitore.ingredienti.length) * 100);
+            const indiceRealeDatabase = databaseRicette.indexOf(piattoVincitore);
+            const èNeiPreferiti = (preferiti || []).includes(piattoVincitore.nome);
+            let schedaEletta = null;
+            if (typeof creaSchedaRicetta === "function") {
+                schedaEletta = creaSchedaRicetta(piattoVincitore, èNeiPreferiti, indiceRealeDatabase);
+            }
+            if (schedaEletta) {
+                schedaEletta.classList.add("scheda-estratta-slot");
+                if (frigoMinuscolo.length > 0 && piattoVincitore.percentualeFattibilita > 0) {
+                    const bloccoInfoFrigo = document.createElement("div");
+                    bloccoInfoFrigo.style.cssText = "margin-top: 6px; margin-bottom: 6px; font-size: 0.75rem; letter-spacing: 0.5px;";
+                    let htmlInfo = `<span class="ingrediente-mappato" style="font-weight: bold; color: #f59f00 !important; display: block; text-transform: uppercase;">🎯 Compatibilità frigo: ${piattoVincitore.percentualeFattibilita}%</span>`;
+                    if (piattoVincitore.percentualeFattibilita < 100) {
+                        const stringaMancanti = piattoVincitore.ingredientiMancanti.map(ing => ing.charAt(0).toUpperCase() + ing.slice(1)).join(", ");
+                        htmlInfo += `<span style="color: #e03131; font-weight: 600; display: block; margin-top: 2px;">❌ Ti manca: ${stringaMancanti}</span>`;
+                    } else if (piattoVincitore.percentualeFattibilita === 100) {
+                        htmlInfo += `<span style="color: #40c057; font-weight: 600; display: block; margin-top: 2px;">🟢 Puoi farla subito!</span>`;
+                    }
+                    bloccoInfoFrigo.innerHTML = htmlInfo;
+                    const titoloScheda = schedaEletta.querySelector("h3");
+                    if (titoloScheda) titoloScheda.after(bloccoInfoFrigo);
+                }
+                contenitore.appendChild(schedaEletta);
+                schedaEletta.scrollIntoView({ behavior: "smooth", block: "center" });
+            } else {
+                if (typeof barraRicerca !== "undefined" && barraRicerca) {
+                    barraRicerca.value = piattoVincitore.nome;
+                    if (typeof eseguiRicercaFiltri === "function") eseguiRicercaFiltri();
+                }
+            }
+            if (btnSlot) btnSlot.disabled = false;
+        }
+    }, 60);
+}
