@@ -701,18 +701,30 @@ let allarmeIntervalloSuono = null;
 const displayTimer = document.getElementById("display-timer");
 const btnAvviaTimer = document.getElementById("tasto-avvia-timer");
 const btnResetTimer = document.getElementById("tasto-reset-timer");
+if (typeof Notification !== "undefined" && Notification.permission !== "granted" && Notification.permission !== "denied") {
+    Notification.requestPermission();
+}
 function aggiornaGraficaDisplay() {
     if (!displayTimer) return;
-    const minuti = Math.floor(tempoRimanenteS / 60);
-    const secondi = tempoRimanenteS % 60;
-    const stringaMinuti = minuti < 10 ? "0" + minuti : minuti;
-    const stringaSecondi = secondi < 10 ? "0" + secondi : secondi;
+    const minutes = Math.floor(tempoRimanenteS / 60);
+    const seconds = tempoRimanenteS % 60;
+    const stringaMinuti = minutes < 10 ? "0" + minutes : minutes;
+    const stringaSecondi = seconds < 10 ? "0" + seconds : seconds;
     displayTimer.textContent = stringaMinuti + ":" + stringaSecondi;
 }
 function impostaMinutiTimer(minutiDaAggiungere) {
     if (displayTimer) displayTimer.classList.remove("allarme-attivo");
+    if (tempoRimanenteS <= 0 && btnResetTimer) {
+        btnResetTimer.style.setProperty("display", "inline-block", "important");
+    }
     tempoRimanenteS += (minutiDaAggiungere * 60);
     if (tempoRimanenteS > 5999) tempoRimanenteS = 5999;
+    if (countdownIntervallo) {
+        const nuovaScadenza = Date.now() + (tempoRimanenteS * 1000);
+        localStorage.setItem("timerScadenzaData", nuovaScadenza);
+    } else {
+        localStorage.setItem("timerTempoImpostato", tempoRimanenteS);
+    }
     aggiornaGraficaDisplay();
 }
 function riproduciBeepElettronico() {
@@ -742,17 +754,52 @@ function avviaSuoneriaInfinita() {
         setTimeout(riproduciBeepElettronico, 120);
         setTimeout(riproduciBeepElettronico, 240);
         setTimeout(riproduciBeepElettronico, 360);
-    }, 2000);
+    }, 2000)
+    if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+        new Notification("⏱️ Timer Cucina Scaduto!", {
+            body: "Il tempo di cottura è terminato. Controlla i fornelli!",
+            requireInteraction: true 
+        });
+    }
 }
 function fermaSuoneriaInfinita() {
     if (allarmeIntervalloSuono) {
         clearInterval(allarmeIntervalloSuono);
         allarmeIntervalloSuono = null;
     }
+    localStorage.removeItem("timerScadenzaData");
+    localStorage.removeItem("timerTempoImpostato");
     if (displayTimer) displayTimer.classList.remove("allarme-attivo");
-    if (btnResetTimer) {
-        btnResetTimer.style.setProperty("display", "inline-block", "important");
-    }
+    if (btnResetTimer) btnResetTimer.style.setProperty("display", "inline-block", "important");
+}
+function avviaCicloCountdown() {
+    if (countdownIntervallo) clearInterval(countdownIntervallo);
+    countdownIntervallo = setInterval(() => {
+        const dataScadenza = localStorage.getItem("timerScadenzaData");
+        if (!dataScadenza) {
+            clearInterval(countdownIntervallo);
+            countdownIntervallo = null;
+            return;
+        }
+        const secondiMancanti = Math.ceil((parseInt(dataScadenza) - Date.now()) / 1000);
+        if (secondiMancanti <= 0) {
+            clearInterval(countdownIntervallo);
+            countdownIntervallo = null;
+            tempoRimanenteS = 0;
+            aggiornaGraficaDisplay();
+            if (btnAvviaTimer) {
+                btnAvviaTimer.textContent = "🛑 STOP";
+                btnAvviaTimer.classList.add("attivo");
+            }
+            if (displayTimer) displayTimer.classList.add("allarme-attivo");
+            if (btnResetTimer) btnResetTimer.style.setProperty("display", "none", "important");
+            
+            avviaSuoneriaInfinita();
+        } else {
+            tempoRimanenteS = secondiMancanti;
+            aggiornaGraficaDisplay();
+        }
+    }, 1000);
 }
 if (btnAvviaTimer) {
     btnAvviaTimer.addEventListener("click", () => {
@@ -765,33 +812,69 @@ if (btnAvviaTimer) {
         if (countdownIntervallo) {
             clearInterval(countdownIntervallo);
             countdownIntervallo = null;
+            localStorage.removeItem("timerScadenzaData");
+            localStorage.setItem("timerTempoImpostato", tempoRimanenteS);
             btnAvviaTimer.textContent = "▶️ Avvia";
             btnAvviaTimer.classList.remove("attivo");
-        } 
-        else {
+        } else {
             if (tempoRimanenteS <= 0) return;
             btnAvviaTimer.textContent = "⏸️ Pausa";
             btnAvviaTimer.classList.add("attivo");
-            countdownIntervallo = setInterval(() => {
-                tempoRimanenteS--;
-                aggiornaGraficaDisplay();
-                if (tempoRimanenteS <= 0) {
-                    clearInterval(countdownIntervallo);
-                    countdownIntervallo = null;
-                    tempoRimanenteS = 0;
-                    aggiornaGraficaDisplay();
-                    btnAvviaTimer.textContent = "🛑 STOP";
-                    btnAvviaTimer.classList.add("attivo");
-                    if (displayTimer) displayTimer.classList.add("allarme-attivo");
-                    if (btnResetTimer) {
-                        btnResetTimer.style.setProperty("display", "none", "important");
-                    }
-                    avviaSuoneriaInfinita();
-                }
-            }, 1000);
+            const scadenzaFutura = Date.now() + (tempoRimanenteS * 1000);
+            localStorage.setItem("timerScadenzaData", scadenzaFutura);
+            avviaCicloCountdown();
         }
     });
 }
+if (btnResetTimer) {
+    btnResetTimer.addEventListener("click", () => {
+        if (countdownIntervallo) {
+            clearInterval(countdownIntervallo);
+            countdownIntervallo = null;
+        }
+        fermaSuoneriaInfinita();
+        tempoRimanenteS = 0;
+        localStorage.removeItem("timerScadenzaData");
+        localStorage.removeItem("timerTempoImpostato");
+        aggiornaGraficaDisplay();
+        if (btnAvviaTimer) {
+            btnAvviaTimer.textContent = "▶️ Avvia";
+            btnAvviaTimer.classList.remove("attivo");
+        }
+    });
+}
+(function ripristinaStatoTimerAllAvvio() {
+    const dataScadenzaSalvata = localStorage.getItem("timerScadenzaData");
+    const tempoImpostatoSalvato = localStorage.getItem("timerTempoImpostato");
+    if (dataScadenzaSalvata) {
+        const millisecondiMancanti = parseInt(dataScadenzaSalvata) - Date.now();
+        if (millisecondiMancanti > 0) {
+            tempoRimanenteS = Math.ceil(millisecondiMancanti / 1000);
+            aggiornaGraficaDisplay();
+            if (btnAvviaTimer) {
+                btnAvviaTimer.textContent = "⏸️ Pausa";
+                btnAvviaTimer.classList.add("attivo");
+            }
+            avviaCicloCountdown();
+        } else {
+            tempoRimanenteS = 0;
+            aggiornaGraficaDisplay();
+            if (btnAvviaTimer) {
+                btnAvviaTimer.textContent = "🛑 STOP";
+                btnAvviaTimer.classList.add("attivo");
+            }
+            if (displayTimer) displayTimer.classList.add("allarme-attivo");
+            if (btnResetTimer) btnResetTimer.style.setProperty("display", "none", "important");
+            avviaSuoneriaInfinita();
+        }
+    } else if (tempoImpostatoSalvato) {
+        tempoRimanenteS = parseInt(tempoImpostatoSalvato);
+        aggiornaGraficaDisplay();
+    } else {
+        tempoRimanenteS = 0;
+        aggiornaGraficaDisplay();
+    }
+})();
 if (btnResetTimer) {
     btnResetTimer.addEventListener("click", () => {
         if (countdownIntervallo) {
