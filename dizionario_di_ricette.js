@@ -65,7 +65,15 @@ const databaseRicette = [
     { nome: "Involtini di zucchine grigliate con crema di tonno", ingredienti: ["tonno", "verdure", "maionese"], video: "https://www.youtube.com/shorts/zk3gXO6qdTY", tipo: "antipasto", temperatura: "freddo", tempo: 25 },
     { nome: "Uova ripiene alla salsa tonnata", ingredienti: ["uova", "tonno", "maionese"], video: "https://www.youtube.com/shorts/jm1tmCkE3d8", tipo: "antipasto", temperatura: "freddo", tempo: 20 },
     { nome: "Insalata russa", ingredienti: ["maionese", "patate", "verdure"], video: "https://www.youtube.com/shorts/uCTOCNA2q3w", tipo: "antipasto", temperatura: "freddo", tempo: 35 },
-    { nome: "Quadrotti di sfoglia con cipolle caramellate", ingredienti: ["cipolla", "formaggio", "uova"], video: "https://www.youtube.com/shorts/2DQFcGqWwLI", tipo: "antipasto", temperatura: "tiepido", tempo: 30 }
+    { nome: "Quadrotti di sfoglia con cipolle caramellate", ingredienti: ["cipolla", "formaggio", "uova"], video: "https://www.youtube.com/shorts/2DQFcGqWwLI", tipo: "antipasto", temperatura: "tiepido", tempo: 30 },
+    { nome: "Pasta al ragù", ingredienti: ["pasta", "ragù"], video: "https://www.youtube.com/shorts/J9yIITFLYow", tipo: "primo", temperatura: "caldo", tempo: 15 },
+    { nome: "Pasta al pesto", ingredienti: ["pasta", "pesto"], video: "https://www.youtube.com/shorts/fjve9zd5KRA", tipo: "primo", temperatura: "caldo", tempo: 15 },
+    { nome: "Pasta aglio olio e peperoncino", ingredienti: ["pasta", "aglio", "olio", "peperoncino"], video: "https://www.youtube.com/shorts/M7aSMrhlpa0", tipo: "primo", temperatura: "caldo", tempo: 15 },
+    { nome: "Pasta in bianco", ingredienti: ["pasta", "grana"], video: "https://www.youtube.com/shorts/RDXphFFThWE", tipo: "primo", temperatura: "caldo", tempo: 15 },
+    { nome: "Pasta ai 4 formaggi", ingredienti: ["pasta", "formaggio"], video: "https://www.youtube.com/shorts/7LgFa1kgxR8", tipo: "primo", temperatura: "caldo", tempo: 15 },
+    { nome: "Pasta panna e prosciutto", ingredienti: ["pasta", "panna", "prosciutto"], video: "https://www.youtube.com/shorts/Uk8n9r65x98", tipo: "primo", temperatura: "caldo", tempo: 15 },
+    { nome: "Filetto di orata", ingredienti: ["pesce", "olio", "limone"], video: "https://www.youtube.com/shorts/4PT1GeCZUeE", tipo: "secondo", temperatura: "caldo", tempo: 30 },
+    { nome: "Seppie con piselli", ingredienti: ["pesce", "verdure", "peperoncino", "olio", "cipolla"], video: "https://www.youtube.com/shorts/V1mu0EggZ9c", tipo: "primo", temperatura: "caldo", tempo: 50 },
 ];
 const boxSuggerimentiIngrediente = document.getElementById("suggerimenti-ingrediente");
 const filtroTemperatura = document.getElementById("filtro-temperatura");
