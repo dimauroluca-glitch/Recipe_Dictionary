@@ -33,7 +33,7 @@ const databaseRicette = [
     { nome: "Frittelle di mele", ingredienti: ["mele", "farina", "uova"], video: "https://www.youtube.com/shorts/BjEIhGPjv7k", tipo: "dolce", temperatura: "caldo", tempo: 20 },
     { nome: "Zuppa di lenticchie", ingredienti: ["lenticchie", "verdure", "brodo"], video: "https://www.youtube.com/shorts/lMzBj2jEXGE", tipo: "primo", temperatura: "caldo", tempo: 45 },
     { nome: "Caponata siciliana", ingredienti: ["melanzane", "pomodoro", "olive"], video: "https://www.youtube.com/shorts/XOnOiCU9ABk", tipo: "antipasto", temperatura: "freddo", tempo: 40 },
-    { nome: "Ratatouille", ingredienti: ["melanzane", "verdure", "cipolla"], video: "https://www.youtube.com/shorts/VDmOqGHDhKc", tipo: "secondo", temperatura: "caldo", tempo: 45 },
+    { nome: "Ratatouille", ingredienti: ["melanzane", "verdure", "verdure"], video: "https://www.youtube.com/shorts/VDmOqGHDhKc", tipo: "secondo", temperatura: "caldo", tempo: 45 },
     { nome: "Torta di mele", ingredienti: ["mele", "farina", "uova"], video: "https://www.youtube.com/shorts/SUf7pWLi8rE", tipo: "dolce", temperatura: "tiepido", tempo: 50 },
     { nome: "Brownies al cioccolato", ingredienti: ["cioccolato", "burro", "uova"], video: "https://www.youtube.com/shorts/6blrycMPTe4", tipo: "dolce", temperatura: "freddo", tempo: 30 },
     { nome: "Pasta all'amatriciana", ingredienti: ["pasta", "pomodoro", "guanciale"], video: "https://www.youtube.com/shorts/HgPblcqdGA4", tipo: "primo", temperatura: "caldo", tempo: 20 },
@@ -74,6 +74,7 @@ const databaseRicette = [
     { nome: "Pasta panna e prosciutto", ingredienti: ["pasta", "panna", "prosciutto"], video: "https://www.youtube.com/shorts/Uk8n9r65x98", tipo: "primo", temperatura: "caldo", tempo: 15 },
     { nome: "Filetto di orata", ingredienti: ["pesce", "olio", "limone"], video: "https://www.youtube.com/shorts/4PT1GeCZUeE", tipo: "secondo", temperatura: "caldo", tempo: 30 },
     { nome: "Seppie con piselli", ingredienti: ["pesce", "verdure", "peperoncino", "olio", "cipolla"], video: "https://www.youtube.com/shorts/V1mu0EggZ9c", tipo: "primo", temperatura: "caldo", tempo: 50 },
+    { nome: "Panino con hamburger", ingredienti: ["pane", "verdure", "carne", "maionese"], video: "https://www.youtube.com/shorts/mV2yOXPUrj0", tipo: "primo", temperatura: "caldo", tempo: 10 },
 ];
 const boxSuggerimentiIngrediente = document.getElementById("suggerimenti-ingrediente");
 const filtroTemperatura = document.getElementById("filtro-temperatura");
@@ -416,6 +417,11 @@ function mostraPreferiti() {
         ingredientiSelezionati = [];
     }
     const frigoMinuscolo = ingredientiSelezionati.map(i => i.toLowerCase().trim());
+    let ingredientiExtraSpesa = [];
+    const memoriaExtra = localStorage.getItem("ingredientiExtraSpesa");
+    if (memoriaExtra) {
+        ingredientiExtraSpesa = JSON.parse(memoriaExtra);
+    }
     function aggiornaSoloIlBannerVerde() {
         const vecchioBanner = document.getElementById("banner-pronto-cucina");
         if (vecchioBanner) vecchioBanner.remove();
@@ -454,17 +460,29 @@ function mostraPreferiti() {
             });
         }
     });
-    if (contenitoreZonaAzione && tuttiGliIngredientiPreferiti.length > 0) {
+    const ingredientiDaComprare = tuttiGliIngredientiPreferiti.filter(ing => !frigoMinuscolo.includes(ing));
+    if (contenitoreZonaAzione) {
         let htmlListaVoci = "";
-        tuttiGliIngredientiPreferiti.forEach((ing, i) => {
+        ingredientiDaComprare.forEach((ing, i) => {
             const nomeFormattato = ing.charAt(0).toUpperCase() + ing.slice(1);
-            const ceLhoGia = frigoMinuscolo.includes(ing);
-            const classeComprato = ceLhoGia ? "comprato" : "";
-            const attributoChecked = ceLhoGia ? "checked" : "";
             htmlListaVoci += `
-                <li class="voce-spesa-item ${classeComprato}" id="item-spesa-${i}" data-ingrediente-nome="${ing}">
-                    <input type="checkbox" id="check-spesa-${i}" ${attributoChecked}>
+                <li class="voce-spesa-item" id="item-spesa-${i}" data-ingrediente-nome="${ing}" data-tipo="automatico">
+                    <input type="checkbox" id="check-spesa-${i}">
                     <span>${nomeFormattato}</span>
+                </li>
+            `;
+        });
+        ingredientiExtraSpesa.forEach((itemExtra, i) => {
+            const nomeFormattato = itemExtra.nome.charAt(0).toUpperCase() + itemExtra.nome.slice(1);
+            const classeComprato = itemExtra.comprato ? "comprato" : "";
+            const attributoChecked = itemExtra.comprato ? "checked" : "";
+            htmlListaVoci += `
+                <li class="voce-spesa-item ${classeComprato}" id="item-extra-${i}" data-ingrediente-nome="${itemExtra.nome}" data-tipo="extra" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="check-extra-${i}" ${attributoChecked}>
+                        <span>${nomeFormattato}</span>
+                    </div>
+                    <button class="btn-elimina-extra" data-indice="${i}" style="background: none; border: none; font-size: 0.9rem; cursor: pointer; opacity: 0.6; padding: 0 5px;">🗑️</button>
                 </li>
             `;
         });
@@ -473,37 +491,57 @@ function mostraPreferiti() {
         divSpesaBox.style.position = "relative";
         divSpesaBox.innerHTML = `
             <h4 style="margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 6px;">🛒 Lista della Spesa Intelligente</h4>
-            <p style="font-size: 0.8rem; opacity: 0.7; margin: 4px 0 0 0;">Ingredienti necessari combinati (spunta le voci quando le compri):</p>
-            <ul class="lista-spesa-voci">${htmlListaVoci}</ul>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin: 4px 0 0 0;">Ingredienti necessari combinati + note personali:</p>
+            <div style="display: flex; gap: 8px; margin-top: 12px; margin-bottom: 12px; width: 100%;">
+                <input type="text" id="input-nota-spesa" placeholder="Aggiungi altro... (es. Bicchieri, tovaglioli)" style="flex: 1; padding: 8px 12px; border: 1px solid rgba(128,128,128,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: var(--text-main); font-size: 0.9rem; outline: none;">
+                <button id="btn-aggiungi-nota-spesa" style="padding: 8px 14px; background: #ff9233; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem;">+</button>
+            </div>
+            <ul class="lista-spesa-voci" style="margin-top: 10px;">
+                ${htmlListaVoci === "" ? '<p style="font-size: 0.85rem; opacity: 0.5; margin: 10px 0;">Nessun ingrediente da comprare. Aggiungine uno a mano qui sopra!</p>' : htmlListaVoci}
+            </ul>
             <button id="tasto-condividi-spesa" class="btn-tab" style="width: 100% !important; max-width: none !important; margin-top: 15px !important; padding: 10px 16px !important; font-size: 0.9rem !important; background: linear-gradient(135deg, #ff9233, #ff5252) !important; color: #ffffff !important; border: none !important; box-shadow: 0 4px 12px rgba(255, 82, 82, 0.25) !important;">
                 📤 Condividi Lista della Spesa
             </button>
         `;
         contenitoreZonaAzione.appendChild(divSpesaBox);
-        const btnCondividi = divSpesaBox.querySelector("#tasto-condividi-spesa");
-        if (btnCondividi) {
-            btnCondividi.addEventListener("click", async () => {
-                let testoCondivisione = "🛒 *LISTA DELLA SPESA* 🛒\nEcco gli ingredienti:\n\n";
-                tuttiGliIngredientiPreferiti.forEach(ing => {
-                    const inFrigo = ingredientiSelezionati.includes(ing);
-                    testoCondivisione += inFrigo ? `✅ ~${ing}~\n` : `▫️ ${ing}\n`;
-                });
-                if (navigator.share) {
-                    try { await navigator.share({ title: 'Lista della Spesa', text: testoCondivisione }); } catch (err) {}
-                } else {
-                    try { await navigator.clipboard.writeText(testoCondivisione); alert("📋 Copiata!"); } catch (err) {}
+        const inputNota = divSpesaBox.querySelector("#input-nota-spesa");
+        const btnAggiungiNota = divSpesaBox.querySelector("#btn-aggiungi-nota-spesa");
+        if (btnAggiungiNota && inputNota) {
+            const eseguiInserimentoExtra = () => {
+                const testoNota = inputNota.value.trim().toLowerCase();
+                if (testoNota === "") return;
+                if (!ingredientiExtraSpesa.some(e => e.nome === testoNota)) {
+                    ingredientiExtraSpesa.push({ nome: testoNota, comprato: false });
+                    localStorage.setItem("ingredientiExtraSpesa", JSON.stringify(ingredientiExtraSpesa));
+                    mostraPreferiti();
                 }
-            });
+                inputNota.value = "";
+                inputNota.focus();
+            };
+            btnAggiungiNota.addEventListener("click", eseguiInserimentoExtra);
+            inputNota.addEventListener("keydown", (e) => { if (e.key === "Enter") eseguiInserimentoExtra(); });
         }
+        const bottoniElimina = divSpesaBox.querySelectorAll(".btn-elimina-extra");
+        bottoniElimina.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const indice = parseInt(btn.getAttribute("data-indice"));
+                ingredientiExtraSpesa.splice(indice, 1);
+                localStorage.setItem("ingredientiExtraSpesa", JSON.stringify(ingredientiExtraSpesa));
+                mostraPreferiti();
+            });
+        });
         const elementiLista = divSpesaBox.querySelectorAll(".voce-spesa-item");
         elementiLista.forEach(li => {
             const checkbox = li.querySelector('input[type="checkbox"]');
             const nomeIngrediente = li.getAttribute("data-ingrediente-nome");
-            li.addEventListener("click", (e) => {
-                if (e.target !== checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                }
-                li.classList.toggle("comprato", checkbox.checked);
+                    const tipoVoce = li.getAttribute("data-tipo");
+        li.addEventListener("click", (e) => {
+            if (e.target !== checkbox && e.target.className !== "btn-elimina-extra") {
+                checkbox.checked = !checkbox.checked;
+            }
+            li.classList.toggle("comprato", checkbox.checked);
+            if (tipoVoce === "automatico") {
                 const memoriaFresca = localStorage.getItem("frigoIngredienti");
                 let ingredientiLocali = memoriaFresca ? JSON.parse(memoriaFresca) : [];
                 if (checkbox.checked) {
@@ -515,13 +553,54 @@ function mostraPreferiti() {
                 }
                 ingredientiSelezionati = ingredientiLocali;
                 localStorage.setItem("frigoIngredienti", JSON.stringify(ingredientiSelezionati));
-                if (typeof disegnaPilloleFrigo === "function") disegnaPilloleFrigo();
-                if (typeof eseguiRicercaFiltri === "function") eseguiRicercaFiltri();
-                aggiornaSoloIlBannerVerde();
-            });
+                
+                if (typeof aggiornaSoloIlBannerVerde === "function") {
+                    aggiornaSoloIlBannerVerde();
+                }
+            } else {
+                const elementoTrovato = ingredientiExtraSpesa.find(e => e.nome === nomeIngrediente);
+                if (elementoTrovato) {
+                    elementoTrovato.comprato = checkbox.checked;
+                    localStorage.setItem("ingredientiExtraSpesa", JSON.stringify(ingredientiExtraSpesa));
+                }
+            }
+        });
+    });
+    const btnCondividi = divSpesaBox.querySelector("#tasto-condividi-spesa");
+    if (btnCondividi) {
+        btnCondividi.addEventListener("click", async () => {
+            let testoCondivisione = "🛒 *LISTA DELLA SPESA INTELLIGENTE* 🛒\n\n";
+            if (ingredientiDaComprare.length > 0) {
+                testoCondivisione += "📋 *Dalle Ricette*:\n";
+                ingredientiDaComprare.forEach(ing => {
+                    const preso = ingredientiSelezionati.includes(ing);
+                    testoCondivisione += preso ? `✅ ~${ing}~\n` : `▫️ ${ing}\n`;
+                });
+                testoCondivisione += "\n";
+            }
+            if (ingredientiExtraSpesa.length > 0) {
+                testoCondivisione += "📝 *Note Personali*:\n";
+                ingredientiExtraSpesa.forEach(item => {
+                    testoCondivisione += item.comprato ? `✅ ~${item.nome}~\n` : `▫️ ${item.nome}\n`;
+                });
+            }
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: 'Lista della Spesa', text: testoCondivisione });
+                } catch (err) {}
+            } else {
+                try {
+                    await navigator.clipboard.writeText(testoCondivisione);
+                    alert("📋 Copiata negli appunti!");
+                } catch (err) {}
+            }
         });
     }
+}
+if (typeof aggiornaSoloIlBannerVerde === "function") {
     aggiornaSoloIlBannerVerde();
+}
+if (contenitorePreferiti && typeof databaseRicette !== "undefined") {
     preferiti.forEach((nomeRicetta, indice) => {
         const ricetta = databaseRicette.find(r => r.nome === nomeRicetta);
         if (ricetta) {
@@ -530,6 +609,7 @@ function mostraPreferiti() {
             contenitorePreferiti.appendChild(scheda);
         }
     });
+}
 }
 filtroTipo.addEventListener("change", eseguiRicercaFiltri);
 barraRicerca.addEventListener("input", () => {
