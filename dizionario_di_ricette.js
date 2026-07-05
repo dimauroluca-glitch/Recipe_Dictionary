@@ -493,7 +493,7 @@ function mostraPreferiti() {
             <h4 style="margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 6px;">🛒 Lista della Spesa Intelligente</h4>
             <p style="font-size: 0.8rem; opacity: 0.7; margin: 4px 0 0 0;">Ingredienti necessari combinati + note personali:</p>
             <div style="display: flex; gap: 8px; margin-top: 12px; margin-bottom: 12px; width: 100%;">
-                <input type="text" id="input-nota-spesa" placeholder="Aggiungi altro... (es. Bevande, biscotti)" style="flex: 1; padding: 8px 12px; border: 1px solid rgba(128,128,128,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: var(--text-main); font-size: 0.9rem; outline: none;">
+                <input type="text" id="input-nota-spesa" placeholder="Aggiungi altro..." style="flex: 1; padding: 8px 12px; border: 1px solid rgba(128,128,128,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: var(--text-main); font-size: 0.9rem; outline: none;">
                 <button id="btn-aggiungi-nota-spesa" style="padding: 8px 14px; background: #ff9233; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem;">+</button>
             </div>
             <ul class="lista-spesa-voci" style="margin-top: 10px;">
