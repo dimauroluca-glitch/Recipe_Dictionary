@@ -569,7 +569,7 @@ function mostraPreferiti() {
     const btnCondividi = divSpesaBox.querySelector("#tasto-condividi-spesa");
     if (btnCondividi) {
         btnCondividi.addEventListener("click", async () => {
-            let testoCondivisione = "🛒 *LISTA DELLA SPESA INTELLIGENTE* 🛒\n\n";
+            let testoCondivisione = "🛒 *LISTA DELLA SPESA INTELLIGENTE*\n\n";
             if (ingredientiDaComprare.length > 0) {
                 testoCondivisione += "📋 *Dalle Ricette*:\n";
                 ingredientiDaComprare.forEach(ing => {
