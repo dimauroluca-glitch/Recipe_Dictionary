@@ -1059,6 +1059,16 @@ function filtraPerTempo(limiteMinuti, elemento) {
     localStorage.setItem("filtroTempoMassimo", tempoMassimoSelezionato);
     eseguiRicercaFiltri(); 
 }
+let wakeLock = null;
+async function attivaSchermoAcceso() {
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    console.log('Lo schermo rimarrà acceso');
+  } catch (err) {
+    console.error(`${err.name}, ${err.message}`);
+  }
+}
+attivaSchermoAcceso();
 function svuotaTuttiIFiltri() {
     barraRicerca.value = "";
     if (inputCercaIngrediente) inputCercaIngrediente.value = "";
