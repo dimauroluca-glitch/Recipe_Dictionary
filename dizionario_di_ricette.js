@@ -886,6 +886,14 @@ function impostaMinutiTimer(minutiDaAggiungere) {
     }
     aggiornaGraficaDisplay();
 }
+let audioCtx = null;
+let intervalloBeep = null;
+function gestisciFineContoRovescia() {
+    intervalloBeep = setInterval(riproduciBeepElettronico, 150);
+    setTimeout(() => {
+        clearInterval(intervalloBeep);
+    }, 3000);
+}
 function riproduciBeepElettronico() {
     try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
