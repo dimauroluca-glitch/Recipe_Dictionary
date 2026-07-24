@@ -886,14 +886,6 @@ function impostaMinutiTimer(minutiDaAggiungere) {
     }
     aggiornaGraficaDisplay();
 }
-let audioCtx = null;
-let intervalloBeep = null;
-function gestisciFineContoRovescia() {
-    intervalloBeep = setInterval(riproduciBeepElettronico, 150);
-    setTimeout(() => {
-        clearInterval(intervalloBeep);
-    }, 3000);
-}
 function riproduciBeepElettronico() {
     try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -921,13 +913,20 @@ function avviaSuoneriaInfinita() {
         setTimeout(riproduciBeepElettronico, 120);
         setTimeout(riproduciBeepElettronico, 240);
         setTimeout(riproduciBeepElettronico, 360);
-    }, 2000)
+    }, 2000);
     if (typeof Notification !== "undefined" && Notification.permission === "granted") {
         new Notification("⏱️ Timer Cucina Scaduto!", {
             body: "Il tempo di cottura è terminato. Controlla i fornelli!",
             requireInteraction: true 
         });
     }
+    setTimeout(() => {
+        fermaSuoneriaInfinita();
+        if (btnAvviaTimer) {
+            btnAvviaTimer.textContent = "▶️ Avvia";
+            btnAvviaTimer.classList.remove("attivo");
+        }
+    }, 5000);
 }
 function fermaSuoneriaInfinita() {
     if (allarmeIntervalloSuono) {
@@ -1042,23 +1041,8 @@ if (btnResetTimer) {
         aggiornaGraficaDisplay();
     }
 })();
-if (btnResetTimer) {
-    btnResetTimer.addEventListener("click", () => {
-        if (countdownIntervallo) {
-            clearInterval(countdownIntervallo);
-            countdownIntervallo = null;
-        }
-        fermaSuoneriaInfinita();
-        tempoRimanenteS = 0;
-        aggiornaGraficaDisplay();
-        if (btnAvviaTimer) {
-            btnAvviaTimer.textContent = "▶️ Avvia";
-            btnAvviaTimer.classList.remove("attivo");
-        }
-    });
-}
 tempoRimanenteS = 0;
-aggiornaGraficaDisplay();
+aggiarnaGraficaDisplay();
 function filtraPerTempo(limiteMinuti, elemento) {
     tempoMassimoSelezionato = limiteMinuti;
     const tutteLePilloleTempo = document.querySelectorAll(".contenitore-tempo-filtro .pillola-senza");
